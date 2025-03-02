@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import Card from "../ui/Card";
+import Card from "../ui/card";
 import { Check, CreditCard, ArrowRight } from "lucide-react";
 
 type BillingCycle = "monthly" | "yearly";

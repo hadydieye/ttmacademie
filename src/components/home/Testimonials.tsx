@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import Card from "../ui/Card";
+import Card from "../ui/card";
 import { Star, ArrowLeft, ArrowRight } from "lucide-react";
 
 // Testimonial data

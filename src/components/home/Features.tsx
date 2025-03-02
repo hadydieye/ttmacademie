@@ -1,6 +1,6 @@
 
 import React from "react";
-import Card from "../ui/Card";
+import Card from "../ui/card";
 import { BookOpen, Users, TrendingUp, BarChart4, Calendar, MessageSquare } from "lucide-react";
 
 const Features = () => {
