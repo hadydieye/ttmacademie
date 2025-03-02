@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Card from "../ui/card";
-import { Check, CreditCard, ArrowRight } from "lucide-react";
+import { Check, CreditCard, ArrowRight, Phone, Shield } from "lucide-react";
 
 type BillingCycle = "monthly" | "yearly";
 
@@ -16,46 +16,51 @@ const Pricing = () => {
   const plans = [
     {
       name: "Débutant",
-      description: "Idéal pour commencer votre parcours dans le trading",
+      description: "Idéal pour commencer votre parcours dans le trading en Afrique",
       price: {
-        monthly: 29,
-        yearly: 299,
+        monthly: 15000,
+        yearly: 150000,
       },
+      currency: "GNF",
       features: [
         "Accès aux cours fondamentaux",
         "Forum communautaire",
         "Analyses de marché basiques",
         "1 webinaire par mois",
         "Support par email",
+        "Paiement via Orange Money/MTN Money",
       ],
       cta: "Commencer Gratuitement",
       popular: false,
     },
     {
       name: "Professionnel",
-      description: "Pour les traders sérieux qui veulent exceller",
+      description: "Pour les traders sérieux qui veulent exceller sur les marchés africains",
       price: {
-        monthly: 99,
-        yearly: 999,
+        monthly: 50000,
+        yearly: 500000,
       },
+      currency: "GNF",
       features: [
         "Tous les avantages du plan Débutant",
-        "Cours avancés et stratégies",
+        "Cours avancés adaptés aux marchés africains",
         "Outils d'analyse premium",
         "Webinaires hebdomadaires",
         "Support prioritaire",
         "Sessions de mentorat mensuelles",
+        "Accès à notre application mobile",
       ],
       cta: "Choisir ce Plan",
       popular: true,
     },
     {
       name: "Expert",
-      description: "Solution complète pour les traders professionnels",
+      description: "Solution complète pour les traders professionnels africains",
       price: {
-        monthly: 199,
-        yearly: 1999,
+        monthly: 100000,
+        yearly: 1000000,
       },
+      currency: "GNF",
       features: [
         "Tous les avantages du plan Professionnel",
         "Accès à toutes les ressources exclusives",
@@ -63,6 +68,7 @@ const Pricing = () => {
         "Groupe d'analyse privé",
         "Signaux de trading premium",
         "Support 24/7",
+        "Accès prioritaire aux événements",
       ],
       cta: "Contacter les Ventes",
       popular: false,
@@ -75,32 +81,38 @@ const Pricing = () => {
     return savings;
   };
 
+  const formatCurrency = (amount: number) => {
+    // Format with spaces for thousands
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  };
+
   return (
-    <section id="pricing" className="py-24 bg-gray-50">
+    <section id="pricing" className="py-24 bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-block text-sm font-medium px-3 py-1 rounded-full bg-secondary-dark/10 text-secondary-dark mb-4">
+          <span className="inline-block text-sm font-medium px-3 py-1 rounded-full bg-guinea-green/10 text-guinea-green dark:bg-guinea-green/20 dark:text-guinea-green/90 mb-4">
             Tarification
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Des plans adaptés à vos besoins
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">
+            Des plans adaptés aux besoins des traders africains
           </h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Choisissez l'offre qui correspond le mieux à votre niveau et à vos objectifs de trading.
+          <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+            Choisissez l'offre qui correspond le mieux à votre niveau et à vos objectifs de trading, 
+            avec des prix adaptés au marché guinéen et des méthodes de paiement locales.
           </p>
 
           {/* Billing Toggle */}
           <div className="flex items-center justify-center mb-8">
             <span
               className={`mr-3 ${
-                billingCycle === "monthly" ? "font-medium text-gray-900" : "text-gray-500"
+                billingCycle === "monthly" ? "font-medium text-gray-900 dark:text-white" : "text-gray-500 dark:text-gray-400"
               }`}
             >
               Mensuel
             </span>
             <button
               onClick={toggleBillingCycle}
-              className="relative inline-flex h-6 w-12 items-center rounded-full bg-primary-dark"
+              className="relative inline-flex h-6 w-12 items-center rounded-full bg-guinea-green"
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
@@ -110,11 +122,11 @@ const Pricing = () => {
             </button>
             <span
               className={`ml-3 ${
-                billingCycle === "yearly" ? "font-medium text-gray-900" : "text-gray-500"
+                billingCycle === "yearly" ? "font-medium text-gray-900 dark:text-white" : "text-gray-500 dark:text-gray-400"
               }`}
             >
               Annuel{" "}
-              <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">
+              <span className="inline-block bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 text-xs px-2 py-0.5 rounded-full">
                 Économisez 15%+
               </span>
             </span>
@@ -128,13 +140,13 @@ const Pricing = () => {
               hover
               className={`${
                 plan.popular
-                  ? "border-2 border-secondary-dark relative scale-105 z-10"
-                  : "border border-gray-200"
+                  ? "border-2 border-guinea-yellow relative scale-105 z-10"
+                  : "border border-gray-200 dark:border-gray-700"
               } animate-fade-in animation-delay-${index * 100}`}
             >
               {plan.popular && (
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-secondary-dark text-white text-xs font-semibold py-1 px-4 rounded-full">
+                  <div className="bg-guinea-yellow text-black text-xs font-semibold py-1 px-4 rounded-full">
                     Plus Populaire
                   </div>
                 </div>
@@ -147,16 +159,16 @@ const Pricing = () => {
                   </Card.Description>
                 </div>
                 <div className="mb-4">
-                  <span className="text-4xl font-bold">
+                  <span className="text-4xl font-bold dark:text-white">
                     {billingCycle === "monthly"
-                      ? `${plan.price.monthly}€`
-                      : `${plan.price.yearly}€`}
+                      ? `${formatCurrency(plan.price.monthly)}`
+                      : `${formatCurrency(plan.price.yearly)}`}
                   </span>
-                  <span className="text-gray-500 ml-2">
-                    {billingCycle === "monthly" ? "/mois" : "/an"}
+                  <span className="text-gray-500 dark:text-gray-400 ml-2">
+                    {plan.currency} {billingCycle === "monthly" ? "/mois" : "/an"}
                   </span>
                   {billingCycle === "yearly" && (
-                    <p className="text-sm text-green-600 mt-1">
+                    <p className="text-sm text-green-600 dark:text-green-400 mt-1">
                       Économisez{" "}
                       {getYearlySavings(plan.price.monthly, plan.price.yearly)}%
                     </p>
@@ -165,31 +177,35 @@ const Pricing = () => {
                 <Button
                   className={`w-full ${
                     plan.popular
-                      ? "bg-secondary-dark hover:bg-secondary-dark/90"
-                      : "bg-primary-dark hover:bg-primary-dark/90"
-                  } text-white`}
+                      ? "bg-guinea-yellow hover:bg-guinea-yellow/90 text-black"
+                      : "bg-guinea-green hover:bg-guinea-green/90 text-white"
+                  }`}
                 >
                   {plan.cta}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Card.Header>
               <Card.Content>
-                <h4 className="font-medium mb-4 text-gray-900">
+                <h4 className="font-medium mb-4 text-gray-900 dark:text-white">
                   Ce qui est inclus :
                 </h4>
                 <ul className="space-y-3">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex">
-                      <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                      <span className="text-gray-600">{feature}</span>
+                      <Check className="h-5 w-5 text-guinea-green dark:text-guinea-yellow mr-3 flex-shrink-0" />
+                      <span className="text-gray-600 dark:text-gray-300">{feature}</span>
                     </li>
                   ))}
                 </ul>
               </Card.Content>
-              <Card.Footer className="pt-4 flex justify-center">
-                <div className="flex items-center text-sm text-gray-500">
-                  <CreditCard className="h-4 w-4 mr-2" />
-                  Paiements sécurisés
+              <Card.Footer className="pt-4 flex justify-center gap-4">
+                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                  <Phone className="h-4 w-4 mr-2" />
+                  Mobile Money
+                </div>
+                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                  <Shield className="h-4 w-4 mr-2" />
+                  Paiement sécurisé
                 </div>
               </Card.Footer>
             </Card>
@@ -197,13 +213,13 @@ const Pricing = () => {
         </div>
 
         <div className="text-center max-w-3xl mx-auto mt-16">
-          <h3 className="text-xl font-semibold mb-4">
-            Vous avez des besoins spécifiques ?
+          <h3 className="text-xl font-semibold mb-4 dark:text-white">
+            Vous avez des besoins spécifiques pour votre entreprise en Guinée ?
           </h3>
-          <p className="text-gray-600 mb-6">
-            Contactez notre équipe pour obtenir une solution sur mesure adaptée à vos objectifs.
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            Contactez notre équipe basée à Conakry pour obtenir une solution sur mesure adaptée à vos objectifs commerciaux.
           </p>
-          <Button variant="outline" className="border-primary-dark text-primary-dark hover:bg-primary-dark/5">
+          <Button variant="outline" className="border-guinea-green text-guinea-green hover:bg-guinea-green/5 dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow/20">
             Demander un Devis Personnalisé
           </Button>
         </div>
