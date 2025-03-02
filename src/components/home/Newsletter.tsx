@@ -1,133 +1,66 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Mail, Check, Phone } from "lucide-react";
+import Card from "../ui/card";
+import { Send } from "lucide-react";
 
 const Newsletter = () => {
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [contactMethod, setContactMethod] = useState<"email" | "phone">("email");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (contactMethod === "email" && !email) return;
-    if (contactMethod === "phone" && !phone) return;
-    
-    setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsSubmitted(true);
-      setEmail("");
-      setPhone("");
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 5000);
-    }, 1500);
-  };
-
   return (
-    <section className="py-16 bg-white dark:bg-gray-950">
+    <section className="py-20 bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="max-w-4xl mx-auto bg-gradient-to-r from-guinea-green/10 to-guinea-yellow/10 dark:from-guinea-green/5 dark:to-guinea-yellow/5 rounded-2xl p-8 md:p-12">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-            <div className="md:w-1/2">
-              <div className="w-12 h-12 rounded-full bg-guinea-green/10 flex items-center justify-center text-guinea-green mb-6">
-                <Mail className="w-6 h-6" />
-              </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-3 dark:text-white">
-                Restez informé des dernières actualités du trading en Afrique
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Inscrivez-vous pour recevoir des conseils adaptés aux marchés africains, des analyses économiques locales et des offres exclusives de formation.
-              </p>
-            </div>
-            
-            <div className="md:w-1/2">
-              {isSubmitted ? (
-                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm animate-scale-in">
-                  <div className="flex items-center gap-3 text-guinea-green dark:text-guinea-yellow mb-2">
-                    <Check className="w-5 h-5" />
-                    <span className="font-medium">Inscription réussie!</span>
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Merci de vous être inscrit à notre newsletter. Vous recevrez bientôt nos dernières actualités et opportunités de trading adaptées au marché africain.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="flex items-center space-x-4 mb-4">
-                    <div className="flex items-center">
-                      <input
-                        type="radio"
-                        id="email-option"
-                        name="contact-method"
-                        checked={contactMethod === "email"}
-                        onChange={() => setContactMethod("email")}
-                        className="mr-2"
-                      />
-                      <label htmlFor="email-option" className="text-gray-700 dark:text-gray-300">Email</label>
-                    </div>
-                    <div className="flex items-center">
-                      <input
-                        type="radio"
-                        id="phone-option"
-                        name="contact-method"
-                        checked={contactMethod === "phone"}
-                        onChange={() => setContactMethod("phone")}
-                        className="mr-2"
-                      />
-                      <label htmlFor="phone-option" className="text-gray-700 dark:text-gray-300">Téléphone</label>
-                    </div>
-                  </div>
-                  
+        <Card className="relative rounded-3xl overflow-hidden">
+          <div className="absolute inset-0 -z-10">
+            <img 
+              src="https://images.unsplash.com/photo-1495714096525-285e85481946?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+              alt="Marchés africains" 
+              className="w-full h-full object-cover opacity-20 dark:opacity-10"
+            />
+          </div>
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-guinea-red/20 via-guinea-yellow/20 to-guinea-green/20 dark:from-guinea-red/30 dark:via-guinea-yellow/30 dark:to-guinea-green/30"></div>
+          
+          <div className="p-8 md:p-12 lg:p-16">
+            <div className="grid md:grid-cols-2 gap-10 items-center">
+              <div>
+                <h2 className="text-3xl font-bold mb-4 dark:text-white">Recevez nos Analyses Hebdomadaires du Marché Africain</h2>
+                <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                  Abonnez-vous pour recevoir notre newsletter spécialisée sur les marchés financiers 
+                  guinéens et africains, ainsi que des conseils d'investissement adaptés à notre contexte local.
+                </p>
+                
+                <div className="flex flex-col space-y-4">
                   <div className="flex flex-col sm:flex-row gap-3">
-                    {contactMethod === "email" ? (
-                      <Input
-                        type="email"
-                        placeholder="Entrez votre adresse email"
-                        className="rounded-full px-4 py-6 border-gray-300 focus:border-guinea-green focus:ring-guinea-green dark:bg-gray-800 dark:border-gray-700"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                    ) : (
-                      <Input
-                        type="tel"
-                        placeholder="Entrez votre numéro de téléphone"
-                        className="rounded-full px-4 py-6 border-gray-300 focus:border-guinea-green focus:ring-guinea-green dark:bg-gray-800 dark:border-gray-700"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        required
-                      />
-                    )}
-                    <Button
-                      type="submit"
-                      className="bg-guinea-green hover:bg-guinea-green/90 text-white dark:bg-guinea-green dark:hover:bg-guinea-green/90 rounded-full px-6 py-6 whitespace-nowrap"
-                      disabled={isLoading}
-                    >
-                      {isLoading ? "Inscription..." : "S'inscrire"}
+                    <input
+                      type="email"
+                      placeholder="Votre adresse email"
+                      className="px-5 py-3 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-guinea-green dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                    />
+                    <Button className="bg-guinea-green hover:bg-guinea-green/90 text-white rounded-lg px-6 py-3 whitespace-nowrap">
+                      S'abonner
+                      <Send className="ml-2 h-4 w-4" />
                     </Button>
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    En vous inscrivant, vous acceptez notre{" "}
-                    <a href="#" className="text-guinea-green hover:underline dark:text-guinea-yellow">
-                      politique de confidentialité
-                    </a>
-                    . Nous respectons la RGPD et les réglementations locales sur la protection des données.
+                  <p className="text-sm text-gray-500 dark:text-gray-500">
+                    Disponible en français, anglais et prochainement en langues locales.
+                    Nous respectons votre vie privée. Désabonnez-vous à tout moment.
                   </p>
-                </form>
-              )}
+                </div>
+              </div>
+              
+              <div className="hidden md:block">
+                <div className="relative">
+                  <img 
+                    src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                    alt="Analyse des marchés africains" 
+                    className="rounded-lg shadow-2xl"
+                  />
+                  <div className="absolute top-0 right-0 bg-guinea-green text-white px-4 py-2 rounded-bl-lg rounded-tr-lg font-medium">
+                    Nouveau: Analyse UEMOA
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
     </section>
   );

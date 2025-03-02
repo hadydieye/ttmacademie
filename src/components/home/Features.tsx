@@ -20,41 +20,59 @@ const Features = () => {
           </p>
         </div>
 
+        {/* Feature Image */}
+        <div className="max-w-5xl mx-auto mb-16 overflow-hidden rounded-xl shadow-xl animate-fade-in">
+          <div className="relative">
+            <img 
+              src="https://images.unsplash.com/photo-1554774853-719586f82d77?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+              alt="Traders africains collaborant" 
+              className="w-full h-auto object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-guinea-red/40 via-guinea-yellow/30 to-guinea-green/40 mix-blend-overlay"></div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <FeatureCard
             icon={<BookOpen className="w-6 h-6" />}
             title="Cours Adaptés au Marché Africain"
             description="Accédez à une bibliothèque complète de cours créés spécifiquement pour les marchés africains, avec des stratégies tenant compte des réalités économiques locales."
+            imageSrc="https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
             className="animate-fade-in"
           />
           <FeatureCard
             icon={<Users className="w-6 h-6" />}
             title="Communauté Panafricaine"
             description="Rejoignez une communauté dynamique de traders africains qui partagent leurs connaissances, expériences et stratégies adaptées à nos marchés."
+            imageSrc="https://images.unsplash.com/photo-1515187029135-18ee286d815b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
             className="animate-fade-in animation-delay-100"
           />
           <FeatureCard
             icon={<TrendingUp className="w-6 h-6" />}
             title="Analyse des Marchés Africains"
             description="Utilisez nos outils d'analyse spécialisés pour les marchés africains, notamment les bourses de Lagos, Nairobi, Casablanca et Johannesburg."
+            imageSrc="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
             className="animate-fade-in animation-delay-200"
           />
           <FeatureCard
             icon={<CreditCard className="w-6 h-6" />}
             title="Solutions de Paiement Locales"
             description="Profitez de nos intégrations avec Orange Money, MTN Mobile Money, Wave et autres systèmes de paiement populaires en Afrique."
+            imageSrc="https://images.unsplash.com/photo-1556741533-6e6a62bd8b49?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
             className="animate-fade-in animation-delay-300"
           />
           <FeatureCard
             icon={<Globe className="w-6 h-6" />}
             title="Contenu Multilingue"
             description="Accédez à des formations en français, anglais, et prochainement en langues locales comme le soussou, le peul et le malinké."
+            imageSrc="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
             className="animate-fade-in animation-delay-400"
           />
           <FeatureCard
             icon={<FileText className="w-6 h-6" />}
             title="Ressources Réglementaires"
             description="Restez informé des réglementations financières spécifiques à la Guinée et aux différentes régions d'Afrique pour un trading en conformité."
+            imageSrc="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
             className="animate-fade-in animation-delay-500"
           />
         </div>
@@ -67,12 +85,20 @@ interface FeatureCardProps {
   icon: React.ReactNode;
   title: string;
   description: string;
+  imageSrc: string;
   className?: string;
 }
 
-const FeatureCard = ({ icon, title, description, className }: FeatureCardProps) => {
+const FeatureCard = ({ icon, title, description, imageSrc, className }: FeatureCardProps) => {
   return (
     <Card hover className={className}>
+      <div className="h-48 overflow-hidden">
+        <img 
+          src={imageSrc} 
+          alt={title} 
+          className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+        />
+      </div>
       <Card.Header>
         <div className="w-12 h-12 rounded-full bg-guinea-green/10 dark:bg-guinea-green/20 flex items-center justify-center text-guinea-green dark:text-guinea-yellow mb-4">
           {icon}

@@ -13,6 +13,15 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center items-center py-16 overflow-hidden dark:bg-gray-950">
+      {/* Background Image */}
+      <div className="absolute inset-0 -z-10 opacity-10 dark:opacity-20">
+        <img 
+          src="https://images.unsplash.com/photo-1586920740928-d373c9a9720a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+          alt="Conakry skyline" 
+          className="w-full h-full object-cover"
+        />
+      </div>
+      
       {/* Background Elements */}
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(var(--secondary),0.1),transparent)] dark:bg-[radial-gradient(ellipse_at_center,rgba(252,209,22,0.15),transparent)]"></div>
       <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-guinea-green/5 dark:bg-guinea-green/10 rounded-full filter blur-3xl"></div>
@@ -41,7 +50,7 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16 animate-fade-in animation-delay-300">
             <Button 
               className="bg-guinea-green hover:bg-guinea-green/90 text-white dark:bg-guinea-green dark:hover:bg-guinea-green/90 px-8 py-6 rounded-full text-lg" 
-              onClick={() => scrollToSection("courses")}
+              onClick={() => scrollToSection("features")}
             >
               Découvrir nos cours
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -49,9 +58,23 @@ const Hero = () => {
             <Button 
               variant="outline" 
               className="border-guinea-yellow text-guinea-yellow hover:bg-guinea-yellow/5 dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow/20 px-8 py-6 rounded-full text-lg"
+              onClick={() => scrollToSection("testimonials")}
             >
               Explorer la plateforme
             </Button>
+          </div>
+        </div>
+
+        {/* Hero Image */}
+        <div className="max-w-4xl mx-auto mb-10 relative rounded-2xl overflow-hidden shadow-2xl animate-fade-in animation-delay-400">
+          <img 
+            src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80" 
+            alt="Traders africains en formation" 
+            className="w-full h-auto"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <p className="font-medium text-lg">Formations adaptées au marché africain</p>
           </div>
         </div>
 
