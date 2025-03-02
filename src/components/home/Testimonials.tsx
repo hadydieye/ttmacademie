@@ -1,54 +1,53 @@
-
 import React, { useState } from "react";
 import Card from "../ui/card";
 import { Star, ArrowLeft, ArrowRight } from "lucide-react";
 
-// Testimonial data with updated images
+// Testimonial data with updated images of black African people
 const testimonials = [
   {
     id: 1,
     name: "Mariama Diallo",
     role: "Trader Indépendante, Conakry",
     content: "TTM Académie a complètement transformé ma façon d'aborder le trading. Les cours sont adaptés à notre contexte guinéen et m'ont permis de développer une stratégie qui tient compte des réalités de notre marché.",
-    avatar: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    avatar: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
     rating: 5,
-    bgImage: "https://images.unsplash.com/photo-1573497620053-ea5300f94f21?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+    bgImage: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
   },
   {
     id: 2,
     name: "Ibrahim Camara",
     role: "Entrepreneur, Kankan",
     content: "Après plusieurs tentatives infructueuses d'investissement, j'ai découvert TTM Académie. La qualité de l'enseignement et le support de la communauté m'ont aidé à comprendre comment investir efficacement malgré les défis de notre économie.",
-    avatar: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    avatar: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
     rating: 5,
-    bgImage: "https://images.unsplash.com/photo-1573496267526-08a69e46a409?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+    bgImage: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
   },
   {
     id: 3,
     name: "Fatoumata Barry",
     role: "Analyste Financière, Dakar",
     content: "En tant que professionnelle de la finance travaillant entre le Sénégal et la Guinée, les outils d'analyse de TTM Académie sont inestimables. Ils prennent en compte les spécificités des marchés ouest-africains que les plateformes internationales ignorent.",
-    avatar: "https://images.unsplash.com/photo-1589156191108-c762ff4b96ab?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    avatar: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
     rating: 5,
-    bgImage: "https://images.unsplash.com/photo-1573167507387-6b4b98cb7c13?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+    bgImage: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
   },
   {
     id: 4,
     name: "Mamadou Sylla",
     role: "Étudiant en Finance, Université de Conakry",
     content: "TTM Académie a comblé le fossé entre la théorie financière enseignée à l'université et les réalités pratiques du trading en Guinée. Les webinaires hebdomadaires avec des traders expérimentés sont particulièrement enrichissants.",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    avatar: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
     rating: 4,
-    bgImage: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+    bgImage: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
   },
   {
     id: 5,
     name: "Aïssatou Baldé",
     role: "Commerçante, Labé",
     content: "Je n'avais aucune connaissance en trading avant TTM Académie. Grâce à leurs cours en français et aux explications claires sur les marchés africains, j'ai réussi à diversifier mes revenus au-delà de mon commerce traditionnel.",
-    avatar: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    avatar: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
     rating: 5,
-    bgImage: "https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+    bgImage: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
   },
 ];
 
@@ -97,7 +96,7 @@ const Testimonials = () => {
         {/* Section Background Image */}
         <div className="relative rounded-xl overflow-hidden mb-12 max-w-5xl mx-auto">
           <img 
-            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+            src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
             alt="Formation de trading" 
             className="w-full h-64 object-cover"
           />

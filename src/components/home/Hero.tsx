@@ -16,7 +16,7 @@ const Hero = () => {
       {/* Background Image */}
       <div className="absolute inset-0 -z-10 opacity-10 dark:opacity-20">
         <img 
-          src="https://images.unsplash.com/photo-1586920740928-d373c9a9720a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+          src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
           alt="Conakry skyline" 
           className="w-full h-full object-cover"
         />
@@ -68,7 +68,7 @@ const Hero = () => {
         {/* Hero Image */}
         <div className="max-w-4xl mx-auto mb-10 relative rounded-2xl overflow-hidden shadow-2xl animate-fade-in animation-delay-400">
           <img 
-            src="https://images.unsplash.com/photo-1508829040192-a1e6716730f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80" 
+            src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
             alt="Traders africains en formation" 
             className="w-full h-auto"
           />
