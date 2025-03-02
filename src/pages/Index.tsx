@@ -36,7 +36,7 @@ const Index = () => {
 
   // Update document title to reflect the new name
   useEffect(() => {
-    document.title = "TTM Académie - Trading Matrix Académie";
+    document.title = "The Trading Matrix Académie";
   }, []);
 
   return (
