@@ -38,7 +38,7 @@ const Hero = () => {
           
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 animate-fade-in animation-delay-100 dark:text-white">
             Devenez un Expert du Trading avec{" "}
-            <span className="text-guinea-gradient">Matrix Académie</span>
+            <span className="text-guinea-gradient">TTM Académie</span>
           </h1>
           
           <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 animate-fade-in animation-delay-200">
@@ -68,7 +68,7 @@ const Hero = () => {
         {/* Hero Image */}
         <div className="max-w-4xl mx-auto mb-10 relative rounded-2xl overflow-hidden shadow-2xl animate-fade-in animation-delay-400">
           <img 
-            src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80" 
+            src="https://images.unsplash.com/photo-1508829040192-a1e6716730f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80" 
             alt="Traders africains en formation" 
             className="w-full h-auto"
           />

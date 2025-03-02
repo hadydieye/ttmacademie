@@ -33,6 +33,11 @@ const Index = () => {
     };
   }, []);
 
+  // Update document title to reflect the new name
+  useEffect(() => {
+    document.title = "TTM Académie - Trading Matrix Académie";
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
