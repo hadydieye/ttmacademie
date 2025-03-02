@@ -1,6 +1,7 @@
 
 import React from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface TestimonialsNavigationProps {
   activeIndex: number;
@@ -17,28 +18,34 @@ const TestimonialsNavigation: React.FC<TestimonialsNavigationProps> = ({
 }) => {
   return (
     <div className="flex justify-center mt-8 gap-4">
-      <button
+      <Button
         onClick={onPrev}
         disabled={activeIndex === 0}
-        className={`w-10 h-10 rounded-full flex items-center justify-center border ${
+        variant="outline"
+        size="icon"
+        className={`w-10 h-10 rounded-full ${
           activeIndex === 0
             ? "border-gray-200 text-gray-400 cursor-not-allowed dark:border-gray-700 dark:text-gray-600"
             : "border-guinea-green text-guinea-green hover:bg-guinea-green hover:text-white transition-colors dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow dark:hover:text-black"
         }`}
+        aria-label="Précédent témoignage"
       >
         <ArrowLeft className="w-5 h-5" />
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={onNext}
         disabled={activeIndex === maxIndex}
-        className={`w-10 h-10 rounded-full flex items-center justify-center border ${
+        variant="outline"
+        size="icon"
+        className={`w-10 h-10 rounded-full ${
           activeIndex === maxIndex
             ? "border-gray-200 text-gray-400 cursor-not-allowed dark:border-gray-700 dark:text-gray-600"
             : "border-guinea-green text-guinea-green hover:bg-guinea-green hover:text-white transition-colors dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow dark:hover:text-black"
         }`}
+        aria-label="Prochain témoignage"
       >
         <ArrowRight className="w-5 h-5" />
-      </button>
+      </Button>
     </div>
   );
 };

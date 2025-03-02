@@ -1,16 +1,33 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Card from "../ui/card";
 import { Check, CreditCard, ArrowRight, Phone, Shield } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 type BillingCycle = "monthly" | "yearly";
 
 const Pricing = () => {
+  const { toast } = useToast();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
 
   const toggleBillingCycle = () => {
     setBillingCycle(billingCycle === "monthly" ? "yearly" : "monthly");
+  };
+
+  const handlePlanSelection = (planName: string) => {
+    toast({
+      title: "Plan sélectionné",
+      description: `Vous avez choisi le plan ${planName}. Un conseiller vous contactera bientôt.`,
+      duration: 3000,
+    });
+  };
+
+  const handleCustomQuote = () => {
+    toast({
+      title: "Demande reçue",
+      description: "Votre demande de devis personnalisé a été envoyée. Notre équipe vous contactera sous peu.",
+      duration: 3000,
+    });
   };
 
   const plans = [
@@ -180,6 +197,7 @@ const Pricing = () => {
                       ? "bg-guinea-yellow hover:bg-guinea-yellow/90 text-black"
                       : "bg-guinea-green hover:bg-guinea-green/90 text-white"
                   }`}
+                  onClick={() => handlePlanSelection(plan.name)}
                 >
                   {plan.cta}
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -219,7 +237,11 @@ const Pricing = () => {
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             Contactez notre équipe basée à Conakry pour obtenir une solution sur mesure adaptée à vos objectifs commerciaux.
           </p>
-          <Button variant="outline" className="border-guinea-green text-guinea-green hover:bg-guinea-green/5 dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow/20">
+          <Button 
+            variant="outline" 
+            className="border-guinea-green text-guinea-green hover:bg-guinea-green/5 dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow/20"
+            onClick={handleCustomQuote}
+          >
             Demander un Devis Personnalisé
           </Button>
         </div>
