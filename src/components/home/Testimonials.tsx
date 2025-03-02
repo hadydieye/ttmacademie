@@ -1,56 +1,8 @@
 
 import React, { useState, useEffect } from "react";
-import Card from "../ui/card";
-import { Star, ArrowLeft, ArrowRight } from "lucide-react";
-
-// Testimonial data with updated images of Black African people
-const testimonials = [
-  {
-    id: 1,
-    name: "Mariama Diallo",
-    role: "Trader Indépendante, Conakry",
-    content: "TTM Académie a complètement transformé ma façon d'aborder le trading. Les cours sont adaptés à notre contexte guinéen et m'ont permis de développer une stratégie qui tient compte des réalités de notre marché.",
-    avatar: "/lovable-uploads/363f58a3-3e8b-4091-89d0-d1b466177e21.png",
-    rating: 5,
-    bgImage: "/lovable-uploads/71cfb6c0-4863-4687-85e2-2ee0854b8f4f.png"
-  },
-  {
-    id: 2,
-    name: "Ibrahim Camara",
-    role: "Entrepreneur, Kankan",
-    content: "Après plusieurs tentatives infructueuses d'investissement, j'ai découvert TTM Académie. La qualité de l'enseignement et le support de la communauté m'ont aidé à comprendre comment investir efficacement malgré les défis de notre économie.",
-    avatar: "/lovable-uploads/8e016688-a288-459d-bd7a-330cfba461d0.png",
-    rating: 5,
-    bgImage: "/lovable-uploads/6c4774b3-6602-45b0-9a72-b682325cdfd4.png"
-  },
-  {
-    id: 3,
-    name: "Fatoumata Barry",
-    role: "Analyste Financière, Dakar",
-    content: "En tant que professionnelle de la finance travaillant entre le Sénégal et la Guinée, les outils d'analyse de TTM Académie sont inestimables. Ils prennent en compte les spécificités des marchés ouest-africains que les plateformes internationales ignorent.",
-    avatar: "/lovable-uploads/5c385599-f359-4f79-8935-30da7331f454.png",
-    rating: 5,
-    bgImage: "/lovable-uploads/72d3ecf6-692c-439e-a697-97f482443862.png"
-  },
-  {
-    id: 4,
-    name: "Mamadou Sylla",
-    role: "Étudiant en Finance, Université de Conakry",
-    content: "TTM Académie a comblé le fossé entre la théorie financière enseignée à l'université et les réalités pratiques du trading en Guinée. Les webinaires hebdomadaires avec des traders expérimentés sont particulièrement enrichissants.",
-    avatar: "/lovable-uploads/f662b4c5-66d3-4211-8cbe-970970311a37.png",
-    rating: 4,
-    bgImage: "/lovable-uploads/3a80c4e7-bf3e-47a9-8d60-6812985952df.png"
-  },
-  {
-    id: 5,
-    name: "Aïssatou Baldé",
-    role: "Commerçante, Labé",
-    content: "Je n'avais aucune connaissance en trading avant TTM Académie. Grâce à leurs cours en français et aux explications claires sur les marchés africains, j'ai réussi à diversifier mes revenus au-delà de mon commerce traditionnel.",
-    avatar: "/lovable-uploads/854c6010-6c34-45db-841e-c4a02e4f7b10.png",
-    rating: 5,
-    bgImage: "/lovable-uploads/60c4dc83-6733-4b61-bf3b-a31ad902bbde.png"
-  },
-];
+import { testimonials } from "@/data/testimonials";
+import TestimonialsCarousel from "./testimonials/TestimonialsCarousel";
+import TestimonialsNavigation from "./testimonials/TestimonialsNavigation";
 
 const Testimonials = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -82,19 +34,6 @@ const Testimonials = () => {
     setActiveIndex(prevIndex => (prevIndex < maxIndex ? prevIndex + 1 : maxIndex));
   };
 
-  const renderStars = (rating: number) => {
-    return Array(5)
-      .fill(0)
-      .map((_, index) => (
-        <Star
-          key={index}
-          className={`w-4 h-4 ${
-            index < rating ? "text-guinea-yellow fill-guinea-yellow" : "text-gray-300"
-          }`}
-        />
-      ));
-  };
-
   return (
     <section id="testimonials" className="py-24 bg-white dark:bg-gray-950">
       <div className="container mx-auto px-4 md:px-6">
@@ -124,87 +63,18 @@ const Testimonials = () => {
           </div>
         </div>
 
-        <div className="relative">
-          <div className="flex overflow-hidden">
-            <div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateX(-${activeIndex * (100 / itemsPerPage)}%)`,
-                width: `${(testimonials.length / itemsPerPage) * 100}%`,
-              }}
-            >
-              {testimonials.map((testimonial) => (
-                <div
-                  key={testimonial.id}
-                  className="p-4"
-                  style={{ width: `${100 / testimonials.length}%` }}
-                >
-                  <Card hover className="h-full overflow-hidden">
-                    <div className="h-32 overflow-hidden relative">
-                      <img 
-                        src={testimonial.bgImage} 
-                        alt={`${testimonial.name} background`} 
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    </div>
-                    <Card.Header className="pb-0 relative">
-                      <div className="absolute -top-12 left-4">
-                        <img
-                          src={testimonial.avatar}
-                          alt={testimonial.name}
-                          className="w-16 h-16 rounded-full object-cover border-4 border-white dark:border-gray-800"
-                        />
-                      </div>
-                      <div className="flex justify-between items-start pt-6">
-                        <div className="mt-2">
-                          <h3 className="font-semibold text-gray-900 dark:text-white">
-                            {testimonial.name}
-                          </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">
-                            {testimonial.role}
-                          </p>
-                        </div>
-                        <div className="flex">
-                          {renderStars(testimonial.rating)}
-                        </div>
-                      </div>
-                    </Card.Header>
-                    <Card.Content>
-                      <p className="text-gray-700 dark:text-gray-300 italic">"{testimonial.content}"</p>
-                    </Card.Content>
-                  </Card>
-                </div>
-              ))}
-            </div>
-          </div>
+        <TestimonialsCarousel 
+          testimonials={testimonials} 
+          activeIndex={activeIndex} 
+          itemsPerPage={itemsPerPage} 
+        />
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-center mt-8 gap-4">
-            <button
-              onClick={handlePrev}
-              disabled={activeIndex === 0}
-              className={`w-10 h-10 rounded-full flex items-center justify-center border ${
-                activeIndex === 0
-                  ? "border-gray-200 text-gray-400 cursor-not-allowed dark:border-gray-700 dark:text-gray-600"
-                  : "border-guinea-green text-guinea-green hover:bg-guinea-green hover:text-white transition-colors dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow dark:hover:text-black"
-              }`}
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={handleNext}
-              disabled={activeIndex === maxIndex}
-              className={`w-10 h-10 rounded-full flex items-center justify-center border ${
-                activeIndex === maxIndex
-                  ? "border-gray-200 text-gray-400 cursor-not-allowed dark:border-gray-700 dark:text-gray-600"
-                  : "border-guinea-green text-guinea-green hover:bg-guinea-green hover:text-white transition-colors dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow dark:hover:text-black"
-              }`}
-            >
-              <ArrowRight className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
+        <TestimonialsNavigation 
+          activeIndex={activeIndex} 
+          maxIndex={maxIndex} 
+          onPrev={handlePrev} 
+          onNext={handleNext} 
+        />
       </div>
     </section>
   );
