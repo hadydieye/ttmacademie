@@ -5,16 +5,16 @@ import { BookOpen, Users, TrendingUp, BarChart4, Calendar, MessageSquare } from 
 
 const Features = () => {
   return (
-    <section id="features" className="py-24 bg-gray-50">
+    <section id="features" className="py-24 bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-block text-sm font-medium px-3 py-1 rounded-full bg-secondary-dark/10 text-secondary-dark mb-4">
+          <span className="inline-block text-sm font-medium px-3 py-1 rounded-full bg-secondary-dark/10 text-secondary-dark dark:bg-secondary-dark/20 dark:text-secondary/90 mb-4">
             Fonctionnalités
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">
             Tout ce dont vous avez besoin pour réussir
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600 dark:text-gray-400">
             Matrix Académie offre une plateforme complète conçue pour vous accompagner 
             dans chaque étape de votre parcours d'apprentissage du trading.
           </p>
@@ -74,13 +74,13 @@ const FeatureCard = ({ icon, title, description, className }: FeatureCardProps) 
   return (
     <Card hover className={className}>
       <Card.Header>
-        <div className="w-12 h-12 rounded-full bg-primary-dark/10 flex items-center justify-center text-primary-dark mb-4">
+        <div className="w-12 h-12 rounded-full bg-primary-dark/10 dark:bg-primary-dark/20 flex items-center justify-center text-primary-dark dark:text-white mb-4">
           {icon}
         </div>
         <Card.Title>{title}</Card.Title>
       </Card.Header>
       <Card.Content>
-        <p className="text-gray-600">{description}</p>
+        <p className="text-gray-600 dark:text-gray-400">{description}</p>
       </Card.Content>
     </Card>
   );

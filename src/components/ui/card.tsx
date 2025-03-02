@@ -19,7 +19,9 @@ const Card = ({
     <div
       className={cn(
         "rounded-2xl overflow-hidden",
-        glass ? "glass" : "bg-white shadow-md",
+        glass 
+          ? "glass dark:glass-dark" 
+          : "bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900/30",
         hover && "transition-all duration-300 hover:shadow-xl hover:-translate-y-1",
         className
       )}
@@ -53,7 +55,7 @@ Card.Title = function CardTitle({
   return (
     <h3
       className={cn(
-        "text-xl font-semibold leading-tight tracking-tight",
+        "text-xl font-semibold leading-tight tracking-tight dark:text-white",
         className
       )}
       {...props}
@@ -70,7 +72,7 @@ Card.Description = function CardDescription({
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      className={cn("text-sm text-gray-500", className)}
+      className={cn("text-sm text-gray-500 dark:text-gray-400", className)}
       {...props}
     >
       {children}
