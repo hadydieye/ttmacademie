@@ -11,8 +11,8 @@ const Newsletter = () => {
         <Card className="relative rounded-3xl overflow-hidden">
           <div className="absolute inset-0 -z-10">
             <img 
-              src="https://images.unsplash.com/photo-1531834685032-c34bf0d84c77?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-              alt="Marchés africains" 
+              src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+              alt="Traders africains en réunion" 
               className="w-full h-full object-cover opacity-20 dark:opacity-10"
             />
           </div>
@@ -49,8 +49,8 @@ const Newsletter = () => {
               <div className="hidden md:block">
                 <div className="relative">
                   <img 
-                    src="https://images.unsplash.com/photo-1642978277577-83c6ceac4820?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                    alt="Analyse des marchés africains" 
+                    src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                    alt="Analyse des marchés par des experts africains" 
                     className="rounded-lg shadow-2xl"
                   />
                   <div className="absolute top-0 right-0 bg-guinea-green text-white px-4 py-2 rounded-bl-lg rounded-tr-lg font-medium">
