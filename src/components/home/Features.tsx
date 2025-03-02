@@ -24,7 +24,7 @@ const Features = () => {
         <div className="max-w-5xl mx-auto mb-16 overflow-hidden rounded-xl shadow-xl animate-fade-in">
           <div className="relative">
             <img 
-              src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+              src="https://images.unsplash.com/photo-1573164574511-73c773193279?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
               alt="Traders africains collaborant" 
               className="w-full h-auto object-cover"
             />
@@ -37,42 +37,42 @@ const Features = () => {
             icon={<BookOpen className="w-6 h-6" />}
             title="Cours Adaptés au Marché Africain"
             description="Accédez à une bibliothèque complète de cours créés spécifiquement pour les marchés africains, avec des stratégies tenant compte des réalités économiques locales."
-            imageSrc="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            imageSrc="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
             className="animate-fade-in"
           />
           <FeatureCard
             icon={<Users className="w-6 h-6" />}
             title="Communauté Panafricaine"
             description="Rejoignez une communauté dynamique de traders africains qui partagent leurs connaissances, expériences et stratégies adaptées à nos marchés."
-            imageSrc="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            imageSrc="https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
             className="animate-fade-in animation-delay-100"
           />
           <FeatureCard
             icon={<TrendingUp className="w-6 h-6" />}
             title="Analyse des Marchés Africains"
             description="Utilisez nos outils d'analyse spécialisés pour les marchés africains, notamment les bourses de Lagos, Nairobi, Casablanca et Johannesburg."
-            imageSrc="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            imageSrc="https://images.unsplash.com/photo-1614644147724-2d4785d69962?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
             className="animate-fade-in animation-delay-200"
           />
           <FeatureCard
             icon={<CreditCard className="w-6 h-6" />}
             title="Solutions de Paiement Locales"
             description="Profitez de nos intégrations avec Orange Money, MTN Mobile Money, Wave et autres systèmes de paiement populaires en Afrique."
-            imageSrc="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            imageSrc="https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
             className="animate-fade-in animation-delay-300"
           />
           <FeatureCard
             icon={<Globe className="w-6 h-6" />}
             title="Contenu Multilingue"
             description="Accédez à des formations en français, anglais, et prochainement en langues locales comme le soussou, le peul et le malinké."
-            imageSrc="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            imageSrc="https://images.unsplash.com/photo-1560523160-754a9e25c68f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
             className="animate-fade-in animation-delay-400"
           />
           <FeatureCard
             icon={<FileText className="w-6 h-6" />}
             title="Ressources Réglementaires"
             description="Restez informé des réglementations financières spécifiques à la Guinée et aux différentes régions d'Afrique pour un trading en conformité."
-            imageSrc="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            imageSrc="https://images.unsplash.com/photo-1560264280-88b68371db39?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
             className="animate-fade-in animation-delay-500"
           />
         </div>
