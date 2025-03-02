@@ -40,7 +40,18 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div 
+      className="min-h-screen flex flex-col"
+      style={{
+        backgroundImage: `url('/lovable-uploads/d7319208-2335-4578-9eaa-e3cbe86a5661.png')`,
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundBlendMode: 'overlay',
+        backgroundColor: 'rgba(255, 255, 255, 0.97)',
+      }}
+    >
       <Navbar />
       <main className="flex-grow">
         <Hero />
