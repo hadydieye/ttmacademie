@@ -16,8 +16,8 @@ const Hero = () => {
       {/* Background Image */}
       <div className="absolute inset-0 -z-10 opacity-10 dark:opacity-20">
         <img 
-          src="https://images.unsplash.com/photo-1614644147724-2d4785d69962?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-          alt="Traders africains" 
+          src="/lovable-uploads/0e95e2af-2c76-4a3f-97e7-a3b26879b4e5.png" 
+          alt="Graphiques de trading" 
           className="w-full h-full object-cover"
         />
       </div>
@@ -68,8 +68,8 @@ const Hero = () => {
         {/* Hero Image */}
         <div className="max-w-4xl mx-auto mb-10 relative rounded-2xl overflow-hidden shadow-2xl animate-fade-in animation-delay-400">
           <img 
-            src="https://images.unsplash.com/photo-1532619675605-1ede6c2ed2b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-            alt="Traders africains en formation" 
+            src="/lovable-uploads/6cd4dbc8-11b8-4047-b4c0-714227a82cb3.png" 
+            alt="Traders africains analysant le marché" 
             className="w-full h-auto"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>

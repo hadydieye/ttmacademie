@@ -7,6 +7,7 @@ import Features from "@/components/home/Features";
 import Testimonials from "@/components/home/Testimonials";
 import Pricing from "@/components/home/Pricing";
 import Newsletter from "@/components/home/Newsletter";
+import MarketAnalysis from "@/components/home/MarketAnalysis";
 
 const Index = () => {
   useEffect(() => {
@@ -43,6 +44,7 @@ const Index = () => {
       <Navbar />
       <main className="flex-grow">
         <Hero />
+        <MarketAnalysis />
         <Features />
         <Testimonials />
         <Pricing />
