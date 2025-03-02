@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -29,11 +28,9 @@ const Navbar = () => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
-            <img 
-              src="/lovable-uploads/a9f8087d-7f56-4d3d-a10c-e977b4f9d810.png" 
-              alt="TTM Académie Logo" 
-              className="h-12 w-auto"
-            />
+            <span className="text-2xl font-bold bg-gradient-to-r from-primary-dark to-secondary-dark bg-clip-text text-transparent dark:from-white dark:to-gray-400">
+              TTM Académie
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
