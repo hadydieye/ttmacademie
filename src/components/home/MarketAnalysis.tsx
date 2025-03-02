@@ -48,7 +48,7 @@ const MarketAnalysis = () => {
               <Card.Content>
                 <div className="h-96">
                   <img 
-                    src="/lovable-uploads/d7319208-2335-4578-9eaa-e3cbe86a5661.png" 
+                    src="/lovable-uploads/60c4dc83-6733-4b61-bf3b-a31ad902bbde.png" 
                     alt="Analyse technique XAUUSD" 
                     className="w-full h-full object-contain"
                   />
@@ -105,7 +105,7 @@ const MarketAnalysis = () => {
                   </div>
                   
                   <img 
-                    src="/lovable-uploads/9b285d2e-d2cd-4ce7-bc61-e4d2c63c3a12.png" 
+                    src="/lovable-uploads/5c385599-f359-4f79-8935-30da7331f454.png" 
                     alt="Positions de trading" 
                     className="w-full mt-4 rounded-lg"
                   />
@@ -119,7 +119,7 @@ const MarketAnalysis = () => {
               </Card.Header>
               <Card.Content>
                 <img 
-                  src="/lovable-uploads/45badc4a-1db3-4805-bd99-4ad83c3ddb0b.png" 
+                  src="/lovable-uploads/7807fc3d-8178-4bb4-8601-2375fa79ec42.png" 
                   alt="Graphique de trading" 
                   className="w-full rounded-lg mb-4"
                 />
@@ -140,7 +140,7 @@ const MarketAnalysis = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <img 
-                    src="/lovable-uploads/377c789a-9c7e-4517-9499-fb2097c2647a.png" 
+                    src="/lovable-uploads/6c4774b3-6602-45b0-9a72-b682325cdfd4.png" 
                     alt="Trader africain analysant des graphiques" 
                     className="w-full h-64 object-cover rounded-lg mb-4"
                   />
@@ -151,7 +151,7 @@ const MarketAnalysis = () => {
                 </div>
                 <div>
                   <img 
-                    src="/lovable-uploads/13aff269-29ab-4b50-956a-dcd5d76a9068.png" 
+                    src="/lovable-uploads/72d3ecf6-692c-439e-a697-97f482443862.png" 
                     alt="Stratégie de trading" 
                     className="w-full h-64 object-cover rounded-lg mb-4"
                   />
@@ -171,7 +171,7 @@ const MarketAnalysis = () => {
             <Card.Content>
               <div className="mb-6">
                 <img 
-                  src="/lovable-uploads/9b285d2e-d2cd-4ce7-bc61-e4d2c63c3a12.png" 
+                  src="/lovable-uploads/3a80c4e7-bf3e-47a9-8d60-6812985952df.png" 
                   alt="Analyse de marché avancée" 
                   className="w-full h-48 object-cover rounded-lg mb-4"
                 />
