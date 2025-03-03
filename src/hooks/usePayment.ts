@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
-type PaymentMethod = 'orange-money' | 'crypto' | 'card';
+type PaymentMethod = 'mobile-money' | 'crypto' | 'card';
 
 interface PaymentDetails {
   planId: string;
