@@ -9,7 +9,90 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      activity_logs: {
+        Row: {
+          details: string | null
+          id: string
+          timestamp: string | null
+          type: string
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          details?: string | null
+          id?: string
+          timestamp?: string | null
+          type: string
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          details?: string | null
+          id?: string
+          timestamp?: string | null
+          type?: string
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          id: string
+          name: string | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          id: string
+          name?: string | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          name?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
+      stats: {
+        Row: {
+          change: string
+          description: string
+          icon: string
+          id: string
+          last_updated: string | null
+          positive: boolean | null
+          title: string
+          value: string
+        }
+        Insert: {
+          change: string
+          description: string
+          icon: string
+          id?: string
+          last_updated?: string | null
+          positive?: boolean | null
+          title: string
+          value: string
+        }
+        Update: {
+          change?: string
+          description?: string
+          icon?: string
+          id?: string
+          last_updated?: string | null
+          positive?: boolean | null
+          title?: string
+          value?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

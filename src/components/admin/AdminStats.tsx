@@ -1,49 +1,98 @@
 
-import React from "react";
-import { User, LogIn, Eye, TrendingUp } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { User, LogIn, Eye, TrendingUp, AlertCircle } from "lucide-react";
 import Card from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export function AdminStats() {
-  // Dans une application réelle, ces données viendraient de Supabase
-  const stats = [
-    { 
-      title: "Utilisateurs", 
-      value: 254, 
-      change: "+12%", 
-      positive: true,
-      icon: User, 
-      description: "Utilisateurs inscrits" 
-    },
-    { 
-      title: "Connexions", 
-      value: 845, 
-      change: "+18%", 
-      positive: true,
-      icon: LogIn, 
-      description: "Ce mois-ci" 
-    },
-    { 
-      title: "Visites", 
-      value: "3,721", 
-      change: "+7%", 
-      positive: true,
-      icon: Eye, 
-      description: "Visites uniques" 
-    },
-    { 
-      title: "Taux de conversion", 
-      value: "6.8%", 
-      change: "+2.1%", 
-      positive: true,
-      icon: TrendingUp, 
-      description: "Visiteurs → Inscriptions" 
+  const [stats, setStats] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fonction pour récupérer les statistiques
+  const fetchStats = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('stats')
+        .select('*')
+        .order('title');
+
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        setStats(data);
+      }
+    } catch (error: any) {
+      console.error("Erreur lors de la récupération des statistiques:", error.message);
+      toast.error("Impossible de charger les statistiques");
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  // Configurer l'écoute des changements en temps réel
+  useEffect(() => {
+    // Charger les données initiales
+    fetchStats();
+
+    // Configurer le canal de communication en temps réel
+    const channel = supabase
+      .channel('stats-changes')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'stats' 
+        }, 
+        (payload) => {
+          console.log('Changement détecté dans les statistiques:', payload);
+          fetchStats(); // Recharger les données lorsqu'un changement est détecté
+        }
+      )
+      .subscribe();
+
+    // Nettoyer l'abonnement
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  // Obtenir l'icône correspondante
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'User': return User;
+      case 'LogIn': return LogIn;
+      case 'Eye': return Eye;
+      case 'TrendingUp': return TrendingUp;
+      default: return AlertCircle;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[...Array(4)].map((_, index) => (
+          <Card key={index} className="p-6 animate-pulse">
+            <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          </Card>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {stats.map((stat, index) => (
-        <StatCard key={index} {...stat} />
+        <StatCard key={index} 
+          title={stat.title} 
+          value={stat.value} 
+          change={stat.change} 
+          positive={stat.positive} 
+          icon={getIcon(stat.icon)} 
+          description={stat.description} 
+        />
       ))}
     </div>
   );
