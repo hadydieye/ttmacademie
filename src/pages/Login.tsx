@@ -8,6 +8,7 @@ import AuthLayout from "@/components/auth/AuthLayout";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
+import TestAuthStatus from "@/components/auth/TestAuthStatus";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,6 +17,13 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
+  const [showTestTools, setShowTestTools] = useState(false);
+
+  // Données de test pour faciliter les tests
+  const testAccounts = [
+    { email: "test@example.com", password: "password123" },
+    { email: "admin@example.com", password: "admin123" }
+  ];
 
   useEffect(() => {
     if (user) {
@@ -34,6 +42,12 @@ const Login = () => {
     } finally {
       setLocalLoading(false);
     }
+  };
+
+  const fillTestAccount = (account: { email: string, password: string }) => {
+    setEmail(account.email);
+    setPassword(account.password);
+    toast.info("Compte de test rempli, cliquez sur Se connecter pour vous authentifier");
   };
 
   return (
@@ -111,6 +125,50 @@ const Login = () => {
           </p>
         </div>
       </form>
+
+      {/* Bouton pour afficher les outils de test */}
+      <div className="mt-8 text-center">
+        <button
+          type="button"
+          onClick={() => setShowTestTools(!showTestTools)}
+          className="text-xs text-gray-500 hover:text-gray-400 transition-colors"
+        >
+          {showTestTools ? "Masquer outils de test" : "Afficher outils de test"}
+        </button>
+      </div>
+
+      {/* Outils de test uniquement visibles en mode développement */}
+      {showTestTools && (
+        <div className="mt-4 p-4 border border-gray-700 rounded-lg bg-gray-900">
+          <h3 className="text-sm font-medium mb-3 text-gray-300">Outils de test (Mode Développement)</h3>
+          
+          <div className="grid grid-cols-1 gap-2 mb-4">
+            {testAccounts.map((account, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                size="sm"
+                onClick={() => fillTestAccount(account)}
+                className="text-xs justify-start border-gray-700 hover:bg-gray-800"
+              >
+                <span className="truncate">{account.email}</span>
+              </Button>
+            ))}
+          </div>
+          
+          <TestAuthStatus />
+          
+          <div className="mt-4 text-xs text-gray-500">
+            <p>Conseils:</p>
+            <ul className="list-disc list-inside mt-1">
+              <li>Créez d'abord un compte via la page d'inscription</li>
+              <li>Vérifiez l'état de l'email dans les détails utilisateur</li>
+              <li>Utilisez le bouton "Confirmer Email" si nécessaire</li>
+              <li>Consultez la console du navigateur pour les erreurs</li>
+            </ul>
+          </div>
+        </div>
+      )}
     </AuthLayout>
   );
 };

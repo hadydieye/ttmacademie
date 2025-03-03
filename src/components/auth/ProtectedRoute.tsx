@@ -13,6 +13,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Log pour le débogage
+    console.log('ProtectedRoute - État utilisateur:', { 
+      isLoading, 
+      isAuthenticated: !!user,
+      user: user ? { 
+        id: user.id, 
+        email: user.email, 
+        confirmed: !!user.email_confirmed_at 
+      } : null
+    });
+
     if (!isLoading && !user) {
       toast.error("Accès refusé. Veuillez vous connecter pour accéder à cette page.");
       navigate('/login');

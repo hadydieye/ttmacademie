@@ -11,6 +11,7 @@ interface AuthContextProps {
   signUp: (email: string, password: string, metadata: { firstName: string, lastName: string }) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  resendConfirmationEmail: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -58,7 +59,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   ) => {
     try {
       setIsLoading(true);
-      const { error } = await supabase.auth.signUp({
+      const { error, data } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -70,9 +71,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       toast({
         title: "Inscription réussie",
-        description: "Votre compte a été créé avec succès.",
+        description: "Votre compte a été créé avec succès. Veuillez vérifier votre e-mail pour confirmer votre compte.",
       });
+      
+      // Log pour le débogage
+      console.log("Inscription réussie:", data);
     } catch (error: any) {
+      console.error("Erreur détaillée d'inscription:", error);
+      
       toast({
         title: "Erreur lors de l'inscription",
         description: error.message || "Une erreur est survenue lors de l'inscription.",
@@ -87,18 +93,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signIn = async (email: string, password: string) => {
     try {
       setIsLoading(true);
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error, data } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        // Gestion spécifique de l'erreur "Email not confirmed"
+        if (error.message === "Email not confirmed") {
+          throw new Error("Votre email n'a pas été confirmé. Veuillez vérifier votre boîte de réception ou cliquer sur renvoyer l'email de confirmation.");
+        }
+        throw error;
+      }
       
       toast({
         title: "Connexion réussie",
         description: "Vous êtes maintenant connecté.",
       });
+      
+      // Log pour le débogage
+      console.log("Connexion réussie:", data);
     } catch (error: any) {
+      console.error("Erreur détaillée de connexion:", error);
+      
       toast({
         title: "Erreur de connexion",
         description: error.message || "Identifiants invalides. Veuillez réessayer.",
@@ -131,6 +148,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Nouvelle fonction pour renvoyer l'email de confirmation
+  const resendConfirmationEmail = async (email: string) => {
+    try {
+      setIsLoading(true);
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: email,
+      });
+
+      if (error) throw error;
+      
+      toast({
+        title: "Email envoyé",
+        description: "Un nouvel email de confirmation a été envoyé à votre adresse.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: error.message || "Une erreur est survenue lors de l'envoi de l'email.",
+        variant: "destructive",
+      });
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const value = {
     user,
     session,
@@ -138,6 +182,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signUp,
     signIn,
     signOut,
+    resendConfirmationEmail,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
