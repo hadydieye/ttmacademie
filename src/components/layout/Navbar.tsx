@@ -1,13 +1,13 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 
 const Navbar = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -21,19 +21,11 @@ const Navbar = () => {
   }, []);
 
   const handleLogin = () => {
-    toast({
-      title: "Connexion",
-      description: "Le module de connexion est en cours de développement.",
-      duration: 3000,
-    });
+    navigate('/login');
   };
 
   const handleSignup = () => {
-    toast({
-      title: "Inscription",
-      description: "Le module d'inscription est en cours de développement.",
-      duration: 3000,
-    });
+    navigate('/register');
   };
 
   const scrollToSection = (id: string) => {
