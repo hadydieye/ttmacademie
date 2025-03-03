@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Home } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/context/AuthContext";
@@ -72,6 +72,14 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
+            <NavLink 
+              href="/" 
+              onClick={() => navigate("/")}
+              active={location.pathname === '/'}
+              icon={<Home className="w-4 h-4 mr-1" />}
+            >
+              Accueil
+            </NavLink>
             <NavLink 
               href="features" 
               onClick={() => scrollToSection("features")}
@@ -155,6 +163,17 @@ const Navbar = () => {
         <div className="md:hidden">
           <div className="px-4 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-900 shadow-md">
             <MobileNavLink 
+              href="/" 
+              onClick={() => {
+                navigate("/");
+                setIsMobileMenuOpen(false);
+              }}
+              active={location.pathname === '/'}
+              icon={<Home className="w-4 h-4 mr-1" />}
+            >
+              Accueil
+            </MobileNavLink>
+            <MobileNavLink 
               href="features" 
               onClick={() => scrollToSection("features")}
               active={location.pathname === '/features'}
@@ -217,43 +236,48 @@ interface NavLinkProps {
   onClick: () => void;
   children: React.ReactNode;
   active?: boolean;
+  icon?: React.ReactNode;
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ href, onClick, children, active }) => {
+const NavLink: React.FC<NavLinkProps> = ({ href, onClick, children, active, icon }) => {
   return (
     <a
-      href={`/${href}`}
+      href={href}
       onClick={(e) => {
         e.preventDefault();
         if (onClick) onClick();
       }}
-      className={`px-3 py-2 text-sm font-medium rounded-md 
+      className={`px-3 py-2 text-sm font-medium rounded-md flex items-center
         ${active 
           ? "text-primary-dark dark:text-white" 
           : "text-gray-700 hover:text-primary-dark dark:text-gray-300 dark:hover:text-white"
         } 
         transition-colors cursor-pointer`}
     >
+      {icon}
       {children}
     </a>
   );
 };
 
-const MobileNavLink: React.FC<NavLinkProps> = ({ href, onClick, children, active }) => {
+interface MobileNavLinkProps extends NavLinkProps {}
+
+const MobileNavLink: React.FC<MobileNavLinkProps> = ({ href, onClick, children, active, icon }) => {
   return (
     <a
-      href={`/${href}`}
+      href={href}
       onClick={(e) => {
         e.preventDefault();
         if (onClick) onClick();
       }}
-      className={`block px-3 py-2 text-base font-medium rounded-md 
+      className={`block px-3 py-2 text-base font-medium rounded-md flex items-center
         ${active 
           ? "text-primary-dark bg-gray-50 dark:text-white dark:bg-gray-800" 
           : "text-gray-700 hover:text-primary-dark hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800"
         } 
         transition-colors cursor-pointer`}
     >
+      {icon}
       {children}
     </a>
   );
