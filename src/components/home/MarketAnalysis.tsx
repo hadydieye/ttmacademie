@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ArrowUpRight, ArrowDownRight, TrendingUp, BarChart4 } from "lucide-react";
 import { Link } from "react-router-dom";
+import LiveQuotes from "./LiveQuotes";
 
 const data = [
   { name: "Jan", value: 2750.40 },
@@ -32,6 +33,11 @@ const MarketAnalysis = () => {
             Maîtrisez les techniques d'analyse utilisées par les meilleurs traders africains pour 
             identifier les opportunités sur les marchés financiers locaux et internationaux.
           </p>
+        </div>
+
+        {/* Nouvelle section: Cotations en temps réel */}
+        <div className="mb-12">
+          <LiveQuotes />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
