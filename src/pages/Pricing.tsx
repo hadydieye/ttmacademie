@@ -1,15 +1,15 @@
-
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Check, X, ArrowRight } from "lucide-react";
 import Card from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { Link } from "react-router-dom";
 
 const Pricing = () => {
-  const { toast } = useToast();
+  const navigate = useNavigate();
   const [isAnnual, setIsAnnual] = useState(true);
 
   useEffect(() => {
@@ -35,12 +35,15 @@ const Pricing = () => {
     return () => observer.disconnect();
   }, []);
 
-  const handleSubscribe = (plan: string) => {
-    toast({
-      title: "Inscription en cours",
-      description: `Votre demande d'inscription au forfait "${plan}" a été reçue. Redirection vers le paiement...`,
-      duration: 3000,
+  const handleSubscribe = (plan: any) => {
+    const params = new URLSearchParams({
+      plan: plan.id,
+      name: plan.name,
+      amount: isAnnual ? plan.annualPrice.toString() : plan.monthlyPrice.toString(),
+      currency: plan.currency
     });
+    
+    navigate(`/checkout?${params.toString()}`);
   };
 
   const plans = [
@@ -223,7 +226,7 @@ const Pricing = () => {
                     <Card.Footer>
                       <Button 
                         className={`w-full bg-${plan.color} hover:bg-${plan.color}/90 text-white`}
-                        onClick={() => handleSubscribe(plan.name)}
+                        onClick={() => handleSubscribe(plan)}
                       >
                         {plan.cta}
                         <ArrowRight className="ml-2 h-4 w-4" />
