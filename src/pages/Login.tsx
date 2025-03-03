@@ -1,35 +1,39 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { Eye, EyeOff, LogIn } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { signIn, user, isLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (user) {
+      navigate('/formations');
+    }
+  }, [user, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLocalLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: "Connexion réussie",
-        description: "Vous êtes maintenant connecté.",
-        duration: 3000,
-      });
-      navigate("/formations");
-    }, 1000);
+    try {
+      await signIn(email, password);
+    } catch (error) {
+      console.error("Erreur de connexion:", error);
+    } finally {
+      setLocalLoading(false);
+    }
   };
 
   return (
@@ -89,10 +93,10 @@ const Login = () => {
         <Button 
           type="submit" 
           className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg py-2.5 transition-all duration-200 mt-8 font-medium"
-          disabled={isLoading}
+          disabled={isLoading || localLoading}
         >
-          {isLoading ? "Connexion en cours..." : "Se connecter"}
-          {!isLoading && <LogIn className="ml-2 h-4 w-4" />}
+          {(isLoading || localLoading) ? "Connexion en cours..." : "Se connecter"}
+          {!isLoading && !localLoading && <LogIn className="ml-2 h-4 w-4" />}
         </Button>
 
         <div className="mt-6 text-center">

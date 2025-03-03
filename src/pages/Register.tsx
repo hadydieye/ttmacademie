@@ -1,17 +1,18 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/components/ui/use-toast";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { Eye, EyeOff, UserPlus } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 const Register = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { signUp, user, isLoading } = useAuth();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -19,38 +20,38 @@ const Register = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      navigate('/formations');
+    }
+  }, [user, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!agreeTerms) {
-      toast({
-        title: "Conditions d'utilisation",
-        description: "Vous devez accepter les conditions d'utilisation pour continuer.",
-        duration: 3000,
-      });
+      toast.error("Vous devez accepter les conditions d'utilisation pour continuer.");
       return;
     }
     
-    setIsLoading(true);
+    setLocalLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: "Inscription réussie",
-        description: "Votre compte a été créé avec succès.",
-        duration: 3000,
-      });
-      navigate("/formations");
-    }, 1000);
+    try {
+      const { firstName, lastName, email, password } = formData;
+      await signUp(email, password, { firstName, lastName });
+    } catch (error) {
+      console.error("Erreur d'inscription:", error);
+    } finally {
+      setLocalLoading(false);
+    }
   };
 
   return (
@@ -152,10 +153,10 @@ const Register = () => {
         <Button 
           type="submit" 
           className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg py-2.5 transition-all duration-200 font-medium"
-          disabled={isLoading || !agreeTerms}
+          disabled={isLoading || localLoading || !agreeTerms}
         >
-          {isLoading ? "Inscription en cours..." : "S'inscrire"}
-          {!isLoading && <UserPlus className="ml-2 h-4 w-4" />}
+          {(isLoading || localLoading) ? "Inscription en cours..." : "S'inscrire"}
+          {!isLoading && !localLoading && <UserPlus className="ml-2 h-4 w-4" />}
         </Button>
 
         <div className="mt-6 text-center">

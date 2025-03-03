@@ -5,11 +5,14 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Menu, X } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/context/AuthContext";
+import UserMenu from "./UserMenu";
 
 const Navbar = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -106,14 +109,30 @@ const Navbar = () => {
             </NavLink>
             <ThemeToggle />
             <div className="ml-4 flex items-center space-x-3">
-              <Button variant="outline" className="rounded-full" onClick={handleLogin}>Se Connecter</Button>
-              <Button className="rounded-full bg-primary-dark hover:bg-primary-dark/90 text-white dark:bg-white dark:text-primary-dark dark:hover:bg-white/90" onClick={handleSignup}>S'Inscrire</Button>
+              {user ? (
+                <>
+                  <Button 
+                    variant="outline" 
+                    className="rounded-full"
+                    onClick={() => navigate('/formations')}
+                  >
+                    Mes formations
+                  </Button>
+                  <UserMenu />
+                </>
+              ) : (
+                <>
+                  <Button variant="outline" className="rounded-full" onClick={handleLogin}>Se Connecter</Button>
+                  <Button className="rounded-full bg-primary-dark hover:bg-primary-dark/90 text-white dark:bg-white dark:text-primary-dark dark:hover:bg-white/90" onClick={handleSignup}>S'Inscrire</Button>
+                </>
+              )}
             </div>
           </nav>
 
           {/* Mobile Navigation Toggle */}
           <div className="flex items-center md:hidden space-x-3">
             <ThemeToggle />
+            {user && <UserMenu />}
             <Button 
               variant="ghost" 
               size="icon" 
@@ -170,12 +189,22 @@ const Navbar = () => {
             >
               Contact
             </MobileNavLink>
-            <div className="pt-2 flex flex-col space-y-2">
-              <Button variant="outline" className="w-full justify-center" onClick={handleLogin}>Se Connecter</Button>
-              <Button className="w-full justify-center bg-primary-dark hover:bg-primary-dark/90 text-white dark:bg-white dark:text-primary-dark dark:hover:bg-white/90" onClick={handleSignup}>
-                S'Inscrire
-              </Button>
-            </div>
+            {user ? (
+              <MobileNavLink 
+                href="formations" 
+                onClick={() => navigate('/formations')}
+                active={location.pathname === '/formations'}
+              >
+                Mes formations
+              </MobileNavLink>
+            ) : (
+              <div className="pt-2 flex flex-col space-y-2">
+                <Button variant="outline" className="w-full justify-center" onClick={handleLogin}>Se Connecter</Button>
+                <Button className="w-full justify-center bg-primary-dark hover:bg-primary-dark/90 text-white dark:bg-white dark:text-primary-dark dark:hover:bg-white/90" onClick={handleSignup}>
+                  S'Inscrire
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}
