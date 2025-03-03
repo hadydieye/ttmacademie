@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Card } from '@/components/ui/card';
+import Card from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
