@@ -58,34 +58,34 @@ const Register = () => {
       title="Créer un compte" 
       subtitle="Rejoignez TTM Académie pour accéder à nos formations"
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="firstName">Prénom</Label>
+            <Label htmlFor="firstName" className="text-gray-300">Prénom</Label>
             <Input
               id="firstName"
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
               required
-              className="rounded-lg"
+              className="rounded-lg bg-gray-800 border-gray-700 placeholder-gray-500 text-gray-200 focus:border-purple-500 focus:ring-purple-500"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="lastName">Nom</Label>
+            <Label htmlFor="lastName" className="text-gray-300">Nom</Label>
             <Input
               id="lastName"
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
               required
-              className="rounded-lg"
+              className="rounded-lg bg-gray-800 border-gray-700 placeholder-gray-500 text-gray-200 focus:border-purple-500 focus:ring-purple-500"
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-gray-300">Email</Label>
           <Input
             id="email"
             name="email"
@@ -94,12 +94,12 @@ const Register = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            className="rounded-lg"
+            className="rounded-lg bg-gray-800 border-gray-700 placeholder-gray-500 text-gray-200 focus:border-purple-500 focus:ring-purple-500"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Mot de passe</Label>
+          <Label htmlFor="password" className="text-gray-300">Mot de passe</Label>
           <div className="relative">
             <Input
               id="password"
@@ -108,12 +108,12 @@ const Register = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="rounded-lg pr-10"
+              className="rounded-lg bg-gray-800 border-gray-700 placeholder-gray-500 text-gray-200 pr-10 focus:border-purple-500 focus:ring-purple-500"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300"
             >
               {showPassword ? (
                 <EyeOff className="h-4 w-4" />
@@ -132,17 +132,18 @@ const Register = () => {
             id="terms" 
             checked={agreeTerms}
             onCheckedChange={(checked) => setAgreeTerms(checked as boolean)}
+            className="border-gray-600 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
           />
           <label
             htmlFor="terms"
-            className="text-sm text-gray-600 dark:text-gray-400"
+            className="text-sm text-gray-400"
           >
             J'accepte les{" "}
-            <Link to="/terms" className="text-primary-dark hover:underline dark:text-blue-400">
+            <Link to="/terms" className="text-purple-400 hover:text-purple-300 transition-colors">
               conditions d'utilisation
             </Link>{" "}
             et la{" "}
-            <Link to="/privacy" className="text-primary-dark hover:underline dark:text-blue-400">
+            <Link to="/privacy" className="text-purple-400 hover:text-purple-300 transition-colors">
               politique de confidentialité
             </Link>
           </label>
@@ -150,7 +151,7 @@ const Register = () => {
 
         <Button 
           type="submit" 
-          className="w-full bg-primary-dark hover:bg-primary-dark/90 text-white dark:bg-blue-600 dark:hover:bg-blue-700 rounded-lg py-2"
+          className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg py-2.5 transition-all duration-200 font-medium"
           disabled={isLoading || !agreeTerms}
         >
           {isLoading ? "Inscription en cours..." : "S'inscrire"}
@@ -158,11 +159,11 @@ const Register = () => {
         </Button>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-400">
             Vous avez déjà un compte?{" "}
             <Link 
               to="/login" 
-              className="text-primary-dark hover:underline dark:text-blue-400 font-medium"
+              className="text-purple-400 hover:text-purple-300 font-medium transition-colors"
             >
               Se connecter
             </Link>
