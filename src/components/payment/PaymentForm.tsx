@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { CreditCard, Banknote, Bitcoin } from 'lucide-react';
+import { CreditCard, Banknote } from 'lucide-react';
 import { usePayment } from '@/hooks/usePayment';
 import { toast } from 'sonner';
 
@@ -97,7 +97,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             <div className="flex items-center space-x-2 border p-3 rounded-md">
               <RadioGroupItem value="crypto" id="crypto" />
               <Label htmlFor="crypto" className="flex items-center">
-                <Bitcoin className="w-5 h-5 mr-2 text-purple-500" />
+                <img 
+                  src="/lovable-uploads/45badc4a-1db3-4805-bd99-4ad83c3ddb0b.png" 
+                  alt="Cryptocurrency" 
+                  className="w-5 h-5 mr-2" 
+                />
                 Cryptomonnaie
               </Label>
             </div>
