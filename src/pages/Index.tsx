@@ -8,6 +8,7 @@ import Testimonials from "@/components/home/Testimonials";
 import Pricing from "@/components/home/Pricing";
 import Newsletter from "@/components/home/Newsletter";
 import MarketAnalysis from "@/components/home/MarketAnalysis";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const Index = () => {
   useEffect(() => {
@@ -62,6 +63,7 @@ const Index = () => {
         <Newsletter />
       </main>
       <Footer />
+      <WhatsAppButton phoneNumber="+224 663 29 32 80" />
     </div>
   );
 };

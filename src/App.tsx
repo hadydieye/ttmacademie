@@ -8,6 +8,7 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Training from "./pages/Training";
@@ -60,6 +61,7 @@ const App = () => (
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <WhatsAppButton phoneNumber="+224 663 29 32 80" />
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
