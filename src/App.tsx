@@ -9,6 +9,7 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import ScrollToTop from "@/components/ScrollToTop";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Training from "./pages/Training";
@@ -62,6 +63,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
             <WhatsAppButton phoneNumber="+224 663 29 32 80" />
+            <ScrollToTop />
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
