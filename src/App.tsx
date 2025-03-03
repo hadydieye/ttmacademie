@@ -18,6 +18,7 @@ import Pricing from "./pages/Pricing";
 import Checkout from "./pages/Checkout";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,11 @@ const App = () => (
               <Route path="/formations" element={
                 <ProtectedRoute>
                   <Training />
+                </ProtectedRoute>
+              } />
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               } />
               <Route path="/login" element={<Login />} />

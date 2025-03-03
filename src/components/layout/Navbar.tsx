@@ -284,3 +284,6 @@ const MobileNavLink: React.FC<MobileNavLinkProps> = ({ href, onClick, children, 
 };
 
 export default Navbar;
+
+// To avoid circular imports, also export the named component
+export { default as Navbar } from "./Navbar";
