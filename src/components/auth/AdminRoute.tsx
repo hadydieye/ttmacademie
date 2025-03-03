@@ -10,7 +10,7 @@ interface AdminRouteProps {
 
 // Dans une application réelle, on vérifierait le rôle d'administrateur dans une table spécifique
 // Pour cet exemple, nous considérons simplement les utilisateurs avec un email spécifique comme admin
-const ADMIN_EMAILS = ['admin@matrixacademie.com', 'test@example.com'];
+const ADMIN_EMAILS = ['admin@matrixacademie.com', 'test@example.com', 'tradingmatrixacademie@gmail.com'];
 
 const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
   const { user, isLoading } = useAuth();
