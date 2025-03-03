@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -37,25 +36,9 @@ const Navbar = () => {
     navigate('/register');
   };
 
-  const scrollToSection = (id: string) => {
+  const navigateToPage = (path: string) => {
     setIsMobileMenuOpen(false);
-    
-    // If we're on the homepage, scroll to section
-    if (location.pathname === '/') {
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      } else {
-        toast({
-          title: "Section non trouvée",
-          description: `La section "${id}" est en cours de développement.`,
-          duration: 3000,
-        });
-      }
-    } else {
-      // If we're not on the homepage, navigate to the corresponding page
-      navigate(`/${id}`);
-    }
+    navigate(`/${path}`);
   };
 
   return (
@@ -86,35 +69,35 @@ const Navbar = () => {
             </NavLink>
             <NavLink 
               href="features" 
-              onClick={() => scrollToSection("features")}
+              onClick={() => navigateToPage("features")}
               active={location.pathname === '/features'}
             >
               Fonctionnalités
             </NavLink>
             <NavLink 
               href="testimonials" 
-              onClick={() => scrollToSection("testimonials")}
+              onClick={() => navigateToPage("testimonials")}
               active={location.pathname === '/testimonials'}
             >
               Témoignages
             </NavLink>
             <NavLink 
               href="pricing" 
-              onClick={() => scrollToSection("pricing")}
+              onClick={() => navigateToPage("pricing")}
               active={location.pathname === '/pricing'}
             >
               Tarifs
             </NavLink>
             <NavLink 
               href="blog" 
-              onClick={() => scrollToSection("blog")}
+              onClick={() => navigateToPage("blog")}
               active={location.pathname === '/blog'}
             >
               Blog
             </NavLink>
             <NavLink 
               href="contact" 
-              onClick={() => scrollToSection("contact")}
+              onClick={() => navigateToPage("contact")}
               active={location.pathname === '/contact'}
             >
               Contact
@@ -195,35 +178,35 @@ const Navbar = () => {
             </MobileNavLink>
             <MobileNavLink 
               href="features" 
-              onClick={() => scrollToSection("features")}
+              onClick={() => navigateToPage("features")}
               active={location.pathname === '/features'}
             >
               Fonctionnalités
             </MobileNavLink>
             <MobileNavLink 
               href="testimonials" 
-              onClick={() => scrollToSection("testimonials")}
+              onClick={() => navigateToPage("testimonials")}
               active={location.pathname === '/testimonials'}
             >
               Témoignages
             </MobileNavLink>
             <MobileNavLink 
               href="pricing" 
-              onClick={() => scrollToSection("pricing")}
+              onClick={() => navigateToPage("pricing")}
               active={location.pathname === '/pricing'}
             >
               Tarifs
             </MobileNavLink>
             <MobileNavLink 
               href="blog" 
-              onClick={() => scrollToSection("blog")}
+              onClick={() => navigateToPage("blog")}
               active={location.pathname === '/blog'}
             >
               Blog
             </MobileNavLink>
             <MobileNavLink 
               href="contact" 
-              onClick={() => scrollToSection("contact")}
+              onClick={() => navigateToPage("contact")}
               active={location.pathname === '/contact'}
             >
               Contact
@@ -306,5 +289,4 @@ const MobileNavLink: React.FC<MobileNavLinkProps> = ({ href, onClick, children, 
 
 export default Navbar;
 
-// To avoid circular imports, also export the named component
 export { default as Navbar } from "./Navbar";
