@@ -51,11 +51,11 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start">
                 <MapPin className="w-5 h-5 text-secondary-dark mt-1 mr-3 flex-shrink-0" />
-                <span className="text-gray-600">123 Avenue du Trading, 75001 Paris, France</span>
+                <span className="text-gray-600">Quartier Lansanaya, Commune de Matoto, Conakry, Guinée</span>
               </li>
               <li className="flex items-center">
                 <Phone className="w-5 h-5 text-secondary-dark mr-3 flex-shrink-0" />
-                <span className="text-gray-600">+33 1 23 45 67 89</span>
+                <span className="text-gray-600">+224 611 35 34 56</span>
               </li>
               <li className="flex items-center">
                 <Mail className="w-5 h-5 text-secondary-dark mr-3 flex-shrink-0" />
