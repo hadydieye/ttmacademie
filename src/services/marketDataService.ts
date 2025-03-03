@@ -20,7 +20,7 @@ const formatSymbolForAPI = (symbol: string): string => {
 };
 
 // Liste des symboles à surveiller
-export const WATCHED_SYMBOLS = ['XAUUSD', 'BTCUSD', 'EURUSD', 'GBPUSD'];
+export const WATCHED_SYMBOLS = ['XAUUSD', 'BTCUSD', 'EURUSD', 'GBPUSD', 'JPYUSD'];
 
 // Obtient les données pour un symbole spécifique
 const fetchQuoteForSymbol = async (symbol: string): Promise<MarketQuote | null> => {
@@ -139,6 +139,14 @@ export const getDemoQuotes = (): MarketQuote[] => {
       ask: 1.2654,
       change: 0.0032,
       changePercent: 0.25,
+      lastUpdated: now
+    },
+    {
+      symbol: 'JPYUSD',
+      bid: 0.0064,
+      ask: 0.0065,
+      change: -0.0001,
+      changePercent: -0.15,
       lastUpdated: now
     }
   ];

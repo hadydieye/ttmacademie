@@ -16,7 +16,7 @@ const LiveQuotes: React.FC = () => {
   const formatNumber = (num: number, symbol: string) => {
     if (symbol.includes('BTC')) return num.toFixed(1);
     if (symbol.includes('XAU')) return num.toFixed(2);
-    if (symbol === 'EURUSD' || symbol === 'GBPUSD') return num.toFixed(4);
+    if (symbol === 'EURUSD' || symbol === 'GBPUSD' || symbol === 'JPYUSD') return num.toFixed(4);
     return num.toFixed(2);
   };
 
@@ -27,6 +27,7 @@ const LiveQuotes: React.FC = () => {
       case 'BTCUSD': return 'Bitcoin/USD';
       case 'EURUSD': return 'Euro/USD';
       case 'GBPUSD': return 'Livre/USD';
+      case 'JPYUSD': return 'Yen/USD';
       default: return symbol;
     }
   };
