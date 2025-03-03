@@ -26,7 +26,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   onSuccess,
   onCancel,
 }) => {
-  const [paymentMethod, setPaymentMethod] = useState<'orange-money' | 'crypto' | 'card'>('orange-money');
+  const [paymentMethod, setPaymentMethod] = useState<'mobile-money' | 'crypto' | 'card'>('mobile-money');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -39,8 +39,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     e.preventDefault();
     
     // Basic validation
-    if (paymentMethod === 'orange-money' && !phoneNumber) {
-      toast.error('Veuillez entrer votre numéro de téléphone Orange Money');
+    if (paymentMethod === 'mobile-money' && !phoneNumber) {
+      toast.error('Veuillez entrer votre numéro de téléphone Mobile Money');
       return;
     }
     
@@ -87,10 +87,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             className="flex flex-col space-y-3"
           >
             <div className="flex items-center space-x-2 border p-3 rounded-md">
-              <RadioGroupItem value="orange-money" id="orange-money" />
-              <Label htmlFor="orange-money" className="flex items-center">
+              <RadioGroupItem value="mobile-money" id="mobile-money" />
+              <Label htmlFor="mobile-money" className="flex items-center">
                 <Banknote className="w-5 h-5 mr-2 text-orange-500" />
-                Orange Money
+                Mobile Money
               </Label>
             </div>
             
@@ -112,9 +112,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           </RadioGroup>
         </div>
 
-        {paymentMethod === 'orange-money' && (
+        {paymentMethod === 'mobile-money' && (
           <div className="mb-6">
-            <Label htmlFor="phone" className="block mb-2">Numéro de téléphone Orange Money</Label>
+            <Label htmlFor="phone" className="block mb-2">Numéro de téléphone Mobile Money</Label>
             <Input
               id="phone"
               type="tel"

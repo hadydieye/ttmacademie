@@ -99,7 +99,6 @@ const Pricing = () => {
   };
 
   const formatCurrency = (amount: number) => {
-    // Format with spaces for thousands
     return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   };
 

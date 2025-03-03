@@ -254,11 +254,11 @@ const Pricing = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
               <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md text-center">
                 <img 
-                  src="/lovable-uploads/45badc4a-1db3-4805-bd99-4ad83c3ddb0b.png" 
-                  alt="Orange Money" 
+                  src="/lovable-uploads/6c119f27-4e1b-4cf3-964b-c9cf552747f2.png" 
+                  alt="Mobile Money" 
                   className="w-16 h-16 object-contain mx-auto mb-4"
                 />
-                <p className="font-medium dark:text-white">Orange Money</p>
+                <p className="font-medium dark:text-white">Mobile Money</p>
               </div>
               
               <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md text-center">
