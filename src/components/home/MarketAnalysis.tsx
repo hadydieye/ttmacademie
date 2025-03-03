@@ -4,6 +4,7 @@ import Card from "../ui/card";
 import { Button } from "@/components/ui/button";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ArrowUpRight, ArrowDownRight, TrendingUp, BarChart4 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const data = [
   { name: "Jan", value: 2750.40 },
@@ -123,9 +124,11 @@ const MarketAnalysis = () => {
                   alt="Graphique de trading" 
                   className="w-full rounded-lg mb-4"
                 />
-                <Button className="w-full bg-guinea-green hover:bg-guinea-green/90">
-                  Accéder aux cours d'analyse technique
-                </Button>
+                <Link to="/formations">
+                  <Button className="w-full bg-guinea-green hover:bg-guinea-green/90">
+                    Accéder aux cours d'analyse technique
+                  </Button>
+                </Link>
               </Card.Content>
             </Card>
           </div>
@@ -180,9 +183,11 @@ const MarketAnalysis = () => {
                   Nos cours prennent en compte les spécificités des marchés financiers africains et sont dispensés 
                   par des experts locaux ayant une connaissance approfondie de l'environnement économique guinéen.
                 </p>
-                <Button className="w-full bg-guinea-yellow text-black hover:bg-guinea-yellow/90">
-                  Découvrir nos formations
-                </Button>
+                <Link to="/formations">
+                  <Button className="w-full bg-guinea-yellow text-black hover:bg-guinea-yellow/90">
+                    Découvrir nos formations
+                  </Button>
+                </Link>
               </div>
             </Card.Content>
           </Card>
