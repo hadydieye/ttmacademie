@@ -2,13 +2,20 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronDown, MapPin } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
+  
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
+  };
+
+  const handleGetStarted = () => {
+    navigate('/register');
   };
 
   return (
@@ -50,15 +57,15 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16 animate-fade-in animation-delay-300">
             <Button 
               className="bg-guinea-green hover:bg-guinea-green/90 text-white dark:bg-guinea-green dark:hover:bg-guinea-green/90 px-8 py-6 rounded-full text-lg" 
-              onClick={() => scrollToSection("features")}
+              onClick={handleGetStarted}
             >
-              Découvrir nos cours
+              Commencer maintenant
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button 
               variant="outline" 
               className="border-guinea-yellow text-guinea-yellow hover:bg-guinea-yellow/5 dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow/20 px-8 py-6 rounded-full text-lg"
-              onClick={() => scrollToSection("testimonials")}
+              onClick={() => scrollToSection("features")}
             >
               Explorer la plateforme
             </Button>

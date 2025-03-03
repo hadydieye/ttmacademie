@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Menu, X, Home } from "lucide-react";
+import { Menu, X, Home, ArrowRight } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/context/AuthContext";
@@ -30,6 +30,10 @@ const Navbar = () => {
   };
 
   const handleSignup = () => {
+    navigate('/register');
+  };
+
+  const handleGetStarted = () => {
     navigate('/register');
   };
 
@@ -131,7 +135,13 @@ const Navbar = () => {
               ) : (
                 <>
                   <Button variant="outline" className="rounded-full" onClick={handleLogin}>Se Connecter</Button>
-                  <Button className="rounded-full bg-primary-dark hover:bg-primary-dark/90 text-white dark:bg-white dark:text-primary-dark dark:hover:bg-white/90" onClick={handleSignup}>S'Inscrire</Button>
+                  <Button 
+                    className="rounded-full bg-guinea-green hover:bg-guinea-green/90 text-white flex items-center gap-1" 
+                    onClick={handleSignup}
+                  >
+                    Commencer maintenant
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
                 </>
               )}
             </div>
@@ -140,7 +150,17 @@ const Navbar = () => {
           {/* Mobile Navigation Toggle */}
           <div className="flex items-center md:hidden space-x-3">
             <ThemeToggle />
-            {user && <UserMenu />}
+            {user ? (
+              <UserMenu />
+            ) : (
+              <Button 
+                className="rounded-full bg-guinea-green hover:bg-guinea-green/90 text-white py-1 px-3"
+                onClick={handleGetStarted}
+              >
+                <ArrowRight className="h-4 w-4 mr-1" />
+                Commencer
+              </Button>
+            )}
             <Button 
               variant="ghost" 
               size="icon" 
@@ -219,8 +239,9 @@ const Navbar = () => {
             ) : (
               <div className="pt-2 flex flex-col space-y-2">
                 <Button variant="outline" className="w-full justify-center" onClick={handleLogin}>Se Connecter</Button>
-                <Button className="w-full justify-center bg-primary-dark hover:bg-primary-dark/90 text-white dark:bg-white dark:text-primary-dark dark:hover:bg-white/90" onClick={handleSignup}>
-                  S'Inscrire
+                <Button className="w-full justify-center bg-guinea-green hover:bg-guinea-green/90 text-white flex items-center gap-2" onClick={handleSignup}>
+                  <span>Commencer maintenant</span>
+                  <ArrowRight className="h-4 w-4" />
                 </Button>
               </div>
             )}
