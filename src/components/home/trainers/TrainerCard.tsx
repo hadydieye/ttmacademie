@@ -61,7 +61,7 @@ const TrainerCard: React.FC<TrainerCardProps> = ({ trainer }) => {
             </a>
           )}
         </div>
-        <Link to={`/formateur/${trainer.id}`}>
+        <Link to={`/about#${trainer.id}`}>
           <Button variant="ghost" className="text-guinea-green hover:text-guinea-green/80 p-0 flex items-center gap-1">
             En savoir plus
             <ArrowRight size={16} />

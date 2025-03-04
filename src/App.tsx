@@ -23,6 +23,7 @@ import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
+import About from "./pages/About";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/about" element={<About />} />
               <Route path="/formations" element={
                 <ProtectedRoute>
                   <Training />

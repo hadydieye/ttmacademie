@@ -3,6 +3,7 @@ import React from "react";
 import TrainerCard from "./trainers/TrainerCard";
 import { trainers } from "@/data/trainers";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Trainers = () => {
   return (
@@ -29,12 +30,13 @@ const Trainers = () => {
         </div>
 
         <div className="mt-12 text-center animate-fade-in animation-delay-500">
-          <Button 
-            className="rounded-full bg-guinea-green hover:bg-guinea-green/90 text-white px-6 py-2"
-            onClick={() => {}}
-          >
-            En savoir plus sur nos formateurs
-          </Button>
+          <Link to="/about#trainers">
+            <Button 
+              className="rounded-full bg-guinea-green hover:bg-guinea-green/90 text-white px-6 py-2"
+            >
+              En savoir plus sur nos formateurs
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
