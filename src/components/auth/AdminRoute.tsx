@@ -37,8 +37,9 @@ const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
   // Afficher un indicateur de chargement si l'état d'authentification est en cours de vérification
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="flex flex-col justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+        <p className="text-gray-500">Vérification des droits d'administration...</p>
       </div>
     );
   }

@@ -31,10 +31,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }, [user, isLoading, navigate]);
 
   // Afficher un indicateur de chargement si l'état d'authentification est en cours de vérification
+  // Mais limiter le temps d'attente pour éviter un blocage infini
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="flex flex-col justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+        <p className="text-gray-500">Chargement de votre profil...</p>
       </div>
     );
   }
