@@ -38,19 +38,6 @@ const queryClient = new QueryClient({
   },
 });
 
-// Add global error logging
-queryClient.getQueryCache().subscribe(event => {
-  if (event.type === 'error' && event.error) {
-    console.error('React Query Error:', event.error);
-  }
-});
-
-queryClient.getMutationCache().subscribe(event => {
-  if (event.type === 'error' && event.error) {
-    console.error('React Query Mutation Error:', event.error);
-  }
-});
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="system">
