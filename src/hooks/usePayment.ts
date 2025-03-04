@@ -78,10 +78,12 @@ export function usePayment() {
   };
 
   const getPaymentStats = async () => {
+    console.log('Fetching payment stats...');
     try {
       const { data, error } = await supabase
         .from('payments')
-        .select('status, payment_method, amount, currency, created_at');
+        .select('status, payment_method, amount, currency, created_at')
+        .limit(100); // Add a reasonable limit
       
       if (error) throw error;
       
@@ -93,6 +95,7 @@ export function usePayment() {
   };
 
   const getRecentPayments = async (limit = 5) => {
+    console.log(`Fetching ${limit} recent payments...`);
     try {
       const { data, error } = await supabase
         .from('payments')
@@ -110,9 +113,13 @@ export function usePayment() {
         .order('created_at', { ascending: false })
         .limit(limit);
       
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error when fetching payments:', error);
+        throw error;
+      }
       
-      return data;
+      console.log(`Retrieved ${data?.length || 0} payments`);
+      return data || [];
     } catch (error) {
       console.error('Error fetching recent payments:', error);
       return [];

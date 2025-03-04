@@ -15,22 +15,27 @@ import { usePayment } from "@/hooks/usePayment";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Button } from "../ui/button";
+import { useQuery } from "@tanstack/react-query";
 
 export function AdminPayments() {
-  const [payments, setPayments] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const { getRecentPayments } = usePayment();
+  
+  // Use React Query for data fetching with automatic caching
+  const { 
+    data: payments = [], 
+    isLoading, 
+    refetch 
+  } = useQuery({
+    queryKey: ['recent-payments'],
+    queryFn: () => getRecentPayments(10),
+    // Disable automatic refetching to improve performance
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
 
   const fetchPayments = async () => {
-    setIsLoading(true);
-    const recentPayments = await getRecentPayments(10);
-    setPayments(recentPayments);
-    setIsLoading(false);
+    refetch();
   };
-
-  useEffect(() => {
-    fetchPayments();
-  }, []);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
