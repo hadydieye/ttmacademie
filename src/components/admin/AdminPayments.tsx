@@ -1,12 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
+import Card from "@/components/ui/card";
 import { 
   Table, 
   TableBody, 
@@ -70,12 +64,12 @@ export function AdminPayments() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <Card.Header className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div>
-          <CardTitle className="text-xl font-bold">Paiements récents</CardTitle>
-          <CardDescription>
+          <Card.Title className="text-xl font-bold">Paiements récents</Card.Title>
+          <Card.Description>
             Les 10 dernières transactions de paiement
-          </CardDescription>
+          </Card.Description>
         </div>
         <Button 
           variant="outline" 
@@ -85,8 +79,8 @@ export function AdminPayments() {
         >
           <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
         </Button>
-      </CardHeader>
-      <CardContent>
+      </Card.Header>
+      <Card.Content>
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <RefreshCw className="h-10 w-10 animate-spin text-gray-400" />
@@ -128,7 +122,7 @@ export function AdminPayments() {
             </Table>
           </div>
         )}
-      </CardContent>
+      </Card.Content>
     </Card>
   );
 }
