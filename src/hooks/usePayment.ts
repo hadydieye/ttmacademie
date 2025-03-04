@@ -24,6 +24,21 @@ export interface PaymentResult {
   redirectUrl?: string;
 }
 
+export interface PaymentData {
+  payment_id: string;
+  item_name: string;
+  amount: number;
+  currency: string;
+  status: string;
+  payment_method: string;
+  created_at: string;
+  user_id: string;
+  profiles?: {
+    name: string | null;
+    email: string | null;
+  } | null;
+}
+
 export function usePayment() {
   const [isProcessing, setIsProcessing] = useState(false);
   const { user } = useAuth();
@@ -94,11 +109,11 @@ export function usePayment() {
     }
   };
 
-  const getRecentPayments = async (limit = 5) => {
+  const getRecentPayments = async (limit = 5): Promise<PaymentData[]> => {
     console.log(`Fetching ${limit} recent payments...`);
     try {
-      // Fix the query to properly join with profiles table
-      const { data, error } = await supabase
+      // Use two separate queries and join the data manually to avoid join error
+      const { data: paymentsData, error: paymentsError } = await supabase
         .from('payments')
         .select(`
           payment_id, 
@@ -108,19 +123,49 @@ export function usePayment() {
           status, 
           payment_method,
           created_at,
-          user_id,
-          profiles(name, email)
+          user_id
         `)
         .order('created_at', { ascending: false })
         .limit(limit);
       
-      if (error) {
-        console.error('Supabase error when fetching payments:', error);
-        throw error;
+      if (paymentsError) {
+        console.error('Supabase error when fetching payments:', paymentsError);
+        throw paymentsError;
+      }
+
+      // Fetch profile data separately if we have payments
+      if (paymentsData && paymentsData.length > 0) {
+        // Extract unique user IDs
+        const userIds = [...new Set(paymentsData.map(p => p.user_id))];
+        
+        // Get profile data for those users
+        const { data: profilesData, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, name, email')
+          .in('id', userIds);
+          
+        if (profilesError) {
+          console.error('Error fetching profiles:', profilesError);
+        }
+        
+        // Create a map of profiles by user ID for faster lookup
+        const profilesMap = (profilesData || []).reduce((map, profile) => {
+          map[profile.id] = profile;
+          return map;
+        }, {} as Record<string, any>);
+        
+        // Combine the payment data with profile data
+        const combinedData = paymentsData.map(payment => ({
+          ...payment,
+          profiles: profilesMap[payment.user_id] || null
+        }));
+        
+        console.log(`Retrieved ${combinedData.length} payments with profile data`);
+        return combinedData;
       }
       
-      console.log(`Retrieved ${data?.length || 0} payments`);
-      return data || [];
+      console.log(`Retrieved ${paymentsData?.length || 0} payments (without profiles)`);
+      return paymentsData || [];
     } catch (error) {
       console.error('Error fetching recent payments:', error);
       return [];
