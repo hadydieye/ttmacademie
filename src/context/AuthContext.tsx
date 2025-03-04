@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
@@ -22,6 +21,7 @@ interface AuthContextProps {
     } | null;
   }>;
   signOut: () => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -32,11 +32,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session data
     const initializeAuth = async () => {
       setIsLoading(true);
       try {
-        // Check if we have an active session
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {
@@ -51,14 +49,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } catch (error) {
         console.error("Erreur lors de l'initialisation de l'authentification:", error);
       } finally {
-        // Ensure isLoading is set to false regardless of success or failure
         setIsLoading(false);
       }
     };
 
     initializeAuth();
 
-    // Subscribe to auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, newSession) => {
         console.info("Événement d'authentification:", event);
@@ -71,12 +67,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(null);
         }
         
-        // Ensure isLoading is set to false after auth state changes
         setIsLoading(false);
       }
     );
 
-    // Cleanup subscription on component unmount
     return () => {
       subscription.unsubscribe();
     };
@@ -127,6 +121,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const signInWithGoogle = async () => {
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/formations`,
+        },
+      });
+      
+      if (error) {
+        console.error("Erreur lors de la connexion avec Google:", error);
+        throw error;
+      }
+    } catch (error) {
+      console.error("Erreur lors de la connexion avec Google:", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const value = {
     user,
     session,
@@ -134,6 +150,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signIn,
     signUp,
     signOut,
+    signInWithGoogle,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
