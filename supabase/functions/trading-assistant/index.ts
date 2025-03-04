@@ -1,13 +1,12 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
-const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -16,10 +15,16 @@ serve(async (req) => {
   }
 
   try {
-    if (!OPENAI_API_KEY) {
-      throw new Error("OPENAI_API_KEY is not set in environment variables");
+    // Initialize the Supabase client with the service role key
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      throw new Error("Supabase credentials are not configured properly");
     }
 
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    
     const { message, chatHistory } = await req.json();
 
     if (!message) {
@@ -50,28 +55,24 @@ serve(async (req) => {
       { role: "user", content: message }
     ];
 
-    console.log("Sending request to OpenAI");
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
+    console.log("Sending request to Supabase AI");
+    
+    // Use Supabase's AI service
+    const { data, error } = await supabase.functions.invoke("ai", {
+      body: {
         messages: messages,
+        model: "gpt-3.5-turbo", // Supabase's default AI model
         temperature: 0.7,
         max_tokens: 1000,
-      }),
+      }
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      console.error("OpenAI API error:", error);
-      throw new Error(`OpenAI API error: ${error.error?.message || 'Unknown error'}`);
+    if (error) {
+      console.error("Supabase AI API error:", error);
+      throw new Error(`Supabase AI API error: ${error.message || 'Unknown error'}`);
     }
 
-    const data = await response.json();
+    console.log("Response from Supabase AI:", data);
     const assistantMessage = data.choices[0].message.content;
 
     return new Response(
