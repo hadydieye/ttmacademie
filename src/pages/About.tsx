@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 const About = () => {
   return (
     <div
-      className="min-h-screen flex flex-col"
+      className="min-h-screen flex flex-col bg-white dark:bg-gray-950"
       style={{
         backgroundImage: `url('/lovable-uploads/f662b4c5-66d3-4211-8cbe-970970311a37.png')`,
         backgroundSize: 'cover',
@@ -27,12 +27,12 @@ const About = () => {
       <main className="flex-grow container mx-auto px-4 py-16 md:px-6">
         {/* Hero Section */}
         <section className="relative mb-24 py-16 rounded-3xl overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-guinea-green/20 to-guinea-red/20 -z-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-guinea-green/20 to-guinea-red/20 dark:from-guinea-green/10 dark:to-guinea-red/10 -z-10"></div>
           <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-guinea-green/5 dark:bg-guinea-green/10 rounded-full filter blur-3xl"></div>
           <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-guinea-red/5 dark:bg-guinea-red/10 rounded-full filter blur-3xl"></div>
           
           <div className="text-center relative z-10 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-guinea-gradient">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-guinea-gradient dark:text-guinea-gradient">
               À propos de The Trading Matrix Académie
             </h1>
             <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-8">
@@ -63,8 +63,8 @@ const About = () => {
         <section className="mb-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-8 animate-fade-in animation-delay-100">
-              <h2 className="text-2xl font-bold mb-4 text-guinea-green flex items-center">
-                <Shield className="h-6 w-6 mr-2 text-guinea-green" />
+              <h2 className="text-2xl font-bold mb-4 text-guinea-green dark:text-guinea-yellow flex items-center">
+                <Shield className="h-6 w-6 mr-2 text-guinea-green dark:text-guinea-yellow" />
                 Notre Mission
               </h2>
               <p className="text-gray-700 dark:text-gray-300 mb-4">
@@ -75,8 +75,8 @@ const About = () => {
               </p>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-8 animate-fade-in animation-delay-200">
-              <h2 className="text-2xl font-bold mb-4 text-guinea-green flex items-center">
-                <TrendingUp className="h-6 w-6 mr-2 text-guinea-green" />
+              <h2 className="text-2xl font-bold mb-4 text-guinea-green dark:text-guinea-yellow flex items-center">
+                <TrendingUp className="h-6 w-6 mr-2 text-guinea-green dark:text-guinea-yellow" />
                 Notre Vision
               </h2>
               <p className="text-gray-700 dark:text-gray-300 mb-4">
@@ -89,11 +89,11 @@ const About = () => {
           </div>
         </section>
 
-        <Separator className="my-16" />
+        <Separator className="my-16 dark:bg-gray-700" />
 
         <section id="trainers" className="mb-20">
           <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-guinea-gradient">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-guinea-gradient dark:text-guinea-gradient">
               Nos Formateurs Experts
             </h2>
             <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
@@ -114,14 +114,14 @@ const About = () => {
                     alt={trainer.name}
                     className="w-full h-auto object-cover"
                   />
-                  <div className="p-4 bg-guinea-gradient bg-opacity-10">
+                  <div className="p-4 bg-guinea-gradient bg-opacity-10 dark:bg-opacity-5">
                     <div className="flex space-x-4 justify-center">
                       {trainer.socialLinks?.linkedin && (
                         <a 
                           href={trainer.socialLinks.linkedin}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center text-gray-600 hover:text-guinea-green transition-colors bg-white/80 dark:bg-gray-700/80 p-2 rounded-full"
+                          className="flex items-center text-gray-600 dark:text-gray-400 hover:text-guinea-green dark:hover:text-guinea-yellow transition-colors bg-white/80 dark:bg-gray-700/80 p-2 rounded-full"
                         >
                           <Linkedin size={20} />
                         </a>
@@ -131,7 +131,7 @@ const About = () => {
                           href={trainer.socialLinks.twitter}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center text-gray-600 hover:text-guinea-green transition-colors bg-white/80 dark:bg-gray-700/80 p-2 rounded-full"
+                          className="flex items-center text-gray-600 dark:text-gray-400 hover:text-guinea-green dark:hover:text-guinea-yellow transition-colors bg-white/80 dark:bg-gray-700/80 p-2 rounded-full"
                         >
                           <Twitter size={20} />
                         </a>
@@ -141,9 +141,9 @@ const About = () => {
                 </div>
               </div>
               <div className="md:w-2/3 bg-white dark:bg-gray-800 rounded-2xl shadow-md p-8">
-                <h3 className="text-2xl font-bold mb-2 text-guinea-green">{trainer.name}</h3>
+                <h3 className="text-2xl font-bold mb-2 text-guinea-green dark:text-guinea-yellow">{trainer.name}</h3>
                 <p className="text-lg font-semibold text-gray-600 dark:text-gray-400 mb-4 flex items-center">
-                  <BookOpen className="h-5 w-5 mr-2 text-guinea-yellow" />
+                  <BookOpen className="h-5 w-5 mr-2 text-guinea-yellow dark:text-guinea-red" />
                   {trainer.role}
                 </p>
                 <div className="mb-6">
@@ -183,7 +183,7 @@ const About = () => {
                       href={trainer.socialLinks.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center text-gray-600 hover:text-guinea-green transition-colors"
+                      className="flex items-center text-gray-600 dark:text-gray-400 hover:text-guinea-green dark:hover:text-guinea-yellow transition-colors"
                     >
                       <Linkedin className="mr-2" size={20} />
                       <span>LinkedIn</span>
@@ -194,7 +194,7 @@ const About = () => {
                       href={trainer.socialLinks.twitter}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center text-gray-600 hover:text-guinea-green transition-colors"
+                      className="flex items-center text-gray-600 dark:text-gray-400 hover:text-guinea-green dark:hover:text-guinea-yellow transition-colors"
                     >
                       <Twitter className="mr-2" size={20} />
                       <span>Twitter</span>
@@ -206,11 +206,11 @@ const About = () => {
           ))}
         </section>
 
-        <Separator className="my-16" />
+        <Separator className="my-16 dark:bg-gray-700" />
 
         <section className="mb-20">
           <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-guinea-gradient">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-guinea-gradient dark:text-guinea-gradient">
               Notre Méthodologie
             </h2>
             <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
@@ -251,11 +251,11 @@ const About = () => {
                 desc: "Mettez en pratique vos connaissances dans des sessions de trading en direct et sur des comptes de démonstration pour développer vos compétences dans un environnement réaliste."
               }
             ].map((item, index) => (
-              <div key={index} className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md border-l-4 border-guinea-green transition-transform duration-300 hover:scale-105 animate-fade-in animation-delay-100">
+              <div key={index} className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md border-l-4 border-guinea-green dark:border-guinea-yellow transition-transform duration-300 hover:scale-105 animate-fade-in animation-delay-100">
                 <div className="w-12 h-12 rounded-full bg-guinea-green/10 dark:bg-guinea-green/20 flex items-center justify-center text-guinea-green dark:text-guinea-yellow mb-4">
                   {item.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-guinea-green">{item.title}</h3>
+                <h3 className="text-xl font-bold mb-3 text-guinea-green dark:text-guinea-yellow">{item.title}</h3>
                 <p className="text-gray-700 dark:text-gray-300">
                   {item.desc}
                 </p>
@@ -266,7 +266,7 @@ const About = () => {
 
         <section>
           <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-guinea-gradient">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-guinea-gradient dark:text-guinea-gradient">
               Notre Engagement
             </h2>
             <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
@@ -276,9 +276,9 @@ const About = () => {
 
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 mb-12 animate-fade-in animation-delay-100">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="border-r-0 md:border-r border-guinea-green/30 pr-0 md:pr-6">
-                <h3 className="text-2xl font-bold mb-4 text-guinea-green flex items-center">
-                  <Users className="h-6 w-6 mr-2 text-guinea-green" />
+              <div className="border-r-0 md:border-r border-guinea-green/30 dark:border-guinea-yellow/30 pr-0 md:pr-6">
+                <h3 className="text-2xl font-bold mb-4 text-guinea-green dark:text-guinea-yellow flex items-center">
+                  <Users className="h-6 w-6 mr-2 text-guinea-green dark:text-guinea-yellow" />
                   Support personnalisé
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
@@ -291,9 +291,9 @@ const About = () => {
                   <li>Assistance rapide pour répondre à vos questions</li>
                 </ul>
               </div>
-              <div className="pl-0 md:pl-6 pt-6 md:pt-0 border-t md:border-t-0 border-guinea-green/30 mt-6 md:mt-0">
-                <h3 className="text-2xl font-bold mb-4 text-guinea-green flex items-center">
-                  <BookOpen className="h-6 w-6 mr-2 text-guinea-green" />
+              <div className="pl-0 md:pl-6 pt-6 md:pt-0 border-t md:border-t-0 border-guinea-green/30 dark:border-guinea-yellow/30 mt-6 md:mt-0">
+                <h3 className="text-2xl font-bold mb-4 text-guinea-green dark:text-guinea-yellow flex items-center">
+                  <BookOpen className="h-6 w-6 mr-2 text-guinea-green dark:text-guinea-yellow" />
                   Contenu actualisé
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
@@ -309,8 +309,8 @@ const About = () => {
             </div>
           </div>
 
-          <div className="text-center bg-gradient-to-r from-guinea-green/10 to-guinea-yellow/10 rounded-2xl p-8 animate-fade-in animation-delay-200">
-            <h3 className="text-2xl font-bold mb-4 text-guinea-green">Rejoignez The Trading Matrix Académie</h3>
+          <div className="text-center bg-gradient-to-r from-guinea-green/10 to-guinea-yellow/10 dark:from-guinea-green/5 dark:to-guinea-yellow/5 rounded-2xl p-8 animate-fade-in animation-delay-200">
+            <h3 className="text-2xl font-bold mb-4 text-guinea-green dark:text-guinea-yellow">Rejoignez The Trading Matrix Académie</h3>
             <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-6">
               Prêt à transformer votre approche du trading et à développer les compétences nécessaires pour réussir sur les marchés financiers ? Notre équipe de formateurs experts est prête à vous guider à chaque étape de votre parcours.
             </p>
