@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -10,6 +9,7 @@ interface AuthContextProps {
   isLoading: boolean;
   signUp: (email: string, password: string, metadata: { firstName: string, lastName: string }) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
   resendConfirmationEmail: (email: string) => Promise<void>;
 }
@@ -202,6 +202,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const signInWithGoogle = async () => {
+    try {
+      setIsLoading(true);
+      const { error, data } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/formations'
+        }
+      });
+
+      if (error) throw error;
+      
+      // L'utilisateur sera redirigé vers Google pour l'authentification
+      // Quand il revient, le listener onAuthStateChange mettra à jour l'état
+      
+      // Enregistrer l'activité
+      await logUserActivity('login_attempt', 'Tentative de connexion avec Google');
+    } catch (error: any) {
+      console.error("Erreur détaillée de connexion Google:", error);
+      
+      toast({
+        title: "Erreur de connexion Google",
+        description: error.message || "Une erreur est survenue lors de la connexion avec Google.",
+        variant: "destructive",
+      });
+      
+      // Enregistrer l'erreur
+      await logUserActivity('error', `Erreur de connexion Google: ${error.message || 'Erreur inconnue'}`);
+      
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const signOut = async () => {
     try {
       // Enregistrer l'activité avant la déconnexion
@@ -283,6 +318,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isLoading,
     signUp,
     signIn,
+    signInWithGoogle,
     signOut,
     resendConfirmationEmail,
   };
