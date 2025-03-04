@@ -18,7 +18,7 @@ export const trainers: TrainerProps[] = [
     name: "YotraderFx",
     role: "Analyste des Marchés Financiers",
     bio: "YotraderFx est un expert reconnu dans l'analyse fondamentale et l'étude des corrélations entre les différents marchés financiers, avec une approche unique du trading.",
-    image: "/lovable-uploads/3a80c4e7-bf3e-47a9-8d60-6812985952df.png",
+    image: "/lovable-uploads/7d1ef882-2f70-4dc0-b257-ec51c2aaf9fc.png",
     socialLinks: {
       linkedin: "https://linkedin.com/in/yotraderfx",
       twitter: "https://twitter.com/yotraderfx"
