@@ -8,6 +8,7 @@ import Testimonials from "@/components/home/Testimonials";
 import Pricing from "@/components/home/Pricing";
 import Newsletter from "@/components/home/Newsletter";
 import MarketAnalysis from "@/components/home/MarketAnalysis";
+import Trainers from "@/components/home/Trainers";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 const Index = () => {
@@ -58,6 +59,7 @@ const Index = () => {
         <Hero />
         <MarketAnalysis />
         <Features />
+        <Trainers />
         <Testimonials />
         <Pricing />
         <Newsletter />
