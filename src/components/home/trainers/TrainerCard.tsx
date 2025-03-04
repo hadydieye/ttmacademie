@@ -28,23 +28,12 @@ const TrainerCard: React.FC<TrainerCardProps> = ({ trainer }) => {
   return (
     <Card className="h-full overflow-hidden border-0 shadow-xl">
       <div className="flex flex-col md:flex-row">
-        {/* Image section - on the left */}
-        <div className="md:w-2/5 h-80 md:h-auto overflow-hidden relative">
-          <div className={`absolute inset-0 ${
-            isScriptrader 
-              ? "bg-gradient-to-br from-[#2D1B69]/90 to-[#1E3A8A]/90" 
-              : isYotraderFx 
-                ? "bg-gradient-to-br from-[#1E3A8A]/90 to-[#3730A3]/90"
-                : "bg-gradient-to-br from-[#2D1B69]/90 to-[#1E3A8A]/90"
-          }`}></div>
+        {/* Image section - on the left with no overlay */}
+        <div className="md:w-2/5 h-96 md:h-auto overflow-hidden relative bg-gray-50">
           <img 
             src={trainer.image} 
             alt={trainer.name}
-            className={`w-full h-full ${
-              isScriptrader || isYotraderFx 
-                ? "object-contain p-6" 
-                : "object-cover"
-            } transition-transform duration-500 hover:scale-110`}
+            className="w-full h-full object-contain p-4 transition-transform duration-500 hover:scale-105"
           />
         </div>
         
