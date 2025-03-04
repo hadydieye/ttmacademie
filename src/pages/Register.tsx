@@ -47,6 +47,8 @@ const Register = () => {
     try {
       const { firstName, lastName, email, password } = formData;
       await signUp(email, password, { firstName, lastName });
+      // Redirection sera gérée par l'useEffect lorsque user sera mis à jour
+      toast.success("Inscription réussie! Redirection vers les formations...");
     } catch (error) {
       console.error("Erreur d'inscription:", error);
     } finally {

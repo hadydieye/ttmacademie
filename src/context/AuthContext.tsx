@@ -103,15 +103,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         email,
         password,
         options: {
-          data: metadata
+          data: metadata,
+          // Désactiver la vérification par email
+          emailRedirectTo: undefined
         }
       });
 
       if (error) throw error;
       
+      // On ne vérifie plus si l'email est confirmé
+      // On considère que l'utilisateur est maintenant connecté
+      if (data && data.user) {
+        setUser(data.user);
+        if (data.session) {
+          setSession(data.session);
+        }
+      }
+      
       toast({
         title: "Inscription réussie",
-        description: "Votre compte a été créé avec succès. Veuillez vérifier votre e-mail pour confirmer votre compte.",
+        description: "Votre compte a été créé avec succès.",
       });
       
       // Log pour le débogage
@@ -120,7 +131,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Enregistrer l'activité d'inscription
       await logUserActivity(
         'signup', 
-        'Inscription réussie, en attente de confirmation email',
+        'Inscription réussie',
         data.user?.id,
         email
       );
