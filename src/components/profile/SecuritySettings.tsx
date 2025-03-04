@@ -180,7 +180,7 @@ const SecuritySettings = () => {
         <Button 
           type="submit" 
           disabled={isLoading}
-          className="bg-primary-dark hover:bg-primary-dark/90 text-white"
+          className="bg-guinea-green hover:bg-guinea-green/90 text-white"
         >
           {isLoading ? (
             <>

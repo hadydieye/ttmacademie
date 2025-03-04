@@ -51,9 +51,13 @@ const Pricing = () => {
       id: "basic",
       name: "Débutant",
       description: "Pour ceux qui découvrent le trading",
-      monthlyPrice: 25000,
-      annualPrice: 250000,
+      monthlyPrice: 250000,
+      annualPrice: 2500000,
       currency: "GNF",
+      priceUSD: {
+        monthly: 29,
+        yearly: 290,
+      },
       features: [
         "Accès aux cours fondamentaux",
         "Analyses de marché hebdomadaires",
@@ -76,9 +80,13 @@ const Pricing = () => {
       id: "pro",
       name: "Professionnel",
       description: "Pour les traders sérieux",
-      monthlyPrice: 50000,
-      annualPrice: 500000,
+      monthlyPrice: 500000,
+      annualPrice: 5000000,
       currency: "GNF",
+      priceUSD: {
+        monthly: 58,
+        yearly: 580,
+      },
       features: [
         "Tout ce qui est inclus dans le forfait Débutant",
         "Accès à tous les cours et formations",
@@ -100,9 +108,13 @@ const Pricing = () => {
       id: "elite",
       name: "Élite",
       description: "Pour les traders professionnels",
-      monthlyPrice: 100000,
-      annualPrice: 1000000,
+      monthlyPrice: 750000,
+      annualPrice: 7500000,
       currency: "GNF",
+      priceUSD: {
+        monthly: 86,
+        yearly: 860,
+      },
       features: [
         "Tout ce qui est inclus dans le forfait Professionnel",
         "Formations illimitées",
@@ -195,6 +207,9 @@ const Pricing = () => {
                         <span className="text-sm text-gray-500 dark:text-gray-400">
                           par {isAnnual ? 'an' : 'mois'}
                         </span>
+                        <div className="text-sm text-gray-500 mt-1">
+                          ~{isAnnual ? plan.priceUSD.yearly : plan.priceUSD.monthly} USD
+                        </div>
                       </div>
                       
                       <div>
