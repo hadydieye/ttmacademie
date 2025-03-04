@@ -24,7 +24,7 @@ const About = () => {
       }}
     >
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-16 md:px-6">
+      <main className="flex-grow container mx-auto px-4 py-16 md:px-6 dark:text-gray-200">
         {/* Hero Section */}
         <section className="relative mb-24 py-16 rounded-3xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-guinea-green/20 to-guinea-red/20 dark:from-guinea-green/10 dark:to-guinea-red/10 -z-10"></div>
@@ -49,7 +49,7 @@ const About = () => {
               </Button>
               <Button 
                 variant="outline" 
-                className="border-guinea-yellow text-guinea-yellow hover:bg-guinea-yellow/5"
+                className="border-guinea-yellow text-guinea-yellow hover:bg-guinea-yellow/5 dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow/20"
                 asChild
               >
                 <Link to="/contact">
@@ -89,7 +89,7 @@ const About = () => {
           </div>
         </section>
 
-        <Separator className="my-16 dark:bg-gray-700" />
+        <Separator className="my-16 bg-gray-300 dark:bg-gray-700" />
 
         <section id="trainers" className="mb-20">
           <div className="text-center mb-12 animate-fade-in">
@@ -206,7 +206,7 @@ const About = () => {
           ))}
         </section>
 
-        <Separator className="my-16 dark:bg-gray-700" />
+        <Separator className="my-16 bg-gray-300 dark:bg-gray-700" />
 
         <section className="mb-20">
           <div className="text-center mb-12 animate-fade-in">
@@ -325,7 +325,7 @@ const About = () => {
               </Button>
               <Button 
                 variant="outline" 
-                className="border-guinea-yellow text-guinea-yellow hover:bg-guinea-yellow/10 px-6 py-3 text-lg rounded-full"
+                className="border-guinea-yellow text-guinea-yellow hover:bg-guinea-yellow/10 dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow/20 px-6 py-3 text-lg rounded-full"
                 asChild
               >
                 <Link to="/contact">
