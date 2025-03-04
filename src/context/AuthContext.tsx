@@ -1,6 +1,8 @@
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
+import { ErrorService, ErrorType } from '@/services/errorService';
 
 interface AuthContextProps {
   user: User | null;
@@ -38,7 +40,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {
-          console.error("Erreur lors de la récupération de la session:", error);
+          ErrorService.handleError({
+            type: ErrorType.AUTHENTICATION,
+            message: "Erreur lors de la récupération de la session",
+            originalError: error
+          });
         }
         
         if (session) {
@@ -47,7 +53,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.info("Événement d'authentification: SIGNED_IN");
         }
       } catch (error) {
-        console.error("Erreur lors de l'initialisation de l'authentification:", error);
+        ErrorService.handleError({
+          type: ErrorType.AUTHENTICATION,
+          message: "Erreur lors de l'initialisation de l'authentification",
+          originalError: error
+        });
       } finally {
         setIsLoading(false);
       }
@@ -80,9 +90,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
     try {
       const result = await supabase.auth.signInWithPassword({ email, password });
+      
+      if (result.error) {
+        ErrorService.handleError({
+          type: ErrorType.AUTHENTICATION,
+          message: "Échec de la connexion",
+          originalError: result.error
+        });
+      }
+      
       return result;
     } catch (error) {
-      console.error("Erreur lors de la connexion:", error);
+      ErrorService.handleError({
+        type: ErrorType.AUTHENTICATION,
+        message: "Erreur lors de la connexion",
+        originalError: error
+      });
       throw error;
     } finally {
       setIsLoading(false);
@@ -99,9 +122,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           data: metadata,
         },
       });
+      
+      if (result.error) {
+        ErrorService.handleError({
+          type: ErrorType.AUTHENTICATION,
+          message: "Échec de l'inscription",
+          originalError: result.error
+        });
+      }
+      
       return result;
     } catch (error) {
-      console.error("Erreur lors de l'inscription:", error);
+      ErrorService.handleError({
+        type: ErrorType.AUTHENTICATION,
+        message: "Erreur lors de l'inscription",
+        originalError: error
+      });
       throw error;
     } finally {
       setIsLoading(false);
@@ -111,18 +147,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signOut = async () => {
     setIsLoading(true);
     try {
-      await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) {
+        ErrorService.handleError({
+          type: ErrorType.AUTHENTICATION,
+          message: "Erreur lors de la déconnexion",
+          originalError: error
+        });
+      }
+      
       setUser(null);
       setSession(null);
     } catch (error) {
-      console.error("Erreur lors de la déconnexion:", error);
+      ErrorService.handleError({
+        type: ErrorType.AUTHENTICATION,
+        message: "Erreur lors de la déconnexion",
+        originalError: error
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
   const signInWithGoogle = async () => {
-    console.warn("L'authentification Google a été désactivée.");
+    ErrorService.handleError({
+      type: ErrorType.AUTHENTICATION,
+      message: "L'authentification Google a été désactivée",
+      code: "GOOGLE_AUTH_DISABLED"
+    });
     return Promise.resolve();
   };
 
