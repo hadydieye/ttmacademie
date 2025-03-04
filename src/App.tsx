@@ -33,13 +33,19 @@ const queryClient = new QueryClient({
     queries: {
       retry: 1,
       refetchOnWindowFocus: false,
-      onError: (error) => {
-        console.error('React Query Error:', error);
+      // Updated to use the correct API format for error handling
+      onSettled: (data, error) => {
+        if (error) {
+          console.error('React Query Error:', error);
+        }
       }
     },
     mutations: {
-      onError: (error) => {
-        console.error('React Query Mutation Error:', error);
+      // Updated to use the correct API format for error handling
+      onSettled: (data, error) => {
+        if (error) {
+          console.error('React Query Mutation Error:', error);
+        }
       }
     },
   },
