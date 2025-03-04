@@ -26,7 +26,7 @@ const About = () => {
       <Navbar />
       <main className="flex-grow container mx-auto px-4 py-16 md:px-6 dark:text-gray-200">
         {/* Hero Section */}
-        <section className="relative mb-24 py-16 rounded-3xl overflow-hidden">
+        <section className="relative mb-24 py-16 rounded-3xl overflow-hidden dark:bg-gray-900/50">
           <div className="absolute inset-0 bg-gradient-to-r from-guinea-green/20 to-guinea-red/20 dark:from-guinea-green/10 dark:to-guinea-red/10 -z-10"></div>
           <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-guinea-green/5 dark:bg-guinea-green/10 rounded-full filter blur-3xl"></div>
           <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-guinea-red/5 dark:bg-guinea-red/10 rounded-full filter blur-3xl"></div>
@@ -114,7 +114,7 @@ const About = () => {
                     alt={trainer.name}
                     className="w-full h-auto object-cover"
                   />
-                  <div className="p-4 bg-guinea-gradient bg-opacity-10 dark:bg-opacity-5">
+                  <div className="p-4 bg-guinea-gradient bg-opacity-10 dark:bg-opacity-5 dark:bg-gray-800">
                     <div className="flex space-x-4 justify-center">
                       {trainer.socialLinks?.linkedin && (
                         <a 
@@ -309,7 +309,7 @@ const About = () => {
             </div>
           </div>
 
-          <div className="text-center bg-gradient-to-r from-guinea-green/10 to-guinea-yellow/10 dark:from-guinea-green/5 dark:to-guinea-yellow/5 rounded-2xl p-8 animate-fade-in animation-delay-200">
+          <div className="text-center bg-gradient-to-r from-guinea-green/10 to-guinea-yellow/10 dark:from-guinea-green/5 dark:to-guinea-yellow/5 dark:bg-gray-800/50 rounded-2xl p-8 animate-fade-in animation-delay-200">
             <h3 className="text-2xl font-bold mb-4 text-guinea-green dark:text-guinea-yellow">Rejoignez The Trading Matrix Académie</h3>
             <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-6">
               Prêt à transformer votre approche du trading et à développer les compétences nécessaires pour réussir sur les marchés financiers ? Notre équipe de formateurs experts est prête à vous guider à chaque étape de votre parcours.
