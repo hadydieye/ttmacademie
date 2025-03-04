@@ -36,11 +36,19 @@ const queryClient = new QueryClient({
     },
     mutations: {},
   },
-  logger: {
-    log: (...args) => console.log(...args),
-    warn: (...args) => console.warn(...args),
-    error: (error) => console.error('React Query Error:', error),
-  },
+});
+
+// Add global error logging
+queryClient.getQueryCache().subscribe({
+  onError: (error) => {
+    console.error('React Query Error:', error);
+  }
+});
+
+queryClient.getMutationCache().subscribe({
+  onError: (error) => {
+    console.error('React Query Mutation Error:', error);
+  }
 });
 
 const App = () => (
