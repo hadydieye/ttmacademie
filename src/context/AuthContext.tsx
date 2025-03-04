@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -40,7 +41,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Vérifier si l'utilisateur est déjà connecté
     const getInitialSession = async () => {
       try {
+        setIsLoading(true); // S'assurer que isLoading est à true pendant la vérification
         const { data } = await supabase.auth.getSession();
+        
+        console.log("Session initiale récupérée:", data.session);
+        
         setSession(data.session);
         setUser(data.session?.user || null);
         
@@ -56,6 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } catch (error) {
         console.error('Erreur lors de la récupération de la session:', error);
       } finally {
+        // Important: Toujours mettre isLoading à false à la fin, même en cas d'erreur
         setIsLoading(false);
       }
     };
@@ -66,6 +72,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Événement d\'authentification:', event);
+        
+        // Mettre à jour l'état
         setSession(session);
         setUser(session?.user || null);
         
@@ -79,10 +87,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           );
         } else if (event === 'SIGNED_OUT') {
           // Nous ne pouvons pas obtenir l'utilisateur ici car il est déjà déconnecté
-          // Donc nous n'enregistrons pas d'ID utilisateur
           await logUserActivity('logout', 'Déconnexion réussie');
         }
         
+        // Important: Toujours mettre isLoading à false après chaque événement d'authentification
         setIsLoading(false);
       }
     );
