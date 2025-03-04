@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from "@/components/ui/use-toast";
+import { ErrorService } from '@/services/errorService';
 
 export interface Message {
   role: 'user' | 'assistant' | 'system';
@@ -30,6 +31,9 @@ export const useTradingAssistant = () => {
     try {
       // Prépare l'historique pour l'API (sans les timestamps)
       const historyForApi = messages.map(({ role, content }) => ({ role, content }));
+      
+      console.log("Sending message to trading assistant:", userMessage);
+      console.log("Chat history:", historyForApi);
 
       // Appelle la fonction edge Supabase
       const { data, error } = await supabase.functions.invoke("trading-assistant", {
@@ -41,8 +45,11 @@ export const useTradingAssistant = () => {
 
       if (error) {
         console.error("Error calling trading assistant:", error);
+        ErrorService.logError(error);
         throw new Error(error.message || "Failed to get response from assistant");
       }
+
+      console.log("Received response from trading assistant:", data);
 
       // Ajoute la réponse de l'assistant à l'historique
       const assistantMsg: Message = {
@@ -54,6 +61,7 @@ export const useTradingAssistant = () => {
       setMessages(prev => [...prev, assistantMsg]);
     } catch (error) {
       console.error("Error in chat:", error);
+      ErrorService.handleError(error);
       toast({
         title: "Erreur",
         description: error instanceof Error ? error.message : "Une erreur est survenue lors de la communication avec l'assistant",
