@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Card from "../ui/card";
@@ -35,8 +36,12 @@ const Pricing = () => {
       name: "Débutant",
       description: "Idéal pour commencer votre parcours dans le trading en Afrique",
       price: {
-        monthly: 15000,
-        yearly: 150000,
+        monthly: 250000,
+        yearly: 2500000,
+      },
+      priceUSD: {
+        monthly: 29,
+        yearly: 290,
       },
       currency: "GNF",
       features: [
@@ -54,8 +59,12 @@ const Pricing = () => {
       name: "Professionnel",
       description: "Pour les traders sérieux qui veulent exceller sur les marchés africains",
       price: {
-        monthly: 50000,
-        yearly: 500000,
+        monthly: 500000,
+        yearly: 5000000,
+      },
+      priceUSD: {
+        monthly: 58,
+        yearly: 580,
       },
       currency: "GNF",
       features: [
@@ -74,8 +83,12 @@ const Pricing = () => {
       name: "Expert",
       description: "Solution complète pour les traders professionnels africains",
       price: {
-        monthly: 100000,
-        yearly: 1000000,
+        monthly: 750000,
+        yearly: 7500000,
+      },
+      priceUSD: {
+        monthly: 86,
+        yearly: 860,
       },
       currency: "GNF",
       features: [
@@ -183,6 +196,9 @@ const Pricing = () => {
                   <span className="text-gray-500 dark:text-gray-400 ml-2">
                     {plan.currency} {billingCycle === "monthly" ? "/mois" : "/an"}
                   </span>
+                  <div className="text-sm text-gray-500 mt-1">
+                    ~{billingCycle === "monthly" ? plan.priceUSD.monthly : plan.priceUSD.yearly} USD
+                  </div>
                   {billingCycle === "yearly" && (
                     <p className="text-sm text-green-600 dark:text-green-400 mt-1">
                       Économisez{" "}

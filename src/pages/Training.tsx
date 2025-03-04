@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -54,7 +55,8 @@ const Training = () => {
       category: "debutant",
       duration: "4 semaines",
       students: 450,
-      price: 500000,
+      price: 250000,
+      priceUSD: 29,
       image: "/lovable-uploads/6c4774b3-6602-45b0-9a72-b682325cdfd4.png",
       features: [
         "Comprendre les différents marchés financiers",
@@ -71,7 +73,8 @@ const Training = () => {
       category: "intermediaire",
       duration: "6 semaines",
       students: 320,
-      price: 750000,
+      price: 500000,
+      priceUSD: 58,
       image: "/lovable-uploads/72d3ecf6-692c-439e-a697-97f482443862.png",
       features: [
         "Indicateurs techniques avancés",
@@ -88,7 +91,8 @@ const Training = () => {
       category: "specialise",
       duration: "5 semaines",
       students: 275,
-      price: 650000,
+      price: 1000000,
+      priceUSD: 115,
       image: "/lovable-uploads/60c4dc83-6733-4b61-bf3b-a31ad902bbde.png",
       features: [
         "Fondamentaux du marché Forex",
@@ -105,7 +109,8 @@ const Training = () => {
       category: "specialise",
       duration: "6 semaines",
       students: 180,
-      price: 800000,
+      price: 1000000,
+      priceUSD: 115,
       image: "/lovable-uploads/5c385599-f359-4f79-8935-30da7331f454.png",
       features: [
         "Fondamentaux des marchés de matières premières",
@@ -122,7 +127,8 @@ const Training = () => {
       category: "avance",
       duration: "4 semaines",
       students: 390,
-      price: 450000,
+      price: 750000,
+      priceUSD: 86,
       image: "/lovable-uploads/3a80c4e7-bf3e-47a9-8d60-6812985952df.png",
       features: [
         "Gestion des émotions en trading",
@@ -139,7 +145,8 @@ const Training = () => {
       category: "avance",
       duration: "8 semaines",
       students: 120,
-      price: 950000,
+      price: 750000,
+      priceUSD: 86,
       image: "/lovable-uploads/7807fc3d-8178-4bb4-8601-2375fa79ec42.png",
       features: [
         "Introduction à la programmation pour traders",
@@ -287,8 +294,13 @@ const Training = () => {
                         <Users className="h-4 w-4 mr-1" />
                         <span>{course.students} étudiants</span>
                       </div>
-                      <div className="text-guinea-yellow font-semibold">
-                        {course.price.toLocaleString('fr-FR')} GNF
+                      <div className="flex flex-col items-end">
+                        <div className="text-guinea-yellow font-semibold">
+                          {course.price.toLocaleString('fr-FR')} GNF
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          ~{course.priceUSD} USD
+                        </div>
                       </div>
                     </div>
                   </Card.Content>
