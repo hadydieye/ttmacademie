@@ -20,8 +20,6 @@ import { useQuery } from "@tanstack/react-query";
 export function AdminPayments() {
   const { getRecentPayments } = usePayment();
   
-  // Use React Query for data fetching with automatic caching
-  // Use the correct type for the query result
   const { 
     data: payments = [], 
     isLoading, 
@@ -29,7 +27,6 @@ export function AdminPayments() {
   } = useQuery<PaymentData[]>({
     queryKey: ['recent-payments'],
     queryFn: () => getRecentPayments(10),
-    // Disable automatic refetching to improve performance
     refetchOnWindowFocus: false,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
