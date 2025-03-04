@@ -36,6 +36,81 @@ export type Database = {
         }
         Relationships: []
       }
+      enrollments: {
+        Row: {
+          course_id: string
+          enrolled_at: string | null
+          id: string
+          payment_id: string | null
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          course_id: string
+          enrolled_at?: string | null
+          id?: string
+          payment_id?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          course_id?: string
+          enrolled_at?: string | null
+          id?: string
+          payment_id?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string
+          item_id: string
+          item_name: string
+          item_type: string
+          payment_details: Json | null
+          payment_id: string
+          payment_method: string
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string
+          item_id: string
+          item_name: string
+          item_type: string
+          payment_details?: Json | null
+          payment_id?: string
+          payment_method: string
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string
+          item_id?: string
+          item_name?: string
+          item_type?: string
+          payment_details?: Json | null
+          payment_id?: string
+          payment_method?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null

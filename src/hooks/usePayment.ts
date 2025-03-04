@@ -4,15 +4,24 @@ import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
-type PaymentMethod = 'orange-money' | 'wave' | 'payeer' | 'crypto' | 'card';
+export type PaymentMethod = 'orange-money' | 'wave' | 'payeer' | 'crypto' | 'card';
 
-interface PaymentDetails {
+export interface PaymentDetails {
   planId?: string;
   planName?: string;
   courseId?: string;
   courseName?: string;
   amount: number;
   currency: string;
+}
+
+export interface PaymentResult {
+  success: boolean;
+  data?: any;
+  error?: any;
+  paymentId?: string;
+  status?: string;
+  redirectUrl?: string;
 }
 
 export function usePayment() {
@@ -22,7 +31,7 @@ export function usePayment() {
   const processPayment = async (
     paymentMethod: PaymentMethod,
     paymentDetails: PaymentDetails
-  ) => {
+  ): Promise<PaymentResult> => {
     if (!user) {
       toast.error("Vous devez être connecté pour effectuer un paiement");
       return { success: false, error: "User not authenticated" };
@@ -53,7 +62,12 @@ export function usePayment() {
       // Process successful payment
       toast.success(data.message);
       
-      return { success: true, data };
+      return { 
+        success: true, 
+        data,
+        paymentId: data.payment?.payment_id,
+        status: data.payment?.status
+      };
     } catch (error) {
       console.error('Payment error:', error);
       toast.error("Erreur lors du traitement du paiement");
@@ -63,8 +77,52 @@ export function usePayment() {
     }
   };
 
+  const getPaymentStats = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('payments')
+        .select('status, payment_method, amount, currency, created_at');
+      
+      if (error) throw error;
+      
+      return data;
+    } catch (error) {
+      console.error('Error fetching payment stats:', error);
+      return [];
+    }
+  };
+
+  const getRecentPayments = async (limit = 5) => {
+    try {
+      const { data, error } = await supabase
+        .from('payments')
+        .select(`
+          payment_id, 
+          item_name, 
+          amount, 
+          currency, 
+          status, 
+          payment_method,
+          created_at,
+          user_id,
+          profiles:user_id (name, email)
+        `)
+        .order('created_at', { ascending: false })
+        .limit(limit);
+      
+      if (error) throw error;
+      
+      return data;
+    } catch (error) {
+      console.error('Error fetching recent payments:', error);
+      return [];
+    }
+  };
+
   return {
     processPayment,
     isProcessing,
+    getPaymentStats,
+    getRecentPayments
   };
 }

@@ -5,6 +5,7 @@ import { AdminStats } from "@/components/admin/AdminStats";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AdminUsers } from "@/components/admin/AdminUsers";
 import { AdminActivityLog } from "@/components/admin/AdminActivityLog";
+import { AdminPayments } from "@/components/admin/AdminPayments";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
@@ -64,12 +65,18 @@ const AdminDashboard = () => {
             <Tabs defaultValue="users" className="w-full">
               <TabsList className="mb-6">
                 <TabsTrigger value="users">Utilisateurs</TabsTrigger>
+                <TabsTrigger value="payments">Paiements</TabsTrigger>
                 <TabsTrigger value="activity">Activité</TabsTrigger>
               </TabsList>
               
               <TabsContent value="users" className="space-y-4">
                 <h2 className="text-xl font-semibold">Utilisateurs inscrits</h2>
                 <AdminUsers />
+              </TabsContent>
+              
+              <TabsContent value="payments" className="space-y-4">
+                <h2 className="text-xl font-semibold">Historique des paiements</h2>
+                <AdminPayments />
               </TabsContent>
               
               <TabsContent value="activity" className="space-y-4">
