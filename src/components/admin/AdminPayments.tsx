@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Card from "@/components/ui/card";
 import { 
   Table, 
@@ -17,6 +17,22 @@ import { fr } from "date-fns/locale";
 import { Button } from "../ui/button";
 import { useQuery } from "@tanstack/react-query";
 
+// Define a better type for our payment data
+interface Payment {
+  payment_id: string;
+  item_name: string;
+  amount: number;
+  currency: string;
+  status: string;
+  payment_method: string;
+  created_at: string;
+  user_id: string;
+  profiles?: {
+    name: string | null;
+    email: string | null;
+  } | null;
+}
+
 export function AdminPayments() {
   const { getRecentPayments } = usePayment();
   
@@ -25,7 +41,7 @@ export function AdminPayments() {
     data: payments = [], 
     isLoading, 
     refetch 
-  } = useQuery({
+  } = useQuery<Payment[]>({
     queryKey: ['recent-payments'],
     queryFn: () => getRecentPayments(10),
     // Disable automatic refetching to improve performance

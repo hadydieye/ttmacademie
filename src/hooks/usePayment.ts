@@ -97,6 +97,7 @@ export function usePayment() {
   const getRecentPayments = async (limit = 5) => {
     console.log(`Fetching ${limit} recent payments...`);
     try {
+      // Fix the query to properly join with profiles table
       const { data, error } = await supabase
         .from('payments')
         .select(`
@@ -108,7 +109,7 @@ export function usePayment() {
           payment_method,
           created_at,
           user_id,
-          profiles:user_id (name, email)
+          profiles(name, email)
         `)
         .order('created_at', { ascending: false })
         .limit(limit);
