@@ -43,7 +43,7 @@ const Index = () => {
 
   return (
     <div 
-      className="min-h-screen flex flex-col"
+      className="min-h-screen flex flex-col bg-white dark:bg-gray-950"
       style={{
         backgroundImage: `url('/lovable-uploads/f662b4c5-66d3-4211-8cbe-970970311a37.png')`,
         backgroundSize: 'cover',
