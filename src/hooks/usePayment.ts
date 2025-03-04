@@ -4,11 +4,13 @@ import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
-type PaymentMethod = 'mobile-money' | 'crypto' | 'card';
+type PaymentMethod = 'orange-money' | 'wave' | 'payeer' | 'crypto' | 'card';
 
 interface PaymentDetails {
-  planId: string;
-  planName: string;
+  planId?: string;
+  planName?: string;
+  courseId?: string;
+  courseName?: string;
   amount: number;
   currency: string;
 }
@@ -33,7 +35,9 @@ export function usePayment() {
         body: {
           paymentMethod,
           amount: paymentDetails.amount,
-          planId: paymentDetails.planId,
+          planId: paymentDetails.planId || '',
+          courseId: paymentDetails.courseId || '',
+          courseName: paymentDetails.courseName || '',
           userId: user.id,
           email: user.email,
           currency: paymentDetails.currency || 'GNF',

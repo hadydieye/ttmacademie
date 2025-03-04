@@ -5,13 +5,15 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { CreditCard, Banknote } from 'lucide-react';
+import { CreditCard, Banknote, Wallet } from 'lucide-react';
 import { usePayment } from '@/hooks/usePayment';
 import { toast } from 'sonner';
 
 interface PaymentFormProps {
-  planId: string;
-  planName: string;
+  planId?: string;
+  planName?: string;
+  courseId?: string;
+  courseName?: string;
   amount: number;
   currency?: string;
   onSuccess?: () => void;
@@ -19,19 +21,22 @@ interface PaymentFormProps {
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({
-  planId,
-  planName,
+  planId = '',
+  planName = '',
+  courseId = '',
+  courseName = '',
   amount,
   currency = 'GNF',
   onSuccess,
   onCancel,
 }) => {
-  const [paymentMethod, setPaymentMethod] = useState<'mobile-money' | 'crypto' | 'card'>('mobile-money');
+  const [paymentMethod, setPaymentMethod] = useState<'orange-money' | 'wave' | 'payeer' | 'crypto' | 'card'>('orange-money');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
   const [walletAddress, setWalletAddress] = useState('');
+  const [payeerAccount, setPayeerAccount] = useState('');
   
   const { processPayment, isProcessing } = usePayment();
 
@@ -39,7 +44,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     e.preventDefault();
     
     // Basic validation
-    if (paymentMethod === 'mobile-money' && !phoneNumber) {
+    if ((paymentMethod === 'orange-money' || paymentMethod === 'wave') && !phoneNumber) {
       toast.error('Veuillez entrer votre numéro de téléphone Mobile Money');
       return;
     }
@@ -54,9 +59,16 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       return;
     }
 
+    if (paymentMethod === 'payeer' && !payeerAccount) {
+      toast.error('Veuillez entrer votre identifiant Payeer');
+      return;
+    }
+
     const result = await processPayment(paymentMethod, {
       planId,
       planName,
+      courseId,
+      courseName,
       amount,
       currency,
     });
@@ -71,7 +83,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       <div className="mb-6">
         <h2 className="text-2xl font-bold mb-2">Paiement</h2>
         <p className="text-gray-600 dark:text-gray-400">
-          Plan: <span className="font-medium">{planName}</span>
+          {courseName ? `Cours: ${courseName}` : `Plan: ${planName}`}
         </p>
         <p className="text-gray-600 dark:text-gray-400">
           Montant: <span className="font-medium">{amount.toLocaleString('fr-FR')} {currency}</span>
@@ -87,10 +99,26 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             className="flex flex-col space-y-3"
           >
             <div className="flex items-center space-x-2 border p-3 rounded-md">
-              <RadioGroupItem value="mobile-money" id="mobile-money" />
-              <Label htmlFor="mobile-money" className="flex items-center">
+              <RadioGroupItem value="orange-money" id="orange-money" />
+              <Label htmlFor="orange-money" className="flex items-center">
                 <Banknote className="w-5 h-5 mr-2 text-orange-500" />
-                Mobile Money
+                Orange Money
+              </Label>
+            </div>
+            
+            <div className="flex items-center space-x-2 border p-3 rounded-md">
+              <RadioGroupItem value="wave" id="wave" />
+              <Label htmlFor="wave" className="flex items-center">
+                <Banknote className="w-5 h-5 mr-2 text-blue-500" />
+                Wave
+              </Label>
+            </div>
+            
+            <div className="flex items-center space-x-2 border p-3 rounded-md">
+              <RadioGroupItem value="payeer" id="payeer" />
+              <Label htmlFor="payeer" className="flex items-center">
+                <Wallet className="w-5 h-5 mr-2 text-green-500" />
+                Payeer
               </Label>
             </div>
             
@@ -116,9 +144,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           </RadioGroup>
         </div>
 
-        {paymentMethod === 'mobile-money' && (
+        {(paymentMethod === 'orange-money' || paymentMethod === 'wave') && (
           <div className="mb-6">
-            <Label htmlFor="phone" className="block mb-2">Numéro de téléphone Mobile Money</Label>
+            <Label htmlFor="phone" className="block mb-2">
+              {paymentMethod === 'orange-money' ? 'Numéro Orange Money' : 'Numéro Wave'}
+            </Label>
             <Input
               id="phone"
               type="tel"
@@ -129,6 +159,22 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               required
             />
             <p className="text-sm text-gray-500">Vous recevrez une demande de paiement sur ce numéro.</p>
+          </div>
+        )}
+
+        {paymentMethod === 'payeer' && (
+          <div className="mb-6">
+            <Label htmlFor="payeer" className="block mb-2">Identifiant Payeer</Label>
+            <Input
+              id="payeer"
+              type="text"
+              placeholder="P1234567"
+              value={payeerAccount}
+              onChange={(e) => setPayeerAccount(e.target.value)}
+              className="mb-2"
+              required
+            />
+            <p className="text-sm text-gray-500">Entrez votre identifiant Payeer pour recevoir les instructions de paiement.</p>
           </div>
         )}
 

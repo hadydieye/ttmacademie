@@ -19,11 +19,11 @@ serve(async (req) => {
   }
 
   try {
-    const { paymentMethod, amount, planId, userId, email, currency } = await req.json()
-    console.log(`Processing payment: ${paymentMethod} for ${amount} ${currency}`)
+    const { paymentMethod, amount, planId, userId, email, currency, courseId, courseName } = await req.json()
+    console.log(`Processing payment: ${paymentMethod} for ${amount} ${currency}, course: ${courseName || 'N/A'}`)
 
     // Validation
-    if (!paymentMethod || !amount || !planId || !userId) {
+    if (!paymentMethod || !amount || !userId) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
@@ -32,7 +32,6 @@ serve(async (req) => {
 
     // Here we would integrate with different payment processors
     // This is a mock implementation for demonstration
-    let paymentResult
     let paymentId = crypto.randomUUID()
     let status = 'pending'
     let paymentDetails = {}
@@ -47,6 +46,28 @@ serve(async (req) => {
         }
         // In a real implementation, you would call Orange Money API here
         console.log('Processing Orange Money payment')
+        break
+
+      case 'wave':
+        // Simulate Wave integration
+        paymentDetails = {
+          provider: 'Wave',
+          referenceId: `WV-${Math.floor(Math.random() * 1000000)}`,
+          phoneNumber: email,
+        }
+        // In a real implementation, you would call Wave API here
+        console.log('Processing Wave payment')
+        break
+
+      case 'payeer':
+        // Simulate Payeer integration
+        paymentDetails = {
+          provider: 'Payeer',
+          accountId: `PR-${Math.floor(Math.random() * 1000000)}`,
+          wallet: email,
+        }
+        // In a real implementation, you would call Payeer API here
+        console.log('Processing Payeer payment')
         break
 
       case 'crypto':
@@ -78,6 +99,11 @@ serve(async (req) => {
         )
     }
 
+    // Determine if this is a course payment or a plan payment
+    const paymentType = courseId ? 'course' : 'plan';
+    const itemId = courseId || planId;
+    const itemName = courseName || planId;
+
     // Store payment information in the database
     const { data, error } = await supabase
       .from('payments')
@@ -85,7 +111,9 @@ serve(async (req) => {
         {
           payment_id: paymentId,
           user_id: userId,
-          plan_id: planId,
+          item_id: itemId,
+          item_type: paymentType,
+          item_name: itemName,
           amount,
           currency,
           payment_method: paymentMethod,
@@ -102,6 +130,37 @@ serve(async (req) => {
         JSON.stringify({ error: 'Failed to process payment' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
       )
+    }
+
+    // Add course enrollment if this is a course payment
+    if (courseId) {
+      const { error: enrollmentError } = await supabase
+        .from('enrollments')
+        .insert([
+          {
+            user_id: userId,
+            course_id: courseId,
+            payment_id: paymentId,
+            status: 'active',
+            enrolled_at: new Date().toISOString(),
+          },
+        ])
+      
+      if (enrollmentError) {
+        console.error('Error creating enrollment:', enrollmentError)
+      }
+
+      // Log the activity
+      await supabase
+        .from('activity_logs')
+        .insert([
+          {
+            type: 'enrollment',
+            user_id: userId,
+            user_email: email,
+            details: `Inscription au cours: ${courseName}`,
+          },
+        ])
     }
 
     // In a real implementation, we would check the payment status and update accordingly
@@ -139,12 +198,16 @@ serve(async (req) => {
 function getNextSteps(paymentMethod: string): string {
   switch (paymentMethod) {
     case 'orange-money':
-      return 'Vérifiez votre téléphone pour confirmer le paiement Orange Money.'
+      return 'Vérifiez votre téléphone pour confirmer le paiement Orange Money.';
+    case 'wave':
+      return 'Vérifiez votre téléphone pour confirmer le paiement Wave.';
+    case 'payeer':
+      return 'Connectez-vous à votre compte Payeer pour confirmer la transaction.';
     case 'crypto':
-      return 'Vérifiez la transaction sur la blockchain. Votre accès sera activé dès confirmation.'
+      return 'Vérifiez la transaction sur la blockchain. Votre accès sera activé dès confirmation.';
     case 'card':
-      return 'Votre paiement par carte a été traité. Vous avez accès immédiat à votre abonnement.'
+      return 'Votre paiement par carte a été traité. Vous avez accès immédiat à votre abonnement.';
     default:
-      return 'Votre paiement est en cours de traitement.'
+      return 'Votre paiement est en cours de traitement.';
   }
 }

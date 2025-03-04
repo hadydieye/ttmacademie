@@ -1,5 +1,5 @@
-
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -15,13 +15,11 @@ const Training = () => {
   }, []);
 
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleEnrollClick = (courseName: string) => {
-    toast({
-      title: "Inscription en cours",
-      description: `Votre demande d'inscription au cours "${courseName}" a été reçue. Un conseiller vous contactera bientôt.`,
-      duration: 3000,
-    });
+  const handleEnrollClick = (course: any) => {
+    // Navigate to checkout page with course info
+    navigate(`/checkout?courseId=${course.id}&name=${encodeURIComponent(course.title)}&amount=${course.price}&currency=GNF`);
   };
 
   const categories = [
@@ -56,6 +54,7 @@ const Training = () => {
       category: "debutant",
       duration: "4 semaines",
       students: 450,
+      price: 500000,
       image: "/lovable-uploads/6c4774b3-6602-45b0-9a72-b682325cdfd4.png",
       features: [
         "Comprendre les différents marchés financiers",
@@ -72,6 +71,7 @@ const Training = () => {
       category: "intermediaire",
       duration: "6 semaines",
       students: 320,
+      price: 750000,
       image: "/lovable-uploads/72d3ecf6-692c-439e-a697-97f482443862.png",
       features: [
         "Indicateurs techniques avancés",
@@ -88,6 +88,7 @@ const Training = () => {
       category: "specialise",
       duration: "5 semaines",
       students: 275,
+      price: 650000,
       image: "/lovable-uploads/60c4dc83-6733-4b61-bf3b-a31ad902bbde.png",
       features: [
         "Fondamentaux du marché Forex",
@@ -104,6 +105,7 @@ const Training = () => {
       category: "specialise",
       duration: "6 semaines",
       students: 180,
+      price: 800000,
       image: "/lovable-uploads/5c385599-f359-4f79-8935-30da7331f454.png",
       features: [
         "Fondamentaux des marchés de matières premières",
@@ -120,6 +122,7 @@ const Training = () => {
       category: "avance",
       duration: "4 semaines",
       students: 390,
+      price: 450000,
       image: "/lovable-uploads/3a80c4e7-bf3e-47a9-8d60-6812985952df.png",
       features: [
         "Gestion des émotions en trading",
@@ -136,6 +139,7 @@ const Training = () => {
       category: "avance",
       duration: "8 semaines",
       students: 120,
+      price: 950000,
       image: "/lovable-uploads/7807fc3d-8178-4bb4-8601-2375fa79ec42.png",
       features: [
         "Introduction à la programmation pour traders",
@@ -278,15 +282,20 @@ const Training = () => {
                         ))}
                       </ul>
                     </div>
-                    <div className="flex items-center mb-4 text-sm text-gray-500">
-                      <Users className="h-4 w-4 mr-1" />
-                      <span>{course.students} étudiants inscrits</span>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center text-sm text-gray-500">
+                        <Users className="h-4 w-4 mr-1" />
+                        <span>{course.students} étudiants</span>
+                      </div>
+                      <div className="text-guinea-yellow font-semibold">
+                        {course.price.toLocaleString('fr-FR')} GNF
+                      </div>
                     </div>
                   </Card.Content>
                   <Card.Footer>
                     <Button 
                       className="w-full bg-guinea-yellow hover:bg-guinea-yellow/90 text-black"
-                      onClick={() => handleEnrollClick(course.title)}
+                      onClick={() => handleEnrollClick(course)}
                     >
                       S'inscrire à cette formation
                       <ArrowRight className="ml-2 h-4 w-4" />
