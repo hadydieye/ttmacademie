@@ -122,25 +122,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signInWithGoogle = async () => {
-    setIsLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/formations`,
-        },
-      });
-      
-      if (error) {
-        console.error("Erreur lors de la connexion avec Google:", error);
-        throw error;
-      }
-    } catch (error) {
-      console.error("Erreur lors de la connexion avec Google:", error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
+    console.warn("L'authentification Google a été désactivée.");
+    return Promise.resolve();
   };
 
   const value = {
