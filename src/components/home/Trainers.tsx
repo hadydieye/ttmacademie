@@ -1,13 +1,10 @@
 
-import React, { useState } from "react";
+import React from "react";
 import TrainerCard from "./trainers/TrainerCard";
 import { trainers } from "@/data/trainers";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const Trainers = () => {
-  const [visibleTrainers, setVisibleTrainers] = useState(trainers);
-  
   return (
     <section id="trainers" className="py-16 relative">
       <div className="container mx-auto px-4 md:px-6">
@@ -20,8 +17,8 @@ const Trainers = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 animate-scale-in">
-          {visibleTrainers.map((trainer, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto animate-scale-in">
+          {trainers.map((trainer, index) => (
             <div 
               key={trainer.id} 
               className={`transition-all duration-300 animation-delay-${index * 100}`}
@@ -36,7 +33,7 @@ const Trainers = () => {
             className="rounded-full bg-guinea-green hover:bg-guinea-green/90 text-white px-6 py-2"
             onClick={() => {}}
           >
-            Voir tous nos formateurs
+            En savoir plus sur nos formateurs
           </Button>
         </div>
       </div>
