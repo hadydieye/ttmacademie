@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { trainers } from "@/data/trainers";
@@ -10,8 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const About = () => {
+  useEffect(() => {
+    document.title = "À propos | The Trading Matrix Académie";
+  }, []);
+
   return (
-    <div
+    <div 
       className="min-h-screen flex flex-col bg-white dark:bg-gray-950"
       style={{
         backgroundImage: `url('/lovable-uploads/f662b4c5-66d3-4211-8cbe-970970311a37.png')`,
@@ -25,7 +28,6 @@ const About = () => {
     >
       <Navbar />
       <main className="flex-grow container mx-auto px-4 py-16 md:px-6 dark:text-gray-200">
-        {/* Hero Section */}
         <section className="relative mb-24 py-16 rounded-3xl overflow-hidden dark:bg-gray-900/50">
           <div className="absolute inset-0 bg-gradient-to-r from-guinea-green/20 to-guinea-red/20 dark:from-guinea-green/10 dark:to-guinea-red/10 -z-10"></div>
           <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-guinea-green/5 dark:bg-guinea-green/10 rounded-full filter blur-3xl"></div>
@@ -62,7 +64,7 @@ const About = () => {
 
         <section className="mb-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-8 animate-fade-in animation-delay-100">
+            <div className="bg-white dark:bg-gray-800/90 rounded-2xl shadow-md p-8 animate-fade-in animation-delay-100">
               <h2 className="text-2xl font-bold mb-4 text-guinea-green dark:text-guinea-yellow flex items-center">
                 <Shield className="h-6 w-6 mr-2 text-guinea-green dark:text-guinea-yellow" />
                 Notre Mission
@@ -74,7 +76,7 @@ const About = () => {
                 Nous nous engageons à fournir une éducation de haute qualité, basée sur des méthodes éprouvées et des stratégies qui fonctionnent dans les conditions réelles du marché. Notre approche pédagogique combine théorie et pratique, avec un accent particulier sur la gestion des risques et la psychologie du trading.
               </p>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-8 animate-fade-in animation-delay-200">
+            <div className="bg-white dark:bg-gray-800/90 rounded-2xl shadow-md p-8 animate-fade-in animation-delay-200">
               <h2 className="text-2xl font-bold mb-4 text-guinea-green dark:text-guinea-yellow flex items-center">
                 <TrendingUp className="h-6 w-6 mr-2 text-guinea-green dark:text-guinea-yellow" />
                 Notre Vision
@@ -108,13 +110,13 @@ const About = () => {
               className={`mb-16 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} flex flex-col md:flex items-center gap-8 animate-fade-in animation-delay-${index * 100}`}
             >
               <div className="md:w-1/3">
-                <div className="rounded-2xl overflow-hidden shadow-lg max-w-xs mx-auto bg-white dark:bg-gray-800 transition-transform duration-500 hover:scale-105">
+                <div className="rounded-2xl overflow-hidden shadow-lg max-w-xs mx-auto bg-white dark:bg-gray-800/90 transition-transform duration-500 hover:scale-105">
                   <img 
                     src={trainer.image} 
                     alt={trainer.name}
                     className="w-full h-auto object-cover"
                   />
-                  <div className="p-4 bg-guinea-gradient bg-opacity-10 dark:bg-opacity-5 dark:bg-gray-800">
+                  <div className="p-4 bg-guinea-gradient bg-opacity-10 dark:bg-opacity-5 dark:bg-gray-800/90">
                     <div className="flex space-x-4 justify-center">
                       {trainer.socialLinks?.linkedin && (
                         <a 
@@ -140,7 +142,7 @@ const About = () => {
                   </div>
                 </div>
               </div>
-              <div className="md:w-2/3 bg-white dark:bg-gray-800 rounded-2xl shadow-md p-8">
+              <div className="md:w-2/3 bg-white dark:bg-gray-800/90 rounded-2xl shadow-md p-8">
                 <h3 className="text-2xl font-bold mb-2 text-guinea-green dark:text-guinea-yellow">{trainer.name}</h3>
                 <p className="text-lg font-semibold text-gray-600 dark:text-gray-400 mb-4 flex items-center">
                   <BookOpen className="h-5 w-5 mr-2 text-guinea-yellow dark:text-guinea-red" />
@@ -251,7 +253,7 @@ const About = () => {
                 desc: "Mettez en pratique vos connaissances dans des sessions de trading en direct et sur des comptes de démonstration pour développer vos compétences dans un environnement réaliste."
               }
             ].map((item, index) => (
-              <div key={index} className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md border-l-4 border-guinea-green dark:border-guinea-yellow transition-transform duration-300 hover:scale-105 animate-fade-in animation-delay-100">
+              <div key={index} className="bg-white dark:bg-gray-800/90 p-6 rounded-2xl shadow-md border-l-4 border-guinea-green dark:border-guinea-yellow transition-transform duration-300 hover:scale-105 animate-fade-in animation-delay-100">
                 <div className="w-12 h-12 rounded-full bg-guinea-green/10 dark:bg-guinea-green/20 flex items-center justify-center text-guinea-green dark:text-guinea-yellow mb-4">
                   {item.icon}
                 </div>
@@ -274,7 +276,7 @@ const About = () => {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 mb-12 animate-fade-in animation-delay-100">
+          <div className="bg-white dark:bg-gray-800/90 rounded-2xl shadow-lg p-8 mb-12 animate-fade-in animation-delay-100">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="border-r-0 md:border-r border-guinea-green/30 dark:border-guinea-yellow/30 pr-0 md:pr-6">
                 <h3 className="text-2xl font-bold mb-4 text-guinea-green dark:text-guinea-yellow flex items-center">
@@ -309,7 +311,7 @@ const About = () => {
             </div>
           </div>
 
-          <div className="text-center bg-gradient-to-r from-guinea-green/10 to-guinea-yellow/10 dark:from-guinea-green/5 dark:to-guinea-yellow/5 dark:bg-gray-800/50 rounded-2xl p-8 animate-fade-in animation-delay-200">
+          <div className="text-center bg-gradient-to-r from-guinea-green/10 to-guinea-yellow/10 dark:from-guinea-green/5 dark:to-guinea-yellow/5 dark:bg-gray-800/90 rounded-2xl p-8 animate-fade-in animation-delay-200">
             <h3 className="text-2xl font-bold mb-4 text-guinea-green dark:text-guinea-yellow">Rejoignez The Trading Matrix Académie</h3>
             <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-6">
               Prêt à transformer votre approche du trading et à développer les compétences nécessaires pour réussir sur les marchés financiers ? Notre équipe de formateurs experts est prête à vous guider à chaque étape de votre parcours.
