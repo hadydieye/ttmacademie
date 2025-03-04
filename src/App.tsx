@@ -11,6 +11,7 @@ import AdminRoute from "./components/auth/AdminRoute";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import AssistantFloatingButton from "@/components/AssistantFloatingButton";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import ServerError from "./pages/ServerError";
@@ -81,6 +82,7 @@ const App = () => (
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <WhatsAppButton phoneNumber="+224 663 29 32 80" />
+              <AssistantFloatingButton />
               <ScrollToTop />
             </BrowserRouter>
           </TooltipProvider>
