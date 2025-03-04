@@ -28,7 +28,7 @@ const TrainerCard: React.FC<TrainerCardProps> = ({ trainer }) => {
   return (
     <Card className="h-full overflow-hidden border-0 shadow-xl">
       <div className="flex flex-col md:flex-row">
-        {/* Image section - larger and on the left */}
+        {/* Image section - on the left */}
         <div className="md:w-2/5 h-80 md:h-auto overflow-hidden relative">
           <div className={`absolute inset-0 ${
             isScriptrader 
