@@ -1,12 +1,11 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { CreditCard, Banknote, Wallet } from 'lucide-react';
-import { usePayment } from '@/hooks/usePayment';
+import { usePayment, PaymentMethod } from '@/hooks/usePayment';
 import { toast } from 'sonner';
 
 interface PaymentFormProps {
@@ -18,6 +17,7 @@ interface PaymentFormProps {
   currency?: string;
   onSuccess?: () => void;
   onCancel?: () => void;
+  onPaymentMethodSelected?: (method: string) => void;
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({
@@ -29,8 +29,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   currency = 'GNF',
   onSuccess,
   onCancel,
+  onPaymentMethodSelected
 }) => {
-  const [paymentMethod, setPaymentMethod] = useState<'orange-money' | 'wave' | 'payeer' | 'crypto' | 'card'>('orange-money');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('orange-money');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -40,10 +41,19 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   
   const { processPayment, isProcessing } = usePayment();
 
+  useEffect(() => {
+    if (onPaymentMethodSelected) {
+      onPaymentMethodSelected(paymentMethod);
+    }
+  }, [paymentMethod, onPaymentMethodSelected]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Basic validation
+    if (paymentMethod === 'crypto' && onPaymentMethodSelected) {
+      return;
+    }
+    
     if ((paymentMethod === 'orange-money' || paymentMethod === 'wave') && !phoneNumber) {
       toast.error('Veuillez entrer votre numéro de téléphone Mobile Money');
       return;
@@ -54,11 +64,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       return;
     }
     
-    if (paymentMethod === 'crypto' && !walletAddress) {
-      toast.error('Veuillez entrer votre adresse de portefeuille crypto');
-      return;
-    }
-
     if (paymentMethod === 'payeer' && !payeerAccount) {
       toast.error('Veuillez entrer votre identifiant Payeer');
       return;
@@ -95,7 +100,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           <p className="mb-3 font-medium">Choisir une méthode de paiement:</p>
           <RadioGroup 
             value={paymentMethod} 
-            onValueChange={(value) => setPaymentMethod(value as any)}
+            onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}
             className="flex flex-col space-y-3"
           >
             <div className="flex items-center space-x-2 border p-3 rounded-md">
@@ -221,17 +226,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
 
         {paymentMethod === 'crypto' && (
           <div className="mb-6">
-            <Label htmlFor="wallet" className="block mb-2">Adresse de portefeuille Bitcoin</Label>
-            <Input
-              id="wallet"
-              type="text"
-              placeholder="Votre adresse BTC"
-              value={walletAddress}
-              onChange={(e) => setWalletAddress(e.target.value)}
-              className="mb-2"
-              required
-            />
-            <p className="text-sm text-gray-500">Les instructions de paiement seront envoyées après soumission.</p>
+            <p className="text-sm text-gray-500 mb-4">
+              Cliquez sur "Continuer" pour voir toutes les adresses de paiement crypto disponibles.
+            </p>
           </div>
         )}
 
@@ -245,11 +242,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             Annuler
           </Button>
           <Button 
-            type="submit" 
+            type={paymentMethod === 'crypto' ? 'button' : 'submit'} 
             className="bg-guinea-green hover:bg-guinea-green/90 text-white"
             disabled={isProcessing}
           >
-            {isProcessing ? 'Traitement...' : 'Payer maintenant'}
+            {isProcessing ? 'Traitement...' : (paymentMethod === 'crypto' ? 'Continuer' : 'Payer maintenant')}
           </Button>
         </div>
       </form>

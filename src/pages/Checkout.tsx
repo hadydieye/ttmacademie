@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PaymentForm from '@/components/payment/PaymentForm';
+import CryptoPaymentInstructions from '@/components/payment/CryptoPaymentInstructions';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { ArrowLeft, Check } from 'lucide-react';
@@ -14,6 +15,8 @@ const Checkout = () => {
   const { user } = useAuth();
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [showCryptoInstructions, setShowCryptoInstructions] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
 
   // Get payment information from URL params
   const planId = searchParams.get('plan') || '';
@@ -45,6 +48,7 @@ const Checkout = () => {
 
   const handleCancel = () => {
     setShowPaymentForm(false);
+    setShowCryptoInstructions(false);
   };
 
   const handleBackToPricing = () => {
@@ -57,6 +61,20 @@ const Checkout = () => {
 
   const handleGoToDashboard = () => {
     navigate('/formations');
+  };
+
+  const handlePaymentMethodSelected = (method: string) => {
+    setSelectedPaymentMethod(method);
+    
+    if (method === 'crypto') {
+      setShowPaymentForm(false);
+      setShowCryptoInstructions(true);
+    }
+  };
+
+  const handleBackFromCrypto = () => {
+    setShowCryptoInstructions(false);
+    setShowPaymentForm(true);
   };
 
   if ((!planId && !courseId) || amount <= 0) {
@@ -102,6 +120,13 @@ const Checkout = () => {
               {isCoursePurchase ? 'Accéder à vos formations' : 'Accéder à votre abonnement'}
             </Button>
           </div>
+        ) : showCryptoInstructions ? (
+          <CryptoPaymentInstructions
+            amount={amount}
+            currency={currency}
+            onBack={handleBackFromCrypto}
+            onComplete={handlePaymentSuccess}
+          />
         ) : showPaymentForm ? (
           <PaymentForm
             planId={isCoursePurchase ? '' : planId}
@@ -112,6 +137,7 @@ const Checkout = () => {
             currency={currency}
             onSuccess={handlePaymentSuccess}
             onCancel={handleCancel}
+            onPaymentMethodSelected={handlePaymentMethodSelected}
           />
         ) : (
           <div className="max-w-lg mx-auto">
