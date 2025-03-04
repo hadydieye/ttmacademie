@@ -24,11 +24,12 @@ interface TrainerCardProps {
 const TrainerCard: React.FC<TrainerCardProps> = ({ trainer }) => {
   return (
     <Card hover className="h-full overflow-hidden">
-      <div className="h-64 overflow-hidden">
+      <div className="h-64 overflow-hidden relative">
+        <div className={`absolute inset-0 ${trainer.id === "scriptrader" ? "bg-gradient-to-b from-guinea-green/10 to-guinea-red/10 dark:from-guinea-green/20 dark:to-guinea-red/20" : ""}`}></div>
         <img 
           src={trainer.image} 
           alt={trainer.name}
-          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+          className={`w-full h-full ${trainer.id === "scriptrader" ? "object-contain p-2" : "object-cover"} transition-transform duration-300 hover:scale-105`}
         />
       </div>
       <Card.Header>

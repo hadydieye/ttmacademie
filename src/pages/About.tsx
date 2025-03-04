@@ -111,11 +111,13 @@ const About = () => {
             >
               <div className="md:w-1/3">
                 <div className="rounded-2xl overflow-hidden shadow-lg max-w-xs mx-auto bg-white dark:bg-gray-800/90 transition-transform duration-500 hover:scale-105">
-                  <img 
-                    src={trainer.image} 
-                    alt={trainer.name}
-                    className="w-full h-auto object-cover"
-                  />
+                  <div className={`relative ${trainer.id === "scriptrader" ? "bg-gradient-to-b from-guinea-green/10 to-guinea-red/10 dark:from-guinea-green/20 dark:to-guinea-red/20" : ""}`}>
+                    <img 
+                      src={trainer.image} 
+                      alt={trainer.name}
+                      className={`w-full h-auto ${trainer.id === "scriptrader" ? "object-contain p-2" : "object-cover"}`}
+                    />
+                  </div>
                   <div className="p-4 bg-guinea-gradient bg-opacity-10 dark:bg-opacity-5 dark:bg-gray-800/90">
                     <div className="flex space-x-4 justify-center">
                       {trainer.socialLinks?.linkedin && (
