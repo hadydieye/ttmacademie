@@ -60,7 +60,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
 
       <div className="mb-6">
         <p className="mb-3 font-medium">Sélectionnez votre méthode de paiement préférée:</p>
-        <div className="grid gap-4">
+        <RadioGroup value={paymentMethod} onValueChange={(value) => handleMethodSelection(value as PaymentMethod)} className="grid gap-4">
           <PaymentOption
             id="orange-money"
             name="Orange Money"
@@ -104,7 +104,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             isSelected={paymentMethod === 'card'}
             onClick={() => handleMethodSelection('card')}
           />
-        </div>
+        </RadioGroup>
       </div>
 
       <div className="flex justify-between mt-6">
@@ -155,7 +155,6 @@ const PaymentOption: React.FC<PaymentOptionProps> = ({
     >
       <div className="flex items-center">
         <div className="mr-3">
-          <RadioGroupItem value={id} id={id} checked={isSelected} className="sr-only" />
           <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
             isSelected 
               ? 'border-guinea-green' 
