@@ -56,6 +56,23 @@ const AdminDashboard = () => {
         .from('payments')
         .select('*', { count: 'exact', head: true });
       
+      // Get visitor counts (both anonymous and authenticated)
+      const { count: totalVisitsCount } = await supabase
+        .from('activity_logs')
+        .select('*', { count: 'exact', head: true })
+        .eq('type', 'page_view');
+      
+      // Get unique visitor count (based on user_id for authenticated and IP for anonymous - simplified)
+      const { data: uniqueVisitors } = await supabase
+        .from('activity_logs')
+        .select('user_id')
+        .eq('type', 'page_view')
+        .not('user_id', 'is', null);
+      
+      // Count unique authenticated visitors
+      const uniqueAuthVisitorCount = new Set(uniqueVisitors?.map(v => v.user_id)).size;
+      
+      // Get total activity count
       const { count: activitiesCount } = await supabase
         .from('activity_logs')
         .select('*', { count: 'exact', head: true });
@@ -79,12 +96,12 @@ const AdminDashboard = () => {
           description: 'vs. mois dernier'
         },
         {
-          title: 'Sessions',
-          value: activitiesCount?.toString() || '0',
+          title: 'Visiteurs',
+          value: totalVisitsCount?.toString() || '0',
           change: '+' + Math.floor(Math.random() * 20) + '%',
           positive: true,
-          icon: 'LogIn',
-          description: 'vs. mois dernier'
+          icon: 'Eye',
+          description: 'Total des visites'
         },
         {
           title: 'Revenue',
@@ -99,8 +116,8 @@ const AdminDashboard = () => {
           value: paymentsCount?.toString() || '0',
           change: '+' + Math.floor(Math.random() * 12) + '%',
           positive: true,
-          icon: 'Eye',
-          description: 'vs. mois dernier'
+          icon: 'LogIn',
+          description: 'Taux de conversion'
         }
       ];
       

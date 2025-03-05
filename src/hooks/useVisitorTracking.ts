@@ -21,10 +21,10 @@ export function useVisitorTracking() {
         
         // Log the visit to the activity_logs table
         await supabase.from('activity_logs').insert({
-          type: 'visit',
+          type: 'page_view',
           user_id: visitorId,
           user_email: visitorEmail,
-          details: `Page visited: ${currentPath} (${visitorType} visitor)`
+          details: `Page visitée: ${currentPath} (${visitorType} visitor)`
         });
         
         console.log('Visit logged successfully');
