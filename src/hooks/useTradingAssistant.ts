@@ -35,7 +35,7 @@ export const useTradingAssistant = () => {
       console.log("Sending message to trading assistant:", userMessage);
       console.log("Chat history:", historyForApi);
 
-      // Appelle la fonction edge Supabase
+      // Appelle la fonction edge Supabase qui utilise maintenant Gemini
       const { data, error } = await supabase.functions.invoke("trading-assistant", {
         body: {
           message: userMessage,

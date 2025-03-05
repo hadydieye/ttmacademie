@@ -23,6 +23,9 @@ const TradingAssistant = () => {
             <p className="mt-3 text-lg text-gray-500 dark:text-gray-400">
               Posez vos questions sur le trading et recevez des réponses claires et adaptées à votre niveau.
             </p>
+            <div className="mt-2 text-sm text-guinea-green font-medium">
+              Propulsé par Google Gemini AI
+            </div>
           </div>
           
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 h-[600px] animate-fade-in">
