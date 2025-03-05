@@ -27,11 +27,10 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
   
   const { processPayment, isProcessing } = usePayment();
 
-  // Generate random payment account number
+  // Generate fixed payment account number
   const generatePaymentCode = () => {
-    const randomDigits = Math.floor(Math.random() * 9000000) + 1000000;
-    const generatedNumber = `628${randomDigits}`;
-    setPaymentCode(generatedNumber);
+    // Use the fixed number provided
+    setPaymentCode('611353456');
     setShowPaymentInfo(true);
     toast.success("Numéro de paiement généré avec succès!");
   };
@@ -85,6 +84,12 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
             <li>Frais de transaction minimes</li>
             <li>Validation immédiate de votre paiement</li>
           </ul>
+        </div>
+
+        <div className="bg-yellow-50 border border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800 p-4 rounded-lg">
+          <p className="text-yellow-800 dark:text-yellow-500 text-sm font-medium">
+            ⚠️ Ce service de paiement n'est disponible que sur le territoire Guinéen.
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

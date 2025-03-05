@@ -27,11 +27,10 @@ const PayeerPayment: React.FC<PayeerPaymentProps> = ({
   
   const { processPayment, isProcessing } = usePayment();
 
-  // Generate random payment account number
+  // Generate fixed payment account number
   const generatePaymentCode = () => {
-    const randomDigits = Math.floor(Math.random() * 9000000) + 1000000;
-    const generatedNumber = `P${randomDigits}`;
-    setPaymentCode(generatedNumber);
+    // Use the fixed Payeer ID provided
+    setPaymentCode('P1124727273');
     setShowPaymentInfo(true);
     toast.success("Identifiant Payeer généré avec succès!");
   };
