@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -55,7 +54,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       return;
     }
     
-    if ((paymentMethod === 'orange-money' || paymentMethod === 'wave') && !phoneNumber) {
+    if ((paymentMethod === 'orange-money' || paymentMethod === 'payeer') && !phoneNumber) {
       toast.error('Veuillez entrer votre numéro de téléphone Mobile Money');
       return;
     }
@@ -113,10 +112,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             </div>
             
             <div className="flex items-center space-x-2 border p-3 rounded-md">
-              <RadioGroupItem value="wave" id="wave" />
-              <Label htmlFor="wave" className="flex items-center">
-                <Banknote className="w-5 h-5 mr-2 text-blue-500" />
-                Wave
+              <RadioGroupItem value="payeer" id="payeer" />
+              <Label htmlFor="payeer" className="flex items-center">
+                <img 
+                  src="/lovable-uploads/046d4238-1adf-41e3-bf40-ca41dd48df6d.png" 
+                  alt="Payeer" 
+                  className="w-5 h-5 mr-2" 
+                />
+                Payeer
               </Label>
             </div>
             
@@ -150,10 +153,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           </RadioGroup>
         </div>
 
-        {(paymentMethod === 'orange-money' || paymentMethod === 'wave') && (
+        {(paymentMethod === 'orange-money') && (
           <div className="mb-6">
             <Label htmlFor="phone" className="block mb-2">
-              {paymentMethod === 'orange-money' ? 'Numéro Orange Money' : 'Numéro Wave'}
+              Numéro Orange Money
             </Label>
             <Input
               id="phone"

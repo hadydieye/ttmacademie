@@ -287,11 +287,11 @@ const Pricing = () => {
               
               <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md text-center">
                 <img 
-                  src="/lovable-uploads/45badc4a-1db3-4805-bd99-4ad83c3ddb0b.png" 
-                  alt="Wave" 
+                  src="/lovable-uploads/046d4238-1adf-41e3-bf40-ca41dd48df6d.png" 
+                  alt="Payeer" 
                   className="w-16 h-16 object-contain mx-auto mb-4"
                 />
-                <p className="font-medium dark:text-white">Wave</p>
+                <p className="font-medium dark:text-white">Payeer</p>
               </div>
               
               <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md text-center">
