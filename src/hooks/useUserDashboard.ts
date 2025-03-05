@@ -12,6 +12,12 @@ export interface UserCourse {
   progress: number;
   enrolled_at: string;
   last_accessed?: string;
+  modules?: {
+    id: string;
+    title: string;
+    completed: boolean;
+    is_quiz?: boolean;
+  }[];
 }
 
 export interface PaymentHistory {
@@ -33,7 +39,11 @@ export function useUserDashboard() {
     totalCourses: 0,
     completedCourses: 0,
     totalSpent: 0,
-    averageProgress: 0
+    averageProgress: 0,
+    totalModules: 0,
+    completedQuizzes: 0,
+    communityMembers: 248,
+    upcomingEvents: 3
   });
 
   // Simulated data for courses since we don't have a real backend for course progress yet
@@ -45,7 +55,13 @@ export function useUserDashboard() {
       image: "/lovable-uploads/6c4774b3-6602-45b0-9a72-b682325cdfd4.png",
       progress: 75,
       enrolled_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-      last_accessed: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+      last_accessed: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+      modules: [
+        { id: "1-1", title: "Introduction", completed: true },
+        { id: "1-2", title: "Concepts de base", completed: true },
+        { id: "1-3", title: "Stratégies", completed: false, is_quiz: false },
+        { id: "1-4", title: "Quiz 1", completed: false, is_quiz: true }
+      ]
     },
     {
       id: "3",
@@ -54,7 +70,13 @@ export function useUserDashboard() {
       image: "/lovable-uploads/60c4dc83-6733-4b61-bf3b-a31ad902bbde.png",
       progress: 30,
       enrolled_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
-      last_accessed: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+      last_accessed: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      modules: [
+        { id: "3-1", title: "Introduction Forex", completed: true },
+        { id: "3-2", title: "Paires de devises", completed: false },
+        { id: "3-3", title: "Analyse technique", completed: false },
+        { id: "3-4", title: "Quiz intermédiaire", completed: false, is_quiz: true }
+      ]
     }
   ];
 
@@ -102,12 +124,31 @@ export function useUserDashboard() {
         : 0;
       
       const completedCourses = mockCourseData.filter(c => c.progress === 100).length;
+      
+      // Calculate total modules and completed quizzes
+      let totalModules = 0;
+      let completedQuizzes = 0;
+      
+      mockCourseData.forEach(course => {
+        if (course.modules) {
+          totalModules += course.modules.length;
+          course.modules.forEach(module => {
+            if (module.completed && module.is_quiz) {
+              completedQuizzes++;
+            }
+          });
+        }
+      });
 
       setStats({
         totalCourses: mockCourseData.length,
         completedCourses,
         totalSpent,
-        averageProgress: avgProgress
+        averageProgress: avgProgress,
+        totalModules,
+        completedQuizzes,
+        communityMembers: 248, // Mocked data
+        upcomingEvents: 3 // Mocked data
       });
 
     } catch (error) {
