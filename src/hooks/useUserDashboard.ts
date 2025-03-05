@@ -1,8 +1,7 @@
 
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/context/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
 
 export interface UserCourse {
   id: string;
@@ -11,292 +10,154 @@ export interface UserCourse {
   image: string;
   progress: number;
   enrolled_at: string;
-  last_accessed?: string;
-  modules?: {
+  modules: {
     id: string;
     title: string;
     completed: boolean;
-    is_quiz?: boolean;
+    is_quiz: boolean;
   }[];
 }
 
-export interface PaymentHistory {
+export interface UserPayment {
   payment_id: string;
-  date: string;
   amount: number;
   currency: string;
   status: string;
-  payment_method: string;
+  created_at: string;
   item_name: string;
+  payment_method: string;
 }
 
-export interface Stats {
+export interface UserStats {
+  activeSubscription: boolean;
+  subscriptionEnd?: string;
   totalCourses: number;
   completedCourses: number;
-  totalSpent: number;
-  averageProgress: number;
-  totalModules: number;
-  completedQuizzes: number;
-  communityMembers: number;
+  coursesInProgress: number;
   upcomingEvents: number;
+  communityMembers: number;
 }
 
 export function useUserDashboard() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [userCourses, setUserCourses] = useState<UserCourse[]>([]);
-  const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>([]);
+  const [courses, setCourses] = useState<UserCourse[]>([]);
+  const [payments, setPayments] = useState<UserPayment[]>([]);
+  const [stats, setStats] = useState<UserStats | null>(null);
   const [hasPaidAccess, setHasPaidAccess] = useState(false);
-  const [stats, setStats] = useState<Stats>({
-    totalCourses: 0,
-    completedCourses: 0,
-    totalSpent: 0,
-    averageProgress: 0,
-    totalModules: 0,
-    completedQuizzes: 0,
-    communityMembers: 0,
-    upcomingEvents: 0
-  });
-
-  const checkPaidAccess = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('payments')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('status', 'completed')
-        .eq('item_type', 'plan')
-        .limit(1);
-        
-      if (error) throw error;
-      
-      return data && data.length > 0;
-    } catch (error) {
-      console.error('Erreur lors de la vérification des paiements:', error);
-      return false;
-    }
-  };
-
-  const fetchUserEnrollments = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('enrollments')
-        .select(`
-          course_id,
-          enrolled_at,
-          status
-        `)
-        .eq('user_id', userId)
-        .eq('status', 'active');
-        
-      if (error) throw error;
-      
-      return data || [];
-    } catch (error) {
-      console.error('Erreur lors du chargement des inscriptions:', error);
-      return [];
-    }
-  };
-
-  const fetchCommunityStats = async () => {
-    try {
-      const { count } = await supabase
-        .from('profiles')
-        .select('*', { count: 'exact', head: true });
-      
-      const today = new Date().toISOString();
-      let eventCount = 0;
-      
-      try {
-        const { data, error } = await supabase
-          .rpc('count_upcoming_events', { current_date: today });
-          
-        if (error) throw error;
-          
-        if (data !== null) {
-          eventCount = data as number;
-        }
-      } catch (error) {
-        console.warn('La RPC count_upcoming_events n\'est pas disponible:', error);
-        // Ne pas utiliser de fausses valeurs, utiliser 0 à la place
-        eventCount = 0;
-      }
-      
-      return {
-        communityMembers: count || 0,
-        upcomingEvents: eventCount
-      };
-    } catch (error) {
-      console.error('Erreur lors du chargement des statistiques de la communauté:', error);
-      return { communityMembers: 0, upcomingEvents: 0 };
-    }
-  };
-
-  const fetchRealCourseData = async (courseId: string) => {
-    // Dans une application réelle, cette fonction irait chercher les données du cours depuis la base de données
-    // Pour l'instant, nous allons utiliser des données statiques plus cohérentes
-    
-    const courseData = {
-      id: courseId,
-      title: courseId === "1" ? "Introduction au Trading" : 
-             courseId === "2" ? "Analyse Technique" :
-             courseId === "3" ? "Trading de Devises (Forex)" : 
-             `Cours ${courseId}`,
-      level: courseId === "1" ? "Débutant" : 
-             courseId === "2" ? "Intermédiaire" : 
-             courseId === "3" ? "Avancé" : 
-             "Intermédiaire",
-      image: `/lovable-uploads/${courseId === "1" ? "6c4774b3-6602-45b0-9a72-b682325cdfd4.png" : 
-              courseId === "2" ? "60c4dc83-6733-4b61-bf3b-a31ad902bbde.png" :
-              courseId === "3" ? "f4d91439-42e4-4ba5-ac2e-6e2e002e9403.png" :
-              "6c4774b3-6602-45b0-9a72-b682325cdfd4.png"}`,
-      progress: 0, // Nous calculerons cela à partir des modules
-      modules: [
-        { id: `${courseId}-1`, title: "Introduction", completed: false, is_quiz: false },
-        { id: `${courseId}-2`, title: "Concepts de base", completed: false, is_quiz: false },
-        { id: `${courseId}-3`, title: "Stratégies", completed: false, is_quiz: true },
-        { id: `${courseId}-4`, title: "Techniques avancées", completed: false, is_quiz: false },
-        { id: `${courseId}-5`, title: "Évaluation finale", completed: false, is_quiz: true }
-      ]
-    };
-    
-    return courseData;
-  };
-
-  const fetchUserData = async () => {
-    if (!user) return;
-    
-    setIsLoading(true);
-    
-    try {
-      const paidAccess = await checkPaidAccess(user.id);
-      setHasPaidAccess(paidAccess);
-      
-      // Récupérer l'historique des paiements réels
-      const { data: paymentsData, error: paymentsError } = await supabase
-        .from('payments')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-      
-      if (paymentsError) {
-        throw paymentsError;
-      }
-
-      const formattedPayments = paymentsData.map(payment => ({
-        payment_id: payment.payment_id,
-        date: new Date(payment.created_at).toLocaleDateString('fr-FR'),
-        amount: payment.amount,
-        currency: payment.currency,
-        status: payment.status,
-        payment_method: payment.payment_method,
-        item_name: payment.item_name
-      }));
-
-      setPaymentHistory(formattedPayments);
-      
-      // Récupérer les inscriptions réelles aux cours
-      const enrollments = await fetchUserEnrollments(user.id);
-      
-      if (enrollments.length > 0) {
-        // Pour chaque inscription, récupérer les données réelles du cours
-        const courseDataPromises = enrollments.map(enrollment => fetchRealCourseData(enrollment.course_id));
-        const coursesData = await Promise.all(courseDataPromises);
-        
-        setUserCourses(coursesData);
-      } else {
-        setUserCourses([]);
-      }
-
-      // Calculer les statistiques réelles basées sur les données récupérées
-      const totalSpent = formattedPayments
-        .filter(p => p.status === 'completed')
-        .reduce((sum, payment) => sum + Number(payment.amount), 0);
-      
-      // Calculer la progression moyenne des cours
-      let totalProgress = 0;
-      userCourses.forEach(course => {
-        if (course.modules) {
-          const completedModules = course.modules.filter(m => m.completed).length;
-          const totalModules = course.modules.length;
-          course.progress = totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0;
-          totalProgress += course.progress;
-        }
-      });
-      
-      const avgProgress = userCourses.length > 0 
-        ? totalProgress / userCourses.length 
-        : 0;
-      
-      const completedCourses = userCourses.filter(c => c.progress === 100).length;
-      
-      let totalModules = 0;
-      let completedQuizzes = 0;
-      
-      userCourses.forEach(course => {
-        if (course.modules) {
-          totalModules += course.modules.length;
-          course.modules.forEach(module => {
-            if (module.completed && module.is_quiz) {
-              completedQuizzes++;
-            }
-          });
-        }
-      });
-
-      const communityStats = await fetchCommunityStats();
-
-      setStats({
-        totalCourses: userCourses.length,
-        completedCourses,
-        totalSpent,
-        averageProgress: avgProgress,
-        totalModules,
-        completedQuizzes,
-        communityMembers: communityStats.communityMembers,
-        upcomingEvents: communityStats.upcomingEvents
-      });
-
-    } catch (error) {
-      console.error('Erreur lors du chargement des données du tableau de bord:', error);
-      toast.error('Erreur lors du chargement des données');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setIsLoading(false);
+      return;
+    }
+
+    async function fetchUserData() {
+      try {
+        setIsLoading(true);
+        
+        // 1. Fetch user payments
+        const { data: paymentsData, error: paymentsError } = await supabase
+          .from("payments")
+          .select("payment_id, amount, currency, status, created_at, item_name, payment_method")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false });
+
+        if (paymentsError) throw paymentsError;
+        setPayments(paymentsData as UserPayment[]);
+        
+        // Check if user has active subscription payment
+        const hasActiveSubscription = paymentsData.some(
+          payment => 
+            payment.status === 'completed' && 
+            (payment.item_name.toLowerCase().includes('mensuel') || 
+             payment.item_name.toLowerCase().includes('annuel'))
+        );
+        
+        setHasPaidAccess(hasActiveSubscription);
+
+        // 2. Fetch user enrolled courses
+        const { data: enrollmentsData, error: enrollmentsError } = await supabase
+          .from("enrollments")
+          .select("course_id, enrolled_at")
+          .eq("user_id", user.id)
+          .eq("status", "active");
+
+        if (enrollmentsError) throw enrollmentsError;
+
+        // 3. Get upcoming events count 
+        // Using simple query instead of RPC
+        const { count, error: eventCountError } = await supabase
+          .from('events')
+          .select('*', { count: 'exact' })
+          .gte('event_date', new Date().toISOString());
+          
+        if (eventCountError) throw eventCountError;
+        
+        // 4. Get community members count
+        const { count: membersCount, error: membersCountError } = await supabase
+          .from('profiles')
+          .select('*', { count: 'exact' });
+          
+        if (membersCountError) throw membersCountError;
+
+        // Prepare stats
+        const courseStats = {
+          activeSubscription: hasActiveSubscription,
+          subscriptionEnd: hasActiveSubscription ? getSubscriptionEndDate() : undefined,
+          totalCourses: enrollmentsData.length,
+          completedCourses: 0, // To be calculated from real data
+          coursesInProgress: enrollmentsData.length, // Assuming all are in progress
+          upcomingEvents: count || 0,
+          communityMembers: membersCount || 0,
+        };
+        
+        setStats(courseStats);
+
+        // For testing purposes - fetch mock course data
+        // This would ideally be replaced with actual course data from your database
+        const mockCourses: UserCourse[] = enrollmentsData.map((enrollment, index) => ({
+          id: enrollment.course_id,
+          title: `Formation Trading ${index + 1}`,
+          level: ['Débutant', 'Intermédiaire', 'Avancé'][Math.floor(Math.random() * 3)],
+          image: `/lovable-uploads/${['377c789a-9c7e-4517-9499-fb2097c2647a.png', '834d393d-ec93-4081-907d-39ae11fe5e82.png', '0e95e2af-2c76-4a3f-97e7-a3b26879b4e5.png'][Math.floor(Math.random() * 3)]}`,
+          progress: Math.floor(Math.random() * 100),
+          enrolled_at: enrollment.enrolled_at,
+          modules: Array(5).fill(0).map((_, i) => ({
+            id: `module-${i}`,
+            title: `Module ${i + 1}`,
+            completed: Math.random() > 0.5,
+            is_quiz: i === 4,
+          })),
+        }));
+        
+        setCourses(mockCourses);
+      } catch (err) {
+        console.error("Error fetching user dashboard data:", err);
+        setError("Une erreur s'est produite lors du chargement des données");
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
     fetchUserData();
-
-    const channel = supabase
-      .channel('dashboard-changes')
-      .on('postgres_changes', 
-          { 
-            event: '*', 
-            schema: 'public', 
-            table: 'payments',
-            filter: `user_id=eq.${user.id}`
-          }, 
-          (payload) => {
-            console.log('Données de paiement modifiées:', payload);
-            fetchUserData();
-          }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
   }, [user]);
+
+  // Helper function to calculate subscription end date
+  const getSubscriptionEndDate = () => {
+    const date = new Date();
+    // Add 30 days for monthly or 365 for yearly
+    date.setDate(date.getDate() + 30);
+    return date.toISOString();
+  };
 
   return {
     isLoading,
-    userCourses,
-    paymentHistory,
+    courses,
+    payments,
     stats,
     hasPaidAccess,
-    refreshData: fetchUserData
+    error,
   };
 }

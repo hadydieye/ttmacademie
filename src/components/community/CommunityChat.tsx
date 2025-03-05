@@ -1,14 +1,16 @@
 
-import React, { useState, useEffect, useRef } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/context/AuthContext";
-import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
-import { Loader2, Send, MessagesSquare } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import React, { useState, useEffect, useRef } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Card from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Send, Loader2 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { formatDistance } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ChatMessage {
   id: string;
@@ -18,214 +20,235 @@ interface ChatMessage {
   created_at: string;
 }
 
-interface PayloadNew {
-  id: string;
-  user_id: string;
-  content: string;
-  created_at: string;
-  [key: string]: any;
-}
-
-export default function CommunityChat() {
-  const { user } = useAuth();
+const CommunityChat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [newMessage, setNewMessage] = useState("");
-  const [sendingMessage, setSendingMessage] = useState(false);
+  const [newMessage, setNewMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Faire défiler automatiquement vers le bas lors de l'ajout de nouveaux messages
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  // Charger les messages existants et configurer la connexion en temps réel
-  useEffect(() => {
-    if (!user) return;
-
-    // Charger les messages existants
-    const fetchMessages = async () => {
-      try {
-        // Utiliser RPC au lieu d'accéder directement à la table
-        const { data, error } = await supabase.rpc('get_chat_messages');
-
-        if (error) {
-          console.error('Erreur RPC:', error);
-          throw error;
-        }
-
-        if (data && Array.isArray(data)) {
-          setMessages(data as ChatMessage[]);
-        } else {
-          // Aucun message disponible
-          setMessages([]);
-        }
-      } catch (error) {
-        console.error('Erreur lors du chargement des messages:', error);
-        // En cas d'erreur, initialiser un tableau vide
-        setMessages([]);
-      }
-    };
-
-    fetchMessages();
-
-    // Configurer la souscription en temps réel
-    let channel;
+  const { user } = useAuth();
+  
+  const fetchMessages = async () => {
     try {
-      channel = supabase
-        .channel('chat-updates')
-        .on('postgres_changes', 
-          { 
-            event: 'INSERT', 
-            schema: 'public', 
-            table: 'chat_messages' 
-          }, 
-          (payload) => {
-            try {
-              const newData = payload.new as PayloadNew;
-              // Obtenir les informations sur l'utilisateur pour le nouveau message
-              supabase
-                .from('profiles')
-                .select('name')
-                .eq('id', newData.user_id)
-                .single()
-                .then(({ data: userData, error: userError }) => {
-                  if (userError) {
-                    console.error('Erreur lors du chargement des données utilisateur:', userError);
-                  }
-
-                  const newMessage: ChatMessage = {
-                    id: newData.id,
-                    user_id: newData.user_id,
-                    user_name: userData?.name || 'Utilisateur anonyme',
-                    content: newData.content,
-                    created_at: newData.created_at
-                  };
-
-                  setMessages(prev => [...prev, newMessage]);
-                });
-            } catch (error) {
-              console.error('Erreur lors du traitement du nouveau message:', error);
-            }
-          }
-        )
-        .subscribe();
+      setIsLoading(true);
+      
+      // Using simple query instead of complex RPC
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select(`
+          id,
+          user_id,
+          content,
+          created_at,
+          profiles:profile_id (name)
+        `)
+        .order('created_at', { ascending: true })
+        .limit(50);
+        
+      if (error) throw error;
+      
+      // Format messages for display
+      const formattedMessages = data.map(message => ({
+        id: message.id,
+        user_id: message.user_id,
+        user_name: message.profiles?.name || 'Utilisateur anonyme',
+        content: message.content,
+        created_at: message.created_at
+      }));
+      
+      setMessages(formattedMessages);
     } catch (error) {
-      console.error('Erreur lors de la configuration de la subscription en temps réel:', error);
-    }
-
-    return () => {
-      if (channel) {
-        supabase.removeChannel(channel);
-      }
-    };
-  }, [user]);
-
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newMessage.trim() || !user) return;
-
-    setSendingMessage(true);
-    try {
-      try {
-        // Utiliser RPC pour ajouter le message
-        const { error } = await supabase.rpc('add_chat_message', {
-          message_content: newMessage.trim(),
-          user_identifier: user.id
-        });
-
-        if (error) throw error;
-      } catch (error: any) {
-        console.error('Erreur lors de l\'envoi du message:', error);
-        toast.error("Le message n'a pas pu être enregistré en base de données");
-        return;
-      }
-
-      setNewMessage("");
-    } catch (error) {
-      console.error('Erreur lors de l\'envoi du message:', error);
-      toast.error("Une erreur s'est produite. Veuillez réessayer.");
+      console.error('Erreur lors de la récupération des messages:', error);
+      toast.error('Impossible de charger les messages');
     } finally {
-      setSendingMessage(false);
+      setIsLoading(false);
     }
   };
-
-  return (
-    <Card className="h-[600px] flex flex-col">
-      <Card.Header>
-        <div className="flex items-center justify-between">
-          <Card.Title className="flex items-center">
-            <MessagesSquare className="mr-2 h-5 w-5" />
-            Chat en direct
-          </Card.Title>
-          <Badge variant="outline">{messages.length} messages</Badge>
-        </div>
-        <Card.Description>
-          Discutez en temps réel avec d'autres membres de la communauté
-        </Card.Description>
-      </Card.Header>
+  
+  const sendMessage = async () => {
+    if (!newMessage.trim() || !user) return;
+    
+    try {
+      setIsSending(true);
       
-      <Card.Content className="flex-grow overflow-y-auto">
-        <div className="space-y-4">
-          {messages.length === 0 ? (
-            <div className="text-center py-10">
-              <MessagesSquare className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
-              <p className="text-muted-foreground">Aucun message pour le moment</p>
-              <p className="text-sm text-muted-foreground">Soyez le premier à envoyer un message!</p>
-            </div>
-          ) : (
-            messages.map((message) => (
+      // Direct insertion instead of RPC
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .insert({
+          user_id: user.id,
+          content: newMessage.trim(),
+          profile_id: user.id
+        })
+        .select(`
+          id,
+          user_id,
+          content,
+          created_at,
+          profiles:profile_id (name)
+        `)
+        .single();
+      
+      if (error) throw error;
+      
+      // Add new message to the list
+      const formattedMessage: ChatMessage = {
+        id: data.id,
+        user_id: data.user_id,
+        user_name: data.profiles?.name || 'Utilisateur anonyme',
+        content: data.content,
+        created_at: data.created_at
+      };
+      
+      setMessages(prev => [...prev, formattedMessage]);
+      setNewMessage('');
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi du message:', error);
+      toast.error('Impossible d\'envoyer le message');
+    } finally {
+      setIsSending(false);
+    }
+  };
+  
+  // Setup real-time listening for new messages
+  useEffect(() => {
+    fetchMessages();
+    
+    const channel = supabase
+      .channel('chat_messages')
+      .on('postgres_changes', { 
+        event: 'INSERT', 
+        schema: 'public', 
+        table: 'chat_messages' 
+      }, (payload) => {
+        // Only add message if it's not from current user
+        if (payload.new.user_id !== user?.id) {
+          supabase
+            .from('profiles')
+            .select('name')
+            .eq('id', payload.new.profile_id)
+            .single()
+            .then(({ data }) => {
+              const newMsg: ChatMessage = {
+                id: payload.new.id,
+                user_id: payload.new.user_id,
+                user_name: data?.name || 'Utilisateur anonyme',
+                content: payload.new.content,
+                created_at: payload.new.created_at
+              };
+              setMessages(prev => [...prev, newMsg]);
+            });
+        }
+      })
+      .subscribe();
+      
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id]);
+  
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+  
+  return (
+    <Card className="flex flex-col h-[600px] shadow-md">
+      <div className="p-4 border-b">
+        <h3 className="text-lg font-semibold">Chat de la communauté</h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Discutez en temps réel avec d'autres traders
+        </p>
+      </div>
+
+      <ScrollArea className="flex-grow p-4">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-full">
+            <Loader2 className="w-6 h-6 animate-spin text-guinea-green" />
+            <span className="ml-2">Chargement des messages...</span>
+          </div>
+        ) : messages.length === 0 ? (
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+            Aucun message pour le moment. Soyez le premier à écrire!
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {messages.map((message) => (
               <div 
                 key={message.id} 
                 className={`flex ${message.user_id === user?.id ? 'justify-end' : 'justify-start'}`}
               >
-                <div className={`flex ${message.user_id === user?.id ? 'flex-row-reverse' : 'flex-row'} max-w-[80%]`}>
-                  <Avatar className={`h-8 w-8 ${message.user_id === user?.id ? 'ml-2' : 'mr-2'}`}>
-                    <AvatarFallback>{message.user_name.charAt(0)}</AvatarFallback>
+                <div 
+                  className={`flex max-w-[80%] ${
+                    message.user_id === user?.id 
+                      ? 'flex-row-reverse' 
+                      : 'flex-row'
+                  }`}
+                >
+                  <Avatar className={`${message.user_id === user?.id ? 'ml-2' : 'mr-2'} h-8 w-8`}>
+                    <AvatarFallback className="bg-guinea-green text-white text-xs">
+                      {message.user_name.substring(0, 2).toUpperCase()}
+                    </AvatarFallback>
                   </Avatar>
+                  
                   <div>
-                    <div className={`
-                      px-3 py-2 rounded-lg 
-                      ${message.user_id === user?.id 
-                        ? 'bg-guinea-green text-white' 
-                        : 'bg-gray-100 dark:bg-gray-800'}
-                    `}>
-                      <p className="text-sm">{message.content}</p>
+                    <div 
+                      className={`rounded-lg px-3 py-2 ${
+                        message.user_id === user?.id 
+                          ? 'bg-guinea-green text-white' 
+                          : 'bg-gray-100 dark:bg-gray-800'
+                      }`}
+                    >
+                      <div className="text-xs font-medium mb-1">
+                        {message.user_id === user?.id ? 'Vous' : message.user_name}
+                      </div>
+                      <p className="text-sm break-words">{message.content}</p>
                     </div>
-                    <div className={`text-xs text-gray-500 mt-1 ${message.user_id === user?.id ? 'text-right' : 'text-left'}`}>
-                      <span className="font-medium">{message.user_id === user?.id ? 'Vous' : message.user_name}</span> · {
-                        new Date(message.created_at).toLocaleTimeString('fr-FR', {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })
-                      }
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      {formatDistance(new Date(message.created_at), new Date(), { 
+                        addSuffix: true,
+                        locale: fr 
+                      })}
                     </div>
                   </div>
                 </div>
               </div>
-            ))
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-      </Card.Content>
-      
-      <Card.Footer className="border-t p-4">
-        <form onSubmit={handleSendMessage} className="flex gap-2">
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+        )}
+      </ScrollArea>
+
+      <div className="p-3 border-t">
+        <form 
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendMessage();
+          }}
+          className="flex gap-2"
+        >
           <Input
-            placeholder="Écrivez votre message..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            disabled={sendingMessage}
+            placeholder="Écrivez votre message..."
+            disabled={isSending}
             className="flex-grow"
           />
-          <Button type="submit" disabled={sendingMessage || !newMessage.trim()}>
-            {sendingMessage ? (
+          <Button 
+            type="submit" 
+            size="icon"
+            disabled={!newMessage.trim() || isSending}
+            className="bg-guinea-green hover:bg-guinea-green/90"
+          >
+            {isSending ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <Send className="h-4 w-4" />
             )}
           </Button>
         </form>
-      </Card.Footer>
+      </div>
     </Card>
   );
-}
+};
+
+export default CommunityChat;
