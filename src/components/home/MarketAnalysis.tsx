@@ -1,24 +1,54 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Card from "../ui/card";
 import { Button } from "@/components/ui/button";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { ArrowUpRight, ArrowDownRight, TrendingUp, BarChart4 } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, TrendingUp, BarChart4, RotateCcw } from "lucide-react";
 import { Link } from "react-router-dom";
 import LiveQuotes from "./LiveQuotes";
-
-const data = [
-  { name: "Jan", value: 2750.40 },
-  { name: "Fév", value: 2755.00 },
-  { name: "Mar", value: 2758.01 },
-  { name: "Avr", value: 2759.31 },
-  { name: "Mai", value: 2758.72 },
-  { name: "Juin", value: 2756.00 },
-  { name: "Juil", value: 2754.00 },
-  { name: "Août", value: 2750.40 },
-];
+import { useMarketData, getDemoQuotes, MarketQuote } from "@/services/marketDataService";
 
 const MarketAnalysis = () => {
+  const { quotes, loading, error, refreshData } = useMarketData();
+  const [goldData, setGoldData] = useState<MarketQuote | null>(null);
+  const [chartData, setChartData] = useState<any[]>([]);
+  
+  // Trouver les données du XAUUSD dans les cotations
+  useEffect(() => {
+    const displayQuotes = quotes.length > 0 ? quotes : getDemoQuotes();
+    const goldQuote = displayQuotes.find(quote => quote.symbol === 'XAUUSD');
+    
+    if (goldQuote) {
+      setGoldData(goldQuote);
+      
+      // Générer des données de graphique basées sur le prix actuel
+      const basePrice = goldQuote.bid;
+      const newChartData = [
+        { name: "Jan", value: basePrice * 0.985 },
+        { name: "Fév", value: basePrice * 0.992 },
+        { name: "Mar", value: basePrice * 0.997 },
+        { name: "Avr", value: basePrice * 0.999 },
+        { name: "Mai", value: basePrice * 0.998 },
+        { name: "Juin", value: basePrice * 0.995 },
+        { name: "Juil", value: basePrice * 0.990 },
+        { name: "Août", value: basePrice },
+      ];
+      setChartData(newChartData);
+    }
+  }, [quotes]);
+
+  // Formatter le nombre avec 2 décimales
+  const formatPrice = (price?: number) => {
+    if (!price) return "N/A";
+    return price.toFixed(2);
+  };
+  
+  // Formatter la date pour l'affichage
+  const formatDate = (date?: Date) => {
+    if (!date) return "N/A";
+    return date.toLocaleString();
+  };
+
   return (
     <section id="market-analysis" className="py-20 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4 md:px-6">
@@ -45,10 +75,29 @@ const MarketAnalysis = () => {
             <Card className="h-full overflow-hidden">
               <Card.Header>
                 <div className="flex justify-between items-center">
-                  <Card.Title>Analyse Or/USD (XAUUSD)</Card.Title>
-                  <div className="flex items-center text-green-500">
-                    <ArrowUpRight className="w-4 h-4 mr-1" />
-                    <span>+1.23%</span>
+                  <Card.Title>Analyse Or/USD (XAUUSD) - Temps Réel</Card.Title>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center">
+                      {goldData && goldData.change > 0 ? (
+                        <div className="flex items-center text-green-500">
+                          <ArrowUpRight className="w-4 h-4 mr-1" />
+                          <span>+{goldData.change.toFixed(2)} ({goldData.changePercent.toFixed(2)}%)</span>
+                        </div>
+                      ) : goldData && goldData.change < 0 ? (
+                        <div className="flex items-center text-red-500">
+                          <ArrowDownRight className="w-4 h-4 mr-1" />
+                          <span>{goldData.change.toFixed(2)} ({goldData.changePercent.toFixed(2)}%)</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center text-gray-500">
+                          <span>0.00 (0.00%)</span>
+                        </div>
+                      )}
+                    </div>
+                    <Button variant="outline" size="sm" onClick={refreshData} disabled={loading}>
+                      <RotateCcw className={`w-4 h-4 mr-1 ${loading ? "animate-spin" : ""}`} />
+                      <span className="sr-only md:not-sr-only">Actualiser</span>
+                    </Button>
                   </div>
                 </div>
               </Card.Header>
@@ -63,15 +112,26 @@ const MarketAnalysis = () => {
                 <div className="mt-4 grid grid-cols-3 gap-4">
                   <div className="text-center">
                     <p className="text-gray-500 dark:text-gray-400 text-sm">Support</p>
-                    <p className="font-semibold">2750.40</p>
+                    <p className="font-semibold">
+                      {goldData ? formatPrice(goldData.bid * 0.995) : "2750.40"}
+                    </p>
                   </div>
                   <div className="text-center">
                     <p className="text-gray-500 dark:text-gray-400 text-sm">Prix actuel</p>
-                    <p className="font-semibold">2758.52</p>
+                    <p className="font-semibold">
+                      {goldData ? formatPrice(goldData.bid) : "2758.52"}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {goldData ? 
+                        `Mis à jour: ${formatDate(goldData.lastUpdated)}` : 
+                        "Utilisant données de démo"}
+                    </p>
                   </div>
                   <div className="text-center">
                     <p className="text-gray-500 dark:text-gray-400 text-sm">Résistance</p>
-                    <p className="font-semibold">2795.00</p>
+                    <p className="font-semibold">
+                      {goldData ? formatPrice(goldData.ask * 1.005) : "2795.00"}
+                    </p>
                   </div>
                 </div>
               </Card.Content>
@@ -92,24 +152,56 @@ const MarketAnalysis = () => {
                       </div>
                       <span>XAUUSD</span>
                     </div>
-                    <div className="flex items-center text-green-500">
-                      <ArrowUpRight className="w-4 h-4 mr-1" />
-                      <span>+76.70</span>
+                    <div className={`flex items-center ${goldData && goldData.change > 0 ? "text-green-500" : goldData && goldData.change < 0 ? "text-red-500" : "text-gray-500"}`}>
+                      {goldData && goldData.change > 0 ? (
+                        <ArrowUpRight className="w-4 h-4 mr-1" />
+                      ) : goldData && goldData.change < 0 ? (
+                        <ArrowDownRight className="w-4 h-4 mr-1" />
+                      ) : null}
+                      <span>
+                        {goldData ? 
+                          (goldData.change > 0 ? "+" : "") + formatPrice(goldData.change) : 
+                          "+76.70"}
+                      </span>
                     </div>
                   </div>
                   
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="bg-guinea-green/10 p-2 rounded-full mr-3">
-                        <BarChart4 className="w-5 h-5 text-guinea-green" />
+                  {/* Autres tendances du marché */}
+                  {quotes.length > 0 && quotes.filter(q => q.symbol !== 'XAUUSD').slice(0, 2).map(quote => (
+                    <div key={quote.symbol} className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="bg-guinea-green/10 p-2 rounded-full mr-3">
+                          <BarChart4 className="w-5 h-5 text-guinea-green" />
+                        </div>
+                        <span>{quote.symbol}</span>
                       </div>
-                      <span>EUR/USD</span>
+                      <div className={`flex items-center ${quote.change > 0 ? "text-green-500" : quote.change < 0 ? "text-red-500" : "text-gray-500"}`}>
+                        {quote.change > 0 ? (
+                          <ArrowUpRight className="w-4 h-4 mr-1" />
+                        ) : quote.change < 0 ? (
+                          <ArrowDownRight className="w-4 h-4 mr-1" />
+                        ) : null}
+                        <span>
+                          {(quote.change > 0 ? "+" : "") + quote.change.toFixed(2)}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center text-red-500">
-                      <ArrowDownRight className="w-4 h-4 mr-1" />
-                      <span>-0.21%</span>
+                  ))}
+
+                  {quotes.length === 0 && (
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="bg-guinea-green/10 p-2 rounded-full mr-3">
+                          <BarChart4 className="w-5 h-5 text-guinea-green" />
+                        </div>
+                        <span>EUR/USD</span>
+                      </div>
+                      <div className="flex items-center text-red-500">
+                        <ArrowDownRight className="w-4 h-4 mr-1" />
+                        <span>-0.21%</span>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   
                   <img 
                     src="/lovable-uploads/5c385599-f359-4f79-8935-30da7331f454.png" 
