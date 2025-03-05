@@ -278,11 +278,11 @@ const Pricing = () => {
               
               <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md text-center">
                 <img 
-                  src="/lovable-uploads/45badc4a-1db3-4805-bd99-4ad83c3ddb0b.png" 
-                  alt="MTN Mobile Money" 
+                  src="/lovable-uploads/64617320-161a-4c65-b082-31d0193db414.png" 
+                  alt="Cryptomonnaie" 
                   className="w-16 h-16 object-contain mx-auto mb-4"
                 />
-                <p className="font-medium dark:text-white">MTN Mobile Money</p>
+                <p className="font-medium dark:text-white">Cryptomonnaie</p>
               </div>
               
               <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md text-center">

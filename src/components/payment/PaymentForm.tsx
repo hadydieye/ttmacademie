@@ -132,8 +132,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               <RadioGroupItem value="crypto" id="crypto" />
               <Label htmlFor="crypto" className="flex items-center">
                 <img 
-                  src="/lovable-uploads/45badc4a-1db3-4805-bd99-4ad83c3ddb0b.png" 
-                  alt="Cryptocurrency" 
+                  src="/lovable-uploads/64617320-161a-4c65-b082-31d0193db414.png" 
+                  alt="Cryptomonnaie" 
                   className="w-5 h-5 mr-2" 
                 />
                 Cryptomonnaie
