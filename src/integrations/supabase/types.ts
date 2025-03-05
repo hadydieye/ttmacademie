@@ -36,6 +36,38 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          profile_id: string | null
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          profile_id?: string | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          profile_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       enrollments: {
         Row: {
           course_id: string
@@ -63,6 +95,36 @@ export type Database = {
           status?: string
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          created_at: string
+          creator_id: string | null
+          description: string | null
+          event_date: string
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          creator_id?: string | null
+          description?: string | null
+          event_date: string
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          creator_id?: string | null
+          description?: string | null
+          event_date?: string
+          id?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }

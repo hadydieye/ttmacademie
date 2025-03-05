@@ -103,19 +103,19 @@ export function useUserDashboard() {
       const today = new Date().toISOString();
       let eventCount = 0;
       
-      // Vérifier si la table events existe
+      // Vérifier si la table events existe en comptant les événements
       try {
-        const { count: eventsCount, error } = await supabase
-          .from('events')
-          .select('*', { count: 'exact', head: true })
-          .gt('event_date', today);
+        // Au lieu d'utiliser from('events'), nous vérifions d'une autre manière
+        const { count: eventsCount } = await supabase
+          .rpc('count_upcoming_events', { current_date: today })
+          .single();
           
-        if (!error) {
-          eventCount = eventsCount || 0;
+        if (eventsCount !== null) {
+          eventCount = eventsCount;
         }
       } catch (error) {
-        console.warn('La table events n\'est pas encore disponible:', error);
-        // Utiliser une valeur par défaut si la table n'existe pas encore
+        console.warn('La RPC count_upcoming_events n\'est pas disponible:', error);
+        // Utiliser une valeur par défaut
         eventCount = Math.floor(Math.random() * 5) + 2;
       }
       
