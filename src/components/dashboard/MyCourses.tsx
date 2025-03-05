@@ -12,7 +12,8 @@ import {
   CheckCircle, 
   Globe,
   HelpCircle,
-  Users
+  Users,
+  Calendar
 } from "lucide-react";
 import { UserCourse } from "@/hooks/useUserDashboard";
 import { useNavigate } from "react-router-dom";
