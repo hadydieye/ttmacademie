@@ -167,91 +167,112 @@ const Testimonials = () => {
           <div className="container mx-auto px-4 md:px-6">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <span className="inline-block text-sm font-medium px-3 py-1 rounded-full bg-guinea-green/10 text-guinea-green dark:bg-guinea-green/20 dark:text-guinea-green/90 mb-4">
-                Résultats Trading
+                Preuves de Réussite
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">
-                Captures d'écran de nos étudiants
+                Résultats de nos étudiants en images
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-                Voici des captures d'écran réelles des résultats de trading obtenus par les étudiants de TTM Académie.
+                Voici des captures d'écran authentiques montrant les résultats obtenus par nos étudiants appliquant les stratégies TTM Académie.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mb-12">
+              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in bg-white dark:bg-gray-800">
                 <img 
                   src="/lovable-uploads/4a2ca112-e1e5-47f1-909a-9e1d25c75d15.png" 
-                  alt="Position ouverte sur US100Cash" 
+                  alt="Résultat trading avec analyse technique" 
                   className="w-full h-auto"
                 />
-                <div className="p-4 bg-white dark:bg-gray-800">
-                  <p className="text-gray-600 dark:text-gray-400 italic">"Position ouverte sur US100Cash avec un niveau de marge de 741.54%. Stratégie d'entrée sur les liquidités."</p>
+                <div className="p-6">
+                  <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-white">Position stratégique sur US100Cash</h3>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Niveau de marge de 741.54% obtenu grâce à une entrée stratégique basée sur l'identification des points de liquidité enseignée dans notre formation avancée.
+                  </p>
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in">
+              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in bg-white dark:bg-gray-800">
                 <img 
                   src="/lovable-uploads/f0498889-a267-4613-aeb1-734636feb8bd.png" 
-                  alt="Compte de trading avec profit" 
+                  alt="Compte trading avec profit" 
                   className="w-full h-auto"
                 />
-                <div className="p-4 bg-white dark:bg-gray-800">
-                  <p className="text-gray-600 dark:text-gray-400 italic">"Clôture d'une position avec un bénéfice de 91.20 USD, une bonne gestion de trade."</p>
+                <div className="p-6">
+                  <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-white">Gestion de risque exemplaire</h3>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Une parfaite démonstration de notre méthode de gestion du risque, avec un trade clôturé à 91.20 USD de bénéfice. L'étudiant a respecté son plan de trading.
+                  </p>
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in">
+              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in bg-white dark:bg-gray-800">
                 <img 
                   src="/lovable-uploads/d88a9aad-c41b-4d7c-b0f3-92307d2828e7.png" 
-                  alt="Multiple positions XAUUSDm" 
+                  alt="Multiples positions sur l'or" 
                   className="w-full h-auto"
                 />
-                <div className="p-4 bg-white dark:bg-gray-800">
-                  <p className="text-gray-600 dark:text-gray-400 italic">"Application des stratégies TTM avec plusieurs trades réussis sur XAUUSDm totalisant +3500$ de bénéfices."</p>
+                <div className="p-6">
+                  <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-white">Série de trades gagnants sur XAUUSDm</h3>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Application rigoureuse des stratégies TTM Académie sur l'or, générant plus de 3500$ de bénéfices en une série de trades parfaitement exécutés.
+                  </p>
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in">
+              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in bg-white dark:bg-gray-800">
                 <img 
                   src="/lovable-uploads/e7fc234d-d08c-4b4e-9f74-5c9ce581ae6c.png" 
-                  alt="Trading GOLD avec profits" 
+                  alt="Trading de l'or avec profits" 
                   className="w-full h-auto"
                 />
-                <div className="p-4 bg-white dark:bg-gray-800">
-                  <p className="text-gray-600 dark:text-gray-400 italic">"Début prometteur avec une série de trades rentables sur GOLD, en attendant la prochaine analyse pour entrer en position."</p>
+                <div className="p-6">
+                  <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-white">Début prometteur sur GOLD</h3>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Un étudiant débutant qui a rapidement appliqué nos principes d'analyse technique pour identifier des opportunités rentables sur l'or.
+                  </p>
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in">
+              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in bg-white dark:bg-gray-800">
                 <img 
                   src="/lovable-uploads/9e1f20d9-7d11-45e2-ac20-b7990ed83f65.png" 
-                  alt="Trading account with profit" 
+                  alt="Compte de trading avec profit substantiel" 
                   className="w-full h-auto"
                 />
-                <div className="p-4 bg-white dark:bg-gray-800">
-                  <p className="text-gray-600 dark:text-gray-400 italic">"Patience récompensée avec un bénéfice de 1093.80 après avoir attendu le retour du marché pour entrer."</p>
+                <div className="p-6">
+                  <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-white">La patience récompensée</h3>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Résultat d'une stratégie d'attente disciplinée, avec un bénéfice de 1093.80 après avoir identifié le moment idéal pour entrer sur le marché.
+                  </p>
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in">
+              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in bg-white dark:bg-gray-800">
                 <img 
                   src="/lovable-uploads/e408215b-aa15-4856-828d-19017dea9028.png" 
-                  alt="Chart analysis" 
+                  alt="Analyse technique avancée" 
                   className="w-full h-auto"
                 />
-                <div className="p-4 bg-white dark:bg-gray-800">
-                  <p className="text-gray-600 dark:text-gray-400 italic">"Analyse technique de qualité avec canal de prix bien défini, un exemple de la méthodologie enseignée à TTM Académie."</p>
+                <div className="p-6">
+                  <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-white">Maîtrise de l'analyse technique</h3>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Une analyse de marché réalisée par un étudiant utilisant les canaux de prix et les niveaux clés enseignés dans notre module d'analyse technique avancée.
+                  </p>
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in col-span-1 md:col-span-2 lg:col-span-3">
+              <div className="overflow-hidden rounded-xl shadow-lg animate-fade-in col-span-1 md:col-span-2 lg:col-span-2 bg-white dark:bg-gray-800">
                 <img 
                   src="/lovable-uploads/f4d91439-42e4-4ba5-ac2e-6e2e002e9403.png" 
-                  alt="Trading account with multiple positions" 
+                  alt="Compte de trading avec multiples positions rentables" 
                   className="w-full h-auto"
                 />
-                <div className="p-4 bg-white dark:bg-gray-800">
-                  <p className="text-gray-600 dark:text-gray-400 italic">"Trader devenu rentable avec une excellente gestion des positions XAUUSDm et un niveau de marge impressionnant de 589.67%."</p>
+                <div className="p-6">
+                  <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-white">Excellence en trading de l'or</h3>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Niveau de marge exceptionnel de 589.67% atteint par un étudiant ayant maîtrisé notre stratégie spécialisée pour XAUUSDm, démontrant une progression remarquable de débutant à trader rentable.
+                  </p>
                 </div>
               </div>
             </div>
