@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import Card from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Clock, Play } from "lucide-react";
@@ -53,9 +53,9 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ courses }) => {
             </div>
           </div>
           
-          <CardHeader>
-            <CardTitle>{course.title}</CardTitle>
-            <CardDescription>
+          <Card.Header>
+            <Card.Title>{course.title}</Card.Title>
+            <Card.Description>
               <div className="flex items-center text-sm">
                 <Clock className="h-3.5 w-3.5 mr-1" />
                 <span>Inscrit le {formatDate(course.enrolled_at)}</span>
@@ -65,10 +65,10 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ courses }) => {
                   Dernier accès le {formatDate(course.last_accessed)}
                 </div>
               )}
-            </CardDescription>
-          </CardHeader>
+            </Card.Description>
+          </Card.Header>
           
-          <CardContent>
+          <Card.Content>
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span>Progression</span>
@@ -76,14 +76,14 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ courses }) => {
               </div>
               <Progress value={course.progress} className="h-2" />
             </div>
-          </CardContent>
+          </Card.Content>
           
-          <CardFooter>
+          <Card.Footer>
             <Button className="w-full" onClick={() => navigate(`/formations/${course.id}`)}>
               <Play className="h-4 w-4 mr-2" />
               Continuer
             </Button>
-          </CardFooter>
+          </Card.Footer>
         </Card>
       ))}
     </div>
