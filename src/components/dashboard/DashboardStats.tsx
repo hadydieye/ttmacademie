@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Card from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, CreditCard, BarChart, Award } from "lucide-react";
 
 interface DashboardStatsProps {
@@ -44,14 +44,14 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ stats }) => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {statsItems.map((item, index) => (
         <Card key={index}>
-          <Card.Header className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <Card.Title className="text-sm font-medium">{item.title}</Card.Title>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{item.title}</CardTitle>
             {item.icon}
-          </Card.Header>
-          <Card.Content>
+          </CardHeader>
+          <CardContent>
             <div className="text-2xl font-bold">{item.value}</div>
-            <Card.Description>{item.description}</Card.Description>
-          </Card.Content>
+            <CardDescription>{item.description}</CardDescription>
+          </CardContent>
         </Card>
       ))}
     </div>
