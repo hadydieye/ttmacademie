@@ -1,9 +1,9 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Card from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Banknote, PhoneCall, Copy, Check, ArrowRight } from 'lucide-react';
+import { Banknote, PhoneCall, Copy, Check, ArrowRight, Upload, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { usePayment } from '@/hooks/usePayment';
 
@@ -24,6 +24,9 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
   const [paymentCode, setPaymentCode] = useState('');
   const [showPaymentInfo, setShowPaymentInfo] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [hasScreenshot, setHasScreenshot] = useState<boolean>(false);
+  const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const { processPayment, isProcessing } = usePayment();
 
@@ -44,6 +47,27 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
       setCopied(false);
     }, 3000);
   };
+  
+  const toggleScreenshotConfirmation = () => {
+    setHasScreenshot(!hasScreenshot);
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.type.startsWith('image/')) {
+        setScreenshotFile(file);
+        setHasScreenshot(true);
+        toast.success('Capture d\'écran téléchargée avec succès');
+      } else {
+        toast.error('Veuillez sélectionner une image');
+      }
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,9 +81,18 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
       toast.error('Veuillez générer un numéro de paiement');
       return;
     }
+    
+    if (!hasScreenshot) {
+      toast.error('Veuillez confirmer que vous avez pris une capture d\'écran ou télécharger une image');
+      return;
+    }
 
     // Process the payment
-    await processPayment('orange-money', { amount, currency });
+    await processPayment('orange-money', { 
+      amount, 
+      currency,
+      screenshotFile
+    });
     
     if (onSuccess) {
       onSuccess();
@@ -141,15 +174,64 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
                 <h3 className="font-medium">Instructions:</h3>
                 <ol className="list-decimal pl-5 text-sm text-gray-600 dark:text-gray-400 space-y-2">
                   <li>Envoyez <span className="font-bold">{amount.toLocaleString('fr-FR')} {currency}</span> au numéro ci-dessus via Orange Money</li>
+                  <li>Prenez une capture d'écran de votre transaction</li>
+                  <li>Téléchargez la capture d'écran ci-dessous ou cochez la case si vous l'avez déjà prise</li>
                   <li>Une fois le paiement effectué, appuyez sur le bouton "Confirmer le paiement"</li>
-                  <li>Pour une validation rapide, contactez-nous sur WhatsApp en cliquant sur le bouton en bas à droite de la page</li>
                 </ol>
+              </div>
+              
+              {/* Section de téléchargement de capture d'écran */}
+              <div className="mt-4">
+                <div className="flex items-center mb-3">
+                  <input
+                    type="checkbox"
+                    id="screenshotConfirmation"
+                    checked={hasScreenshot}
+                    onChange={toggleScreenshotConfirmation}
+                    className="mr-2 h-4 w-4 text-orange-500 focus:ring-orange-500 rounded"
+                  />
+                  <label htmlFor="screenshotConfirmation" className="text-sm text-gray-700 dark:text-gray-300">
+                    J'ai pris une capture d'écran de ma transaction et je la fournirai à l'équipe de support si nécessaire
+                  </label>
+                </div>
+                
+                <div className="mt-3">
+                  <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                    Ou téléchargez directement votre capture d'écran:
+                  </p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                  
+                  <div className="flex items-center">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={triggerFileInput}
+                      className="flex items-center"
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      Télécharger une image
+                    </Button>
+                    
+                    {screenshotFile && (
+                      <div className="ml-3 flex items-center text-sm text-green-600 dark:text-green-400">
+                        <CheckCircle className="mr-1 h-4 w-4" />
+                        {screenshotFile.name}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
               
               <Button 
                 type="submit" 
-                className="w-full bg-green-500 hover:bg-green-600 text-white"
-                disabled={isProcessing}
+                className="w-full bg-green-500 hover:bg-green-600 text-white mt-4"
+                disabled={isProcessing || !hasScreenshot}
               >
                 {isProcessing ? 'Traitement...' : 'Confirmer le paiement'}
               </Button>

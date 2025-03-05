@@ -1,10 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Card from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { CreditCard, ArrowRight, Info } from 'lucide-react';
+import { CreditCard, ArrowRight, Info, Upload, CheckCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from 'sonner';
 import { usePayment } from '@/hooks/usePayment';
@@ -26,6 +26,9 @@ const BankPayment: React.FC<BankPaymentProps> = ({
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
+  const [hasScreenshot, setHasScreenshot] = useState<boolean>(false);
+  const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const { processPayment, isProcessing } = usePayment();
 
@@ -68,6 +71,27 @@ const BankPayment: React.FC<BankPaymentProps> = ({
     const value = e.target.value.replace(/\D/g, '').substring(0, 4);
     setCvv(value);
   };
+  
+  const toggleScreenshotConfirmation = () => {
+    setHasScreenshot(!hasScreenshot);
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.type.startsWith('image/')) {
+        setScreenshotFile(file);
+        setHasScreenshot(true);
+        toast.success('Capture d\'écran téléchargée avec succès');
+      } else {
+        toast.error('Veuillez sélectionner une image');
+      }
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,9 +115,18 @@ const BankPayment: React.FC<BankPaymentProps> = ({
       toast.error('Veuillez entrer un code de sécurité valide');
       return;
     }
+    
+    if (!hasScreenshot && !screenshotFile) {
+      toast.error('Veuillez confirmer que vous avez pris une capture d\'écran ou télécharger une image');
+      return;
+    }
 
     // Process the payment
-    await processPayment('card', { amount, currency });
+    await processPayment('card', { 
+      amount, 
+      currency,
+      screenshotFile 
+    });
     
     if (onSuccess) {
       onSuccess();
@@ -185,6 +218,55 @@ const BankPayment: React.FC<BankPaymentProps> = ({
               />
             </div>
           </div>
+          
+          {/* Section de téléchargement de capture d'écran */}
+          <div className="border-t pt-4 mt-4">
+            <h3 className="font-medium mb-3">Capture d'écran de la transaction</h3>
+            <div className="flex items-center mb-3">
+              <input
+                type="checkbox"
+                id="screenshotConfirmation"
+                checked={hasScreenshot}
+                onChange={toggleScreenshotConfirmation}
+                className="mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 rounded"
+              />
+              <label htmlFor="screenshotConfirmation" className="text-sm text-gray-700 dark:text-gray-300">
+                J'ai pris une capture d'écran de ma transaction et je la fournirai à l'équipe de support si nécessaire
+              </label>
+            </div>
+            
+            <div className="mt-3">
+              <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                Ou téléchargez directement votre capture d'écran:
+              </p>
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              
+              <div className="flex items-center">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={triggerFileInput}
+                  className="flex items-center"
+                >
+                  <Upload className="mr-2 h-4 w-4" />
+                  Télécharger une image
+                </Button>
+                
+                {screenshotFile && (
+                  <div className="ml-3 flex items-center text-sm text-green-600 dark:text-green-400">
+                    <CheckCircle className="mr-1 h-4 w-4" />
+                    {screenshotFile.name}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
 
           <div className="border-t pt-4 mt-4">
             <div className="flex justify-between font-semibold mb-4">
@@ -196,7 +278,7 @@ const BankPayment: React.FC<BankPaymentProps> = ({
           <Button 
             type="submit" 
             className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-            disabled={isProcessing}
+            disabled={isProcessing || (!hasScreenshot && !screenshotFile)}
           >
             {isProcessing ? 'Traitement...' : 'Payer maintenant'}
           </Button>

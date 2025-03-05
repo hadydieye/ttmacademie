@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
@@ -59,7 +60,27 @@ export function usePayment() {
       
       if (paymentDetails.screenshotFile) {
         console.log('Processing screenshot file:', paymentDetails.screenshotFile.name);
-        screenshotUrl = 'simulated-url-for-' + paymentDetails.screenshotFile.name;
+        
+        // Upload the screenshot file to Supabase Storage
+        const fileExt = paymentDetails.screenshotFile.name.split('.').pop();
+        const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+        const filePath = `payment-screenshots/${fileName}`;
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('payment-proofs')
+          .upload(filePath, paymentDetails.screenshotFile);
+        
+        if (uploadError) {
+          console.error('Error uploading screenshot:', uploadError);
+          toast.error("Erreur lors du téléchargement de la capture d'écran");
+        } else {
+          const { data: { publicUrl } } = supabase.storage
+            .from('payment-proofs')
+            .getPublicUrl(filePath);
+          
+          screenshotUrl = publicUrl;
+          console.log('Screenshot uploaded successfully:', screenshotUrl);
+        }
       }
 
       const { data, error } = await supabase.functions.invoke('process-payment', {
