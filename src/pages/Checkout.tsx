@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PaymentForm from '@/components/payment/PaymentForm';
 import CryptoPaymentInstructions from '@/components/payment/CryptoPaymentInstructions';
+import OrangeMoneyPayment from '@/components/payment/OrangeMoneyPayment';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { ArrowLeft, Check } from 'lucide-react';
@@ -16,6 +17,7 @@ const Checkout = () => {
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [showCryptoInstructions, setShowCryptoInstructions] = useState(false);
+  const [showOrangeMoneyPayment, setShowOrangeMoneyPayment] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
 
   // Get payment information from URL params
@@ -43,12 +45,15 @@ const Checkout = () => {
 
   const handlePaymentSuccess = () => {
     setShowPaymentForm(false);
+    setShowCryptoInstructions(false);
+    setShowOrangeMoneyPayment(false);
     setPaymentSuccess(true);
   };
 
   const handleCancel = () => {
     setShowPaymentForm(false);
     setShowCryptoInstructions(false);
+    setShowOrangeMoneyPayment(false);
   };
 
   const handleBackToPricing = () => {
@@ -69,11 +74,19 @@ const Checkout = () => {
     if (method === 'crypto') {
       setShowPaymentForm(false);
       setShowCryptoInstructions(true);
+    } else if (method === 'orange-money') {
+      setShowPaymentForm(false);
+      setShowOrangeMoneyPayment(true);
     }
   };
 
   const handleBackFromCrypto = () => {
     setShowCryptoInstructions(false);
+    setShowPaymentForm(true);
+  };
+
+  const handleBackFromOrangeMoney = () => {
+    setShowOrangeMoneyPayment(false);
     setShowPaymentForm(true);
   };
 
@@ -126,6 +139,13 @@ const Checkout = () => {
             currency={currency}
             onBack={handleBackFromCrypto}
             onComplete={handlePaymentSuccess}
+          />
+        ) : showOrangeMoneyPayment ? (
+          <OrangeMoneyPayment
+            amount={amount}
+            currency={currency}
+            onSuccess={handlePaymentSuccess}
+            onCancel={handleBackFromOrangeMoney}
           />
         ) : showPaymentForm ? (
           <PaymentForm

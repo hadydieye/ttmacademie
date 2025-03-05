@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -53,8 +54,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     if (paymentMethod === 'crypto' && onPaymentMethodSelected) {
       return;
     }
+
+    if (paymentMethod === 'orange-money' && onPaymentMethodSelected) {
+      return;
+    }
     
-    if ((paymentMethod === 'orange-money' || paymentMethod === 'payeer') && !phoneNumber) {
+    if (paymentMethod === 'payeer' && !phoneNumber) {
       toast.error('Veuillez entrer votre numéro de téléphone Mobile Money');
       return;
     }
@@ -124,14 +129,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             </div>
             
             <div className="flex items-center space-x-2 border p-3 rounded-md">
-              <RadioGroupItem value="payeer" id="payeer" />
-              <Label htmlFor="payeer" className="flex items-center">
-                <Wallet className="w-5 h-5 mr-2 text-green-500" />
-                Payeer
-              </Label>
-            </div>
-            
-            <div className="flex items-center space-x-2 border p-3 rounded-md">
               <RadioGroupItem value="crypto" id="crypto" />
               <Label htmlFor="crypto" className="flex items-center">
                 <img 
@@ -153,10 +150,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           </RadioGroup>
         </div>
 
-        {(paymentMethod === 'orange-money') && (
+        {(paymentMethod === 'payeer') && (
           <div className="mb-6">
             <Label htmlFor="phone" className="block mb-2">
-              Numéro Orange Money
+              Numéro Téléphone
             </Label>
             <Input
               id="phone"
@@ -236,6 +233,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           </div>
         )}
 
+        {paymentMethod === 'orange-money' && (
+          <div className="mb-6">
+            <p className="text-sm text-gray-500 mb-4">
+              Cliquez sur "Continuer" pour accéder à notre page de paiement Orange Money sécurisée.
+            </p>
+          </div>
+        )}
+
         <div className="flex justify-between mt-6">
           <Button 
             type="button" 
@@ -246,11 +251,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             Annuler
           </Button>
           <Button 
-            type={paymentMethod === 'crypto' ? 'button' : 'submit'} 
+            type={paymentMethod === 'crypto' || paymentMethod === 'orange-money' ? 'button' : 'submit'} 
             className="bg-guinea-green hover:bg-guinea-green/90 text-white"
             disabled={isProcessing}
           >
-            {isProcessing ? 'Traitement...' : (paymentMethod === 'crypto' ? 'Continuer' : 'Payer maintenant')}
+            {isProcessing ? 'Traitement...' : (paymentMethod === 'crypto' || paymentMethod === 'orange-money' ? 'Continuer' : 'Payer maintenant')}
           </Button>
         </div>
       </form>
