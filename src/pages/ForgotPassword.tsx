@@ -19,38 +19,6 @@ const ForgotPassword = () => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
-        // Send a customized email in French
-        data: {
-          email_subject: "TTM Académie - Réinitialisation de votre mot de passe",
-          email_template: `
-          <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; color: #333;">
-            <div style="text-align: center; margin-bottom: 30px;">
-              <img src="${window.location.origin}/lovable-uploads/60c4dc83-6733-4b61-bf3b-a31ad902bbde.png" alt="TTM Académie" style="max-width: 200px;">
-            </div>
-            
-            <h1 style="color: #6d28d9; text-align: center; margin-bottom: 20px;">Réinitialisation de votre mot de passe</h1>
-            
-            <div style="background-color: #f9fafb; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
-              <p style="margin-bottom: 15px;">Bonjour,</p>
-              
-              <p style="margin-bottom: 15px;">Vous avez demandé la réinitialisation de votre mot de passe pour votre compte TTM Académie. Cliquez sur le bouton ci-dessous pour créer un nouveau mot de passe :</p>
-              
-              <div style="text-align: center; margin: 30px 0;">
-                <a href="{{action_url}}" style="display: inline-block; background: linear-gradient(to right, #4f46e5, #7c3aed); color: white; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold;">Réinitialiser mon mot de passe</a>
-              </div>
-              
-              <p style="margin-bottom: 15px;">Ce lien est valable pour une durée de 24 heures. Après cette période, vous devrez faire une nouvelle demande de réinitialisation.</p>
-              
-              <p style="margin-bottom: 15px;">Si vous n'avez pas demandé cette réinitialisation, veuillez ignorer cet email et votre mot de passe restera inchangé.</p>
-            </div>
-            
-            <div style="text-align: center; color: #6b7280; font-size: 14px; border-top: 1px solid #e5e7eb; padding-top: 20px;">
-              <p>TTM Académie - Votre partenaire pour la réussite dans le trading</p>
-              <p>© 2023 TTM Académie. Tous droits réservés.</p>
-            </div>
-          </div>
-          `
-        }
       });
 
       if (error) {
