@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -29,8 +28,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import About from "./pages/About";
 import TradingAssistant from "./pages/TradingAssistant";
 import UserDashboard from "./pages/UserDashboard";
+import { useVisitorTracking } from './hooks/useVisitorTracking';
 
-// Configuration du client react-query avec gestion d'erreur
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -41,7 +40,6 @@ const queryClient = new QueryClient({
   },
 });
 
-// WhatsApp button with location awareness
 const WhatsAppButtonWithHint = () => {
   const location = useLocation();
   const isPaymentPage = location.pathname === '/checkout' || 
@@ -50,61 +48,65 @@ const WhatsAppButtonWithHint = () => {
   return <WhatsAppButton phoneNumber="+224 663 29 32 80" showHint={isPaymentPage} />;
 };
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="system">
-      <ErrorBoundary>
-        <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/formations" element={
-                  <ProtectedRoute>
-                    <Training />
-                  </ProtectedRoute>
-                } />
-                <Route path="/assistant" element={<TradingAssistant />} />
-                <Route path="/profile" element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                } />
-                <Route path="/dashboard" element={
-                  <ProtectedRoute>
-                    <UserDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/admin" element={
-                  <AdminRoute>
-                    <AdminDashboard />
-                  </AdminRoute>
-                } />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/features" element={<Features />} />
-                <Route path="/testimonials" element={<Testimonials />} />
-                <Route path="/pricing" element={<Pricing />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/error" element={<ServerError />} />
-                <Route path="/error/:statusCode" element={<ServerError />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-              <WhatsAppButtonWithHint />
-              <AssistantFloatingButton />
-              <ScrollToTop />
-            </BrowserRouter>
-          </TooltipProvider>
-        </AuthProvider>
-      </ErrorBoundary>
-    </ThemeProvider>
-  </QueryClientProvider>
-);
+function App() {
+  useVisitorTracking();
+  
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="system">
+        <ErrorBoundary>
+          <AuthProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/formations" element={
+                    <ProtectedRoute>
+                      <Training />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/assistant" element={<TradingAssistant />} />
+                  <Route path="/profile" element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                      <UserDashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin" element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  } />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/features" element={<Features />} />
+                  <Route path="/testimonials" element={<Testimonials />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/error" element={<ServerError />} />
+                  <Route path="/error/:statusCode" element={<ServerError />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+                <WhatsAppButtonWithHint />
+                <AssistantFloatingButton />
+                <ScrollToTop />
+              </BrowserRouter>
+            </TooltipProvider>
+          </AuthProvider>
+        </ErrorBoundary>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+}
 
 export default App;

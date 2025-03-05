@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { LogIn, UserPlus, MousePointer, AlertCircle } from "lucide-react";
+import { LogIn, UserPlus, MousePointer, AlertCircle, Activity } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -86,9 +86,11 @@ export function AdminActivityLog() {
       case 'signup':
         return <UserPlus className="h-4 w-4 text-green-500" />;
       case 'visit':
-        return <MousePointer className="h-4 w-4 text-gray-500" />;
+        return <MousePointer className="h-4 w-4 text-purple-500" />;
       case 'error':
         return <AlertCircle className="h-4 w-4 text-red-500" />;
+      case 'action':
+        return <Activity className="h-4 w-4 text-amber-500" />;
       default:
         return <AlertCircle className="h-4 w-4 text-gray-500" />;
     }
@@ -100,6 +102,7 @@ export function AdminActivityLog() {
       case 'signup': return 'Inscription';
       case 'visit': return 'Visite';
       case 'error': return 'Erreur';
+      case 'action': return 'Action';
       default: return type || 'Inconnu';
     }
   };
@@ -144,7 +147,7 @@ export function AdminActivityLog() {
                     </span>
                   </div>
                 </TableCell>
-                <TableCell>{activity.user_email || 'Anonyme'}</TableCell>
+                <TableCell>{activity.user_email || 'Visiteur anonyme'}</TableCell>
                 <TableCell>{activity.details || 'Aucun détail'}</TableCell>
                 <TableCell className="text-right">{formatDate(activity.timestamp)}</TableCell>
               </TableRow>
