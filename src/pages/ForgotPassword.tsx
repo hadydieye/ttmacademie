@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +20,6 @@ const ForgotPassword = () => {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
         // Send a customized email in French
-        emailRedirectTo: `${window.location.origin}/reset-password`,
         data: {
           email_subject: "TTM Académie - Réinitialisation de votre mot de passe",
           email_template: `

@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Eye, EyeOff, Lock, Loader, Check } from "lucide-react";
+import { Eye, EyeOff, Lock, Loader, Check, ArrowRight } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const ResetPassword = () => {
