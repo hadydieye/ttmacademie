@@ -20,7 +20,8 @@ import {
   Award, 
   FileText, 
   ChevronDown,
-  AlertTriangle
+  AlertTriangle,
+  GraduationCap // Ajout de l'icône manquante
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import Card from "@/components/ui/card";
