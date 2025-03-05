@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -108,9 +107,8 @@ export function useUserDashboard() {
       let eventCount = 0;
       
       try {
-        // Utiliser RPC au lieu d'accéder directement à la table events
         const { data: eventsCount, error } = await supabase
-          .rpc<number>('count_upcoming_events', { current_date: today });
+          .rpc<number, { current_date: string }>('count_upcoming_events', { current_date: today });
           
         if (error) throw error;
           
