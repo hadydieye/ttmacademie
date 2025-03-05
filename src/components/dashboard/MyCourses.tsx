@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import Card from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { UserCourse } from '@/hooks/useUserDashboard';
@@ -65,15 +65,15 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ courses }) => {
               className="w-full h-full object-cover transition-transform hover:scale-105"
             />
           </div>
-          <CardHeader className="pb-2">
+          <Card.Header className="pb-2">
             <div className="flex justify-between items-start">
-              <CardTitle className="text-xl">{course.title}</CardTitle>
+              <Card.Title className="text-xl">{course.title}</Card.Title>
               <span className="inline-block text-xs font-medium px-2 py-1 rounded-full bg-guinea-green/10 text-guinea-green">
                 {course.level}
               </span>
             </div>
-          </CardHeader>
-          <CardContent className="flex-grow">
+          </Card.Header>
+          <Card.Content className="flex-grow">
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between mb-1">
@@ -93,13 +93,13 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ courses }) => {
                 Inscrit le {formatDate(course.enrolled_at)}
               </div>
             </div>
-          </CardContent>
-          <CardFooter>
+          </Card.Content>
+          <Card.Footer>
             <Button className="w-full bg-guinea-yellow hover:bg-guinea-yellow/90 text-black flex items-center justify-center gap-2">
               <Play className="h-4 w-4" />
               Continuer la formation
             </Button>
-          </CardFooter>
+          </Card.Footer>
         </Card>
       ))}
     </div>
