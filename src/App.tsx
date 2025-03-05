@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +17,8 @@ import ServerError from "./pages/ServerError";
 import Training from "./pages/Training";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Features from "./pages/Features";
 import Testimonials from "./pages/Testimonials";
 import Pricing from "./pages/Pricing";
@@ -49,7 +50,6 @@ const WhatsAppButtonWithHint = () => {
   return <WhatsAppButton phoneNumber="+224 663 29 32 80" showHint={isPaymentPage} />;
 };
 
-// Composant qui utilise le hook useVisitorTracking à l'intérieur du contexte AuthProvider
 const VisitorTracker = ({ children }) => {
   useVisitorTracking();
   return <>{children}</>;
@@ -92,6 +92,8 @@ function App() {
                     } />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/features" element={<Features />} />
                     <Route path="/testimonials" element={<Testimonials />} />
                     <Route path="/pricing" element={<Pricing />} />
@@ -100,7 +102,6 @@ function App() {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/error" element={<ServerError />} />
                     <Route path="/error/:statusCode" element={<ServerError />} />
-                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                   <WhatsAppButtonWithHint />
