@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,8 +18,12 @@ const ForgotPassword = () => {
     setIsLoading(true);
 
     try {
+      // Obtenir l'URL complète actuelle pour le site
+      const siteUrl = window.location.origin;
+      console.log("Using site URL for redirect:", siteUrl);
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: `${siteUrl}/reset-password`,
       });
 
       if (error) {
