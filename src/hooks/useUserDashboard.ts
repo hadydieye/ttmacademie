@@ -35,6 +35,7 @@ export function useUserDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [userCourses, setUserCourses] = useState<UserCourse[]>([]);
   const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>([]);
+  const [hasPaidAccess, setHasPaidAccess] = useState(false);
   const [stats, setStats] = useState({
     totalCourses: 0,
     completedCourses: 0,
@@ -46,54 +47,71 @@ export function useUserDashboard() {
     upcomingEvents: 0
   });
 
-  // Real course data - we'll still use mock data for now but add real-time updates later
-  const mockCourseData = [
-    {
-      id: "1",
-      title: "Introduction au Trading",
-      level: "Débutant",
-      image: "/lovable-uploads/6c4774b3-6602-45b0-9a72-b682325cdfd4.png",
-      progress: 75,
-      enrolled_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-      last_accessed: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      modules: [
-        { id: "1-1", title: "Introduction", completed: true },
-        { id: "1-2", title: "Concepts de base", completed: true },
-        { id: "1-3", title: "Stratégies", completed: false, is_quiz: false },
-        { id: "1-4", title: "Quiz 1", completed: false, is_quiz: true }
-      ]
-    },
-    {
-      id: "3",
-      title: "Trading de Devises (Forex)",
-      level: "Intermédiaire",
-      image: "/lovable-uploads/60c4dc83-6733-4b61-bf3b-a31ad902bbde.png",
-      progress: 30,
-      enrolled_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
-      last_accessed: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-      modules: [
-        { id: "3-1", title: "Introduction Forex", completed: true },
-        { id: "3-2", title: "Paires de devises", completed: false },
-        { id: "3-3", title: "Analyse technique", completed: false },
-        { id: "3-4", title: "Quiz intermédiaire", completed: false, is_quiz: true }
-      ]
+  // Fonction pour vérifier si l'utilisateur a un abonnement actif
+  const checkPaidAccess = async (userId: string) => {
+    try {
+      // Vérifier si l'utilisateur a des paiements complétés pour un abonnement
+      const { data, error } = await supabase
+        .from('payments')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('status', 'completed')
+        .eq('item_type', 'plan')
+        .limit(1);
+        
+      if (error) throw error;
+      
+      // Si au moins un paiement d'abonnement a été trouvé
+      return data && data.length > 0;
+    } catch (error) {
+      console.error('Erreur lors de la vérification des paiements:', error);
+      return false;
     }
-  ];
+  };
 
-  // Function to fetch community statistics
+  // Fonction pour obtenir les inscriptions aux cours réelles de l'utilisateur
+  const fetchUserEnrollments = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('enrollments')
+        .select(`
+          course_id,
+          enrolled_at,
+          status
+        `)
+        .eq('user_id', userId)
+        .eq('status', 'active');
+        
+      if (error) throw error;
+      
+      return data || [];
+    } catch (error) {
+      console.error('Erreur lors du chargement des inscriptions:', error);
+      return [];
+    }
+  };
+
+  // Fonction pour obtenir les statistiques de la communauté
   const fetchCommunityStats = async () => {
     try {
-      // Fetch real user count for community members
+      // Obtenir le nombre réel d'utilisateurs
       const { count } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true });
       
+      // Obtenir le nombre d'événements à venir
+      const today = new Date().toISOString();
+      const { count: eventCount } = await supabase
+        .from('events')
+        .select('*', { count: 'exact', head: true })
+        .gt('event_date', today);
+      
       return {
         communityMembers: count || 0,
-        upcomingEvents: 3 // Hardcoded for now, would come from an events table
+        upcomingEvents: eventCount || 0
       };
     } catch (error) {
-      console.error('Error fetching community stats:', error);
+      console.error('Erreur lors du chargement des statistiques de la communauté:', error);
       return { communityMembers: 0, upcomingEvents: 0 };
     }
   };
@@ -104,7 +122,11 @@ export function useUserDashboard() {
     setIsLoading(true);
     
     try {
-      // Fetch payment history - real data from Supabase
+      // Vérifier si l'utilisateur a un accès payant
+      const paidAccess = await checkPaidAccess(user.id);
+      setHasPaidAccess(paidAccess);
+      
+      // Récupérer l'historique des paiements
       const { data: paymentsData, error: paymentsError } = await supabase
         .from('payments')
         .select('*')
@@ -115,7 +137,7 @@ export function useUserDashboard() {
         throw paymentsError;
       }
 
-      // Format payment history
+      // Formater l'historique des paiements
       const formattedPayments = paymentsData.map(payment => ({
         payment_id: payment.payment_id,
         date: new Date(payment.created_at).toLocaleDateString('fr-FR'),
@@ -128,26 +150,58 @@ export function useUserDashboard() {
 
       setPaymentHistory(formattedPayments);
       
-      // For now, we'll use mock data for courses
-      // In a real implementation, fetch from enrollments table and join with courses
-      setUserCourses(mockCourseData);
+      // Récupérer les inscriptions aux cours de l'utilisateur
+      const enrollments = await fetchUserEnrollments(user.id);
+      
+      // Pour la démonstration, nous allons utiliser des données de cours simulées
+      // En production, vous récupéreriez les données de cours réelles à partir de l'ID de cours
+      if (enrollments.length > 0) {
+        const courseData = enrollments.map(enrollment => {
+          // Simuler des cours basés sur les inscriptions réelles
+          return {
+            id: enrollment.course_id,
+            title: enrollment.course_id === "1" ? "Introduction au Trading" : 
+                  enrollment.course_id === "2" ? "Analyse Technique" :
+                  enrollment.course_id === "3" ? "Trading de Devises (Forex)" : 
+                  `Cours ${enrollment.course_id}`,
+            level: Math.random() > 0.5 ? "Débutant" : "Intermédiaire",
+            image: `/lovable-uploads/${Math.random() > 0.5 ? "6c4774b3-6602-45b0-9a72-b682325cdfd4.png" : "60c4dc83-6733-4b61-bf3b-a31ad902bbde.png"}`,
+            progress: Math.floor(Math.random() * 100),
+            enrolled_at: enrollment.enrolled_at,
+            last_accessed: new Date(Date.now() - Math.floor(Math.random() * 10) * 24 * 60 * 60 * 1000).toISOString(),
+            modules: Array(Math.floor(Math.random() * 5) + 3).fill(0).map((_, idx) => ({
+              id: `${enrollment.course_id}-${idx + 1}`,
+              title: idx === 0 ? "Introduction" : 
+                    idx === 1 ? "Concepts de base" : 
+                    idx === 2 ? "Stratégies" : 
+                    idx === 3 ? "Techniques avancées" : `Module ${idx + 1}`,
+              completed: Math.random() > 0.5,
+              is_quiz: idx % 3 === 0
+            }))
+          };
+        });
+        
+        setUserCourses(courseData);
+      } else {
+        setUserCourses([]);
+      }
 
-      // Calculate stats from real payment data
+      // Calculer les statistiques à partir des données réelles
       const totalSpent = formattedPayments
         .filter(p => p.status === 'completed')
         .reduce((sum, payment) => sum + Number(payment.amount), 0);
       
-      const avgProgress = mockCourseData.length > 0 
-        ? mockCourseData.reduce((sum, course) => sum + course.progress, 0) / mockCourseData.length 
+      const avgProgress = userCourses.length > 0 
+        ? userCourses.reduce((sum, course) => sum + course.progress, 0) / userCourses.length 
         : 0;
       
-      const completedCourses = mockCourseData.filter(c => c.progress === 100).length;
+      const completedCourses = userCourses.filter(c => c.progress === 100).length;
       
-      // Calculate total modules and completed quizzes
+      // Calculer le nombre total de modules et de quiz complétés
       let totalModules = 0;
       let completedQuizzes = 0;
       
-      mockCourseData.forEach(course => {
+      userCourses.forEach(course => {
         if (course.modules) {
           totalModules += course.modules.length;
           course.modules.forEach(module => {
@@ -158,11 +212,11 @@ export function useUserDashboard() {
         }
       });
 
-      // Get community stats
+      // Récupérer les statistiques de la communauté
       const communityStats = await fetchCommunityStats();
 
       setStats({
-        totalCourses: mockCourseData.length,
+        totalCourses: userCourses.length,
         completedCourses,
         totalSpent,
         averageProgress: avgProgress,
@@ -173,21 +227,21 @@ export function useUserDashboard() {
       });
 
     } catch (error) {
-      console.error('Error fetching user dashboard data:', error);
+      console.error('Erreur lors du chargement des données du tableau de bord:', error);
       toast.error('Erreur lors du chargement des données');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Set up real-time subscription for payment updates
+  // Mettre en place une souscription en temps réel pour les mises à jour des paiements
   useEffect(() => {
     if (!user) return;
 
-    // Initial data fetch
+    // Chargement initial des données
     fetchUserData();
 
-    // Set up real-time subscription
+    // Mettre en place une souscription en temps réel
     const channel = supabase
       .channel('dashboard-changes')
       .on('postgres_changes', 
@@ -198,13 +252,13 @@ export function useUserDashboard() {
             filter: `user_id=eq.${user.id}`
           }, 
           (payload) => {
-            console.log('Payment data changed:', payload);
-            fetchUserData(); // Refresh data when payments change
+            console.log('Données de paiement modifiées:', payload);
+            fetchUserData(); // Actualiser les données lorsque les paiements changent
           }
       )
       .subscribe();
 
-    // Clean up the subscription
+    // Nettoyer la souscription
     return () => {
       supabase.removeChannel(channel);
     };
@@ -215,6 +269,7 @@ export function useUserDashboard() {
     userCourses,
     paymentHistory,
     stats,
+    hasPaidAccess,
     refreshData: fetchUserData
   };
 }

@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -30,6 +31,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import About from "./pages/About";
 import TradingAssistant from "./pages/TradingAssistant";
 import UserDashboard from "./pages/UserDashboard";
+import Community from "./pages/Community";
 import { useVisitorTracking } from './hooks/useVisitorTracking';
 
 const queryClient = new QueryClient({
@@ -83,6 +85,11 @@ function App() {
                     <Route path="/dashboard" element={
                       <ProtectedRoute>
                         <UserDashboard />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/community" element={
+                      <ProtectedRoute>
+                        <Community />
                       </ProtectedRoute>
                     } />
                     <Route path="/admin" element={
