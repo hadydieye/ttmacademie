@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Navbar from "@/components/layout/Navbar";
@@ -16,6 +15,7 @@ const Checkout = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [showCryptoInstructions, setShowCryptoInstructions] = useState(false);
@@ -24,44 +24,42 @@ const Checkout = () => {
   const [showBankPayment, setShowBankPayment] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
 
-  // Get payment information from URL params
   const planId = searchParams.get('plan') || '';
   const courseId = searchParams.get('courseId') || '';
   const itemName = searchParams.get('name') || 'Achat';
   const amount = parseInt(searchParams.get('amount') || '0', 10);
   const currency = searchParams.get('currency') || 'GNF';
   
-  // Determine if this is a course payment or plan payment
   const isCoursePurchase = !!courseId;
 
   useEffect(() => {
     document.title = "Paiement - The Trading Matrix Académie";
     
-    // Redirect to login if not authenticated
     if (!user && !paymentSuccess) {
       navigate('/login?redirect=checkout');
     }
   }, [user, navigate, paymentSuccess]);
 
+  const resetPaymentScreens = () => {
+    setShowPaymentForm(false);
+    setShowCryptoInstructions(false);
+    setShowOrangeMoneyPayment(false);
+    setShowPayeerPayment(false);
+    setShowBankPayment(false);
+  };
+
   const handleStartPayment = () => {
+    resetPaymentScreens();
     setShowPaymentForm(true);
   };
 
   const handlePaymentSuccess = () => {
-    setShowPaymentForm(false);
-    setShowCryptoInstructions(false);
-    setShowOrangeMoneyPayment(false);
-    setShowPayeerPayment(false);
-    setShowBankPayment(false);
+    resetPaymentScreens();
     setPaymentSuccess(true);
   };
 
   const handleCancel = () => {
-    setShowPaymentForm(false);
-    setShowCryptoInstructions(false);
-    setShowOrangeMoneyPayment(false);
-    setShowPayeerPayment(false);
-    setShowBankPayment(false);
+    resetPaymentScreens();
   };
 
   const handleBackToPricing = () => {
@@ -78,27 +76,21 @@ const Checkout = () => {
 
   const handlePaymentMethodSelected = (method: string) => {
     setSelectedPaymentMethod(method);
+    resetPaymentScreens();
     
     if (method === 'crypto') {
-      setShowPaymentForm(false);
       setShowCryptoInstructions(true);
     } else if (method === 'orange-money') {
-      setShowPaymentForm(false);
       setShowOrangeMoneyPayment(true);
     } else if (method === 'payeer') {
-      setShowPaymentForm(false);
       setShowPayeerPayment(true);
     } else if (method === 'card') {
-      setShowPaymentForm(false);
       setShowBankPayment(true);
     }
   };
 
   const handleBackFromSpecificPayment = () => {
-    setShowCryptoInstructions(false);
-    setShowOrangeMoneyPayment(false);
-    setShowPayeerPayment(false);
-    setShowBankPayment(false);
+    resetPaymentScreens();
     setShowPaymentForm(true);
   };
 

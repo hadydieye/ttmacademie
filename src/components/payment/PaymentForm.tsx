@@ -1,8 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/ui/card';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { CreditCard, Banknote, ArrowRight } from 'lucide-react';
 import { usePayment, PaymentMethod } from '@/hooks/usePayment';
@@ -30,19 +28,16 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   onCancel,
   onPaymentMethodSelected
 }) => {
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('orange-money');
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod | null>(null);
   const { isProcessing } = usePayment();
 
-  useEffect(() => {
-    if (onPaymentMethodSelected) {
-      onPaymentMethodSelected(paymentMethod);
-    }
-  }, [paymentMethod, onPaymentMethodSelected]);
-
   const handleMethodSelection = (method: PaymentMethod) => {
-    setPaymentMethod(method);
-    if (onPaymentMethodSelected) {
-      onPaymentMethodSelected(method);
+    setSelectedPaymentMethod(method);
+  };
+
+  const handleContinue = () => {
+    if (selectedPaymentMethod && onPaymentMethodSelected) {
+      onPaymentMethodSelected(selectedPaymentMethod);
     }
   };
 
@@ -60,13 +55,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
 
       <div className="mb-6">
         <p className="mb-3 font-medium">Sélectionnez votre méthode de paiement préférée:</p>
-        <RadioGroup value={paymentMethod} onValueChange={(value) => handleMethodSelection(value as PaymentMethod)} className="grid gap-4">
+        <div className="grid gap-4">
           <PaymentOption
             id="orange-money"
             name="Orange Money"
             description="Paiement mobile rapide et sécurisé"
             icon={<Banknote className="w-5 h-5 text-orange-500" />}
-            isSelected={paymentMethod === 'orange-money'}
+            isSelected={selectedPaymentMethod === 'orange-money'}
             onClick={() => handleMethodSelection('orange-money')}
           />
           
@@ -79,7 +74,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               alt="Payeer" 
               className="w-5 h-5" 
             />}
-            isSelected={paymentMethod === 'payeer'}
+            isSelected={selectedPaymentMethod === 'payeer'}
             onClick={() => handleMethodSelection('payeer')}
           />
           
@@ -92,7 +87,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               alt="Cryptomonnaie" 
               className="w-5 h-5" 
             />}
-            isSelected={paymentMethod === 'crypto'}
+            isSelected={selectedPaymentMethod === 'crypto'}
             onClick={() => handleMethodSelection('crypto')}
           />
           
@@ -101,10 +96,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             name="Carte Bancaire"
             description="Paiement sécurisé par carte (Visa, Mastercard, etc.)"
             icon={<CreditCard className="w-5 h-5 text-blue-500" />}
-            isSelected={paymentMethod === 'card'}
+            isSelected={selectedPaymentMethod === 'card'}
             onClick={() => handleMethodSelection('card')}
           />
-        </RadioGroup>
+        </div>
       </div>
 
       <div className="flex justify-between mt-6">
@@ -119,8 +114,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
         <Button 
           type="button"
           className="bg-guinea-green hover:bg-guinea-green/90 text-white"
-          disabled={isProcessing}
-          onClick={() => onPaymentMethodSelected && onPaymentMethodSelected(paymentMethod)}
+          disabled={isProcessing || !selectedPaymentMethod}
+          onClick={handleContinue}
         >
           Continuer <ArrowRight className="ml-1 h-4 w-4" />
         </Button>
@@ -169,9 +164,9 @@ const PaymentOption: React.FC<PaymentOptionProps> = ({
         <div className="flex-1">
           <div className="flex items-center">
             <div className="mr-2">{icon}</div>
-            <Label htmlFor={id} className="font-medium cursor-pointer">
+            <label htmlFor={id} className="font-medium cursor-pointer">
               {name}
-            </Label>
+            </label>
           </div>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
             {description}
