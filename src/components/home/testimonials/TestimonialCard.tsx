@@ -11,24 +11,9 @@ interface TestimonialCardProps {
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial }) => {
   return (
     <Card hover className="h-full overflow-hidden">
-      <div className="h-32 overflow-hidden relative">
-        <img 
-          src={testimonial.bgImage} 
-          alt={`${testimonial.name} background`} 
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-      </div>
-      <Card.Header className="pb-0 relative">
-        <div className="absolute -top-12 left-4">
-          <img
-            src={testimonial.avatar}
-            alt={testimonial.name}
-            className="w-16 h-16 rounded-full object-cover border-4 border-white dark:border-gray-800"
-          />
-        </div>
-        <div className="flex justify-between items-start pt-6">
-          <div className="mt-2">
+      <Card.Header>
+        <div className="flex justify-between items-start">
+          <div>
             <h3 className="font-semibold text-gray-900 dark:text-white">
               {testimonial.name}
             </h3>
