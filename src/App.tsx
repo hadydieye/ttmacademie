@@ -28,6 +28,7 @@ import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import About from "./pages/About";
 import TradingAssistant from "./pages/TradingAssistant";
+import UserDashboard from "./pages/UserDashboard";
 
 // Configuration du client react-query avec gestion d'erreur
 const queryClient = new QueryClient({
@@ -70,6 +71,11 @@ const App = () => (
                 <Route path="/profile" element={
                   <ProtectedRoute>
                     <Profile />
+                  </ProtectedRoute>
+                } />
+                <Route path="/dashboard" element={
+                  <ProtectedRoute>
+                    <UserDashboard />
                   </ProtectedRoute>
                 } />
                 <Route path="/admin" element={

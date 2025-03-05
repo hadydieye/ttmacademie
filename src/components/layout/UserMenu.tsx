@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import { LogOut, Settings, User, LayoutDashboard } from "lucide-react";
+import { LogOut, Settings, User, LayoutDashboard, GraduationCap } from "lucide-react";
 
 // Liste des emails administrateurs pour l'affichage conditionnel du lien admin
 const ADMIN_EMAILS = ['admin@matrixacademie.com', 'test@example.com', 'tradingmatrixacademie@gmail.com'];
@@ -45,6 +45,14 @@ const UserMenu = () => {
           <p className="text-xs text-muted-foreground truncate">{user.email}</p>
         </div>
         <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => navigate('/dashboard')} className="cursor-pointer">
+          <LayoutDashboard className="mr-2 h-4 w-4" />
+          <span>Tableau de bord</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate('/formations')} className="cursor-pointer">
+          <GraduationCap className="mr-2 h-4 w-4" />
+          <span>Mes formations</span>
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
           <User className="mr-2 h-4 w-4" />
           <span>Mon profil</span>
