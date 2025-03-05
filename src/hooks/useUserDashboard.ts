@@ -30,7 +30,7 @@ export interface PaymentHistory {
   item_name: string;
 }
 
-interface Stats {
+export interface Stats {
   totalCourses: number;
   completedCourses: number;
   totalSpent: number;
@@ -110,7 +110,7 @@ export function useUserDashboard() {
       try {
         // Utiliser RPC au lieu d'accéder directement à la table events
         const { data: eventsCount, error } = await supabase
-          .rpc('count_upcoming_events', { current_date: today });
+          .rpc<number>('count_upcoming_events', { current_date: today });
           
         if (error) throw error;
           

@@ -18,6 +18,14 @@ interface ChatMessage {
   created_at: string;
 }
 
+interface PayloadNew {
+  id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+  [key: string]: any;
+}
+
 export default function CommunityChat() {
   const { user } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -58,7 +66,7 @@ export default function CommunityChat() {
     const fetchMessages = async () => {
       try {
         // Utiliser RPC au lieu d'accéder directement à la table
-        const { data, error } = await supabase.rpc('get_chat_messages');
+        const { data, error } = await supabase.rpc<ChatMessage[]>('get_chat_messages');
 
         if (error) {
           console.error('Erreur RPC:', error);
@@ -91,28 +99,30 @@ export default function CommunityChat() {
             schema: 'public', 
             table: 'chat_messages' 
           }, 
-          (payload: any) => {
+          (payload) => {
             try {
+              const newData = payload.new as PayloadNew;
               // Obtenir les informations sur l'utilisateur pour le nouveau message
-              const { data: userData, error: userError } = supabase
+              supabase
                 .from('profiles')
                 .select('name')
-                .eq('id', payload.new.user_id)
-                .single();
+                .eq('id', newData.user_id)
+                .single()
+                .then(({ data: userData, error: userError }) => {
+                  if (userError) {
+                    console.error('Erreur lors du chargement des données utilisateur:', userError);
+                  }
 
-              if (userError) {
-                console.error('Erreur lors du chargement des données utilisateur:', userError);
-              }
+                  const newMessage: ChatMessage = {
+                    id: newData.id,
+                    user_id: newData.user_id,
+                    user_name: userData?.name || 'Utilisateur anonyme',
+                    content: newData.content,
+                    created_at: newData.created_at
+                  };
 
-              const newMessage = {
-                id: payload.new.id,
-                user_id: payload.new.user_id,
-                user_name: userData?.name || 'Utilisateur anonyme',
-                content: payload.new.content,
-                created_at: payload.new.created_at
-              };
-
-              setMessages(prev => [...prev, newMessage]);
+                  setMessages(prev => [...prev, newMessage]);
+                });
             } catch (error) {
               console.error('Erreur lors du traitement du nouveau message:', error);
             }
@@ -138,7 +148,7 @@ export default function CommunityChat() {
     try {
       try {
         // Utiliser RPC pour ajouter le message
-        const { error } = await supabase.rpc('add_chat_message', {
+        const { error } = await supabase.rpc<any>('add_chat_message', {
           message_content: newMessage.trim(),
           user_identifier: user.id
         });
