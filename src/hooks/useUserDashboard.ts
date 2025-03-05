@@ -42,11 +42,11 @@ export function useUserDashboard() {
     averageProgress: 0,
     totalModules: 0,
     completedQuizzes: 0,
-    communityMembers: 248,
-    upcomingEvents: 3
+    communityMembers: 0,
+    upcomingEvents: 0
   });
 
-  // Simulated data for courses since we don't have a real backend for course progress yet
+  // Real course data - we'll still use mock data for now but add real-time updates later
   const mockCourseData = [
     {
       id: "1",
@@ -80,13 +80,31 @@ export function useUserDashboard() {
     }
   ];
 
+  // Function to fetch community statistics
+  const fetchCommunityStats = async () => {
+    try {
+      // Fetch real user count for community members
+      const { count } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true });
+      
+      return {
+        communityMembers: count || 0,
+        upcomingEvents: 3 // Hardcoded for now, would come from an events table
+      };
+    } catch (error) {
+      console.error('Error fetching community stats:', error);
+      return { communityMembers: 0, upcomingEvents: 0 };
+    }
+  };
+
   const fetchUserData = async () => {
     if (!user) return;
     
     setIsLoading(true);
     
     try {
-      // Fetch payment history
+      // Fetch payment history - real data from Supabase
       const { data: paymentsData, error: paymentsError } = await supabase
         .from('payments')
         .select('*')
@@ -114,7 +132,7 @@ export function useUserDashboard() {
       // In a real implementation, fetch from enrollments table and join with courses
       setUserCourses(mockCourseData);
 
-      // Calculate stats
+      // Calculate stats from real payment data
       const totalSpent = formattedPayments
         .filter(p => p.status === 'completed')
         .reduce((sum, payment) => sum + Number(payment.amount), 0);
@@ -140,6 +158,9 @@ export function useUserDashboard() {
         }
       });
 
+      // Get community stats
+      const communityStats = await fetchCommunityStats();
+
       setStats({
         totalCourses: mockCourseData.length,
         completedCourses,
@@ -147,8 +168,8 @@ export function useUserDashboard() {
         averageProgress: avgProgress,
         totalModules,
         completedQuizzes,
-        communityMembers: 248, // Mocked data
-        upcomingEvents: 3 // Mocked data
+        communityMembers: communityStats.communityMembers,
+        upcomingEvents: communityStats.upcomingEvents
       });
 
     } catch (error) {
@@ -159,10 +180,34 @@ export function useUserDashboard() {
     }
   };
 
+  // Set up real-time subscription for payment updates
   useEffect(() => {
-    if (user) {
-      fetchUserData();
-    }
+    if (!user) return;
+
+    // Initial data fetch
+    fetchUserData();
+
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('dashboard-changes')
+      .on('postgres_changes', 
+          { 
+            event: '*', 
+            schema: 'public', 
+            table: 'payments',
+            filter: `user_id=eq.${user.id}`
+          }, 
+          (payload) => {
+            console.log('Payment data changed:', payload);
+            fetchUserData(); // Refresh data when payments change
+          }
+      )
+      .subscribe();
+
+    // Clean up the subscription
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user]);
 
   return {
