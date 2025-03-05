@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Copy, CheckCircle, ArrowLeftCircle } from 'lucide-react';
+import { Copy, CheckCircle, ArrowLeftCircle, Info } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -26,62 +26,63 @@ const CryptoPaymentInstructions: React.FC<CryptoPaymentInstructionsProps> = ({
   onComplete
 }) => {
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
+  const [hasScreenshot, setHasScreenshot] = useState<boolean>(false);
 
-  // Liste des adresses crypto (à remplacer par vos adresses réelles)
+  // Liste des adresses crypto mise à jour
   const cryptoWallets: CryptoWallet[] = [
     {
       name: "Bitcoin",
       symbol: "BTC",
       network: "Bitcoin Network",
-      address: "bc1q9h0nnxm5nqz7u67qjyy2ecu0mhavr8c28kcm9h"
+      address: "3QQTcDHKq6x2pS94A5cVnqbmA3jxWWJa9v"
     },
     {
       name: "Ethereum",
       symbol: "ETH",
       network: "Ethereum Mainnet",
-      address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+      address: "0xa1f37b9ce2c18a95e27d890eff8566fec5b46963"
     },
     {
       name: "Tether USD",
       symbol: "USDT",
       network: "Ethereum (ERC20)",
-      address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+      address: "0xa1f37b9ce2c18a95e27d890eff8566fec5b46963"
     },
     {
       name: "Tether USD",
       symbol: "USDT",
       network: "Tron (TRC20)",
-      address: "THNKLVkjcp5xTbGFoD7vY5fsy2CpVMGZSq"
+      address: "TLZM97cuHUV82GJwxpNpULbdnu2Rp3o6cD"
     },
     {
       name: "Tether USD",
       symbol: "USDT",
       network: "BNB Smart Chain (BEP20)",
-      address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+      address: "0xa1f37b9ce2c18a95e27d890eff8566fec5b46963"
     },
     {
       name: "USD Coin",
       symbol: "USDC",
       network: "Ethereum (ERC20)",
-      address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+      address: "0xa1f37b9ce2c18a95e27d890eff8566fec5b46963"
     },
     {
       name: "USD Coin",
       symbol: "USDC",
-      network: "Tron (TRC20)",
-      address: "THNKLVkjcp5xTbGFoD7vY5fsy2CpVMGZSq"
+      network: "BNB Smart Chain (BEP20)",
+      address: "0xa1f37b9ce2c18a95e27d890eff8566fec5b46963"
     },
     {
       name: "Tron",
       symbol: "TRX",
       network: "Tron Network",
-      address: "THNKLVkjcp5xTbGFoD7vY5fsy2CpVMGZSq"
+      address: "TLZM97cuHUV82GJwxpNpULbdnu2Rp3o6cD"
     },
     {
       name: "Litecoin",
       symbol: "LTC",
       network: "Litecoin Network",
-      address: "ltc1q8m9zcuuhrk0y8v9m4kj3vu9jlq6jvwyswqt6zn"
+      address: "ltc1qzylq5s37xtmmfccqvq454jmqx8zhnycg3qakcf"
     }
   ];
 
@@ -99,6 +100,10 @@ const CryptoPaymentInstructions: React.FC<CryptoPaymentInstructionsProps> = ({
       .catch(() => {
         toast.error('Impossible de copier l\'adresse');
       });
+  };
+
+  const toggleScreenshotConfirmation = () => {
+    setHasScreenshot(!hasScreenshot);
   };
 
   return (
@@ -159,8 +164,30 @@ const CryptoPaymentInstructions: React.FC<CryptoPaymentInstructionsProps> = ({
 
         <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md p-4 mb-6">
           <p className="text-yellow-800 dark:text-yellow-400 text-sm">
-            <strong>Important:</strong> Après avoir effectué le transfert, veuillez cliquer sur "J'ai effectué le paiement" ci-dessous. 
-            Notre équipe vérifiera et validera votre transaction. Veuillez noter qu'il peut y avoir un délai de traitement selon le réseau blockchain utilisé.
+            <strong>Important:</strong> Après avoir effectué le transfert, veuillez prendre une capture d'écran de la transaction 
+            et cocher la case ci-dessous. Ensuite, cliquez sur "J'ai effectué le paiement". 
+            Notre équipe vérifiera et validera votre transaction après réception de votre capture d'écran.
+          </p>
+        </div>
+
+        <div className="flex items-center mb-6">
+          <input
+            type="checkbox"
+            id="screenshotConfirmation"
+            checked={hasScreenshot}
+            onChange={toggleScreenshotConfirmation}
+            className="mr-2 h-4 w-4 text-guinea-green focus:ring-guinea-green rounded"
+          />
+          <label htmlFor="screenshotConfirmation" className="text-sm text-gray-700 dark:text-gray-300">
+            J'ai pris une capture d'écran de ma transaction et je la fournirai à l'équipe de support si nécessaire
+          </label>
+        </div>
+
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md p-4 mb-6 flex items-start">
+          <Info className="h-5 w-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" />
+          <p className="text-blue-800 dark:text-blue-400 text-sm">
+            Vous pouvez envoyer votre capture d'écran via WhatsApp au service client ou par email à support@tradinmatrix.com 
+            en indiquant votre email et la date de transaction pour accélérer la validation de votre paiement.
           </p>
         </div>
 
@@ -175,6 +202,7 @@ const CryptoPaymentInstructions: React.FC<CryptoPaymentInstructionsProps> = ({
           <Button 
             onClick={onComplete}
             className="bg-guinea-green hover:bg-guinea-green/90 text-white"
+            disabled={!hasScreenshot}
           >
             J'ai effectué le paiement
           </Button>
