@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -16,7 +17,7 @@ import { toast } from "sonner";
 const UserDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { isLoading, hasPaidAccess } = useUserDashboard();
+  const { isLoading, hasPaidAccess, stats } = useUserDashboard();
   const [activeUsers, setActiveUsers] = useState(0);
 
   // Vérifier si l'utilisateur a accès à la communauté

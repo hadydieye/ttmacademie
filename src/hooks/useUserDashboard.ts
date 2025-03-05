@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -29,13 +30,24 @@ export interface PaymentHistory {
   item_name: string;
 }
 
+interface Stats {
+  totalCourses: number;
+  completedCourses: number;
+  totalSpent: number;
+  averageProgress: number;
+  totalModules: number;
+  completedQuizzes: number;
+  communityMembers: number;
+  upcomingEvents: number;
+}
+
 export function useUserDashboard() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [userCourses, setUserCourses] = useState<UserCourse[]>([]);
   const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>([]);
   const [hasPaidAccess, setHasPaidAccess] = useState(false);
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<Stats>({
     totalCourses: 0,
     completedCourses: 0,
     totalSpent: 0,
@@ -96,8 +108,11 @@ export function useUserDashboard() {
       let eventCount = 0;
       
       try {
-        const { data: eventsCount } = await supabase
+        // Utiliser RPC au lieu d'accéder directement à la table events
+        const { data: eventsCount, error } = await supabase
           .rpc('count_upcoming_events', { current_date: today });
+          
+        if (error) throw error;
           
         if (eventsCount !== null) {
           eventCount = eventsCount;
