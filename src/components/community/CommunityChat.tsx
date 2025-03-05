@@ -38,26 +38,6 @@ export default function CommunityChat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Générer des messages de démonstration
-  const generateDemoMessages = () => {
-    const names = ["Amadou", "Fatou", "Ibrahim", "Mariama", "Mamadou"];
-    const contents = [
-      "Bonjour à tous ! Comment se passe votre trading aujourd'hui ?",
-      "J'ai remarqué une tendance intéressante sur le marché des devises.",
-      "Quelqu'un a-t-il des recommandations pour les débutants ?",
-      "Le marché est très volatil aujourd'hui, soyez prudents !",
-      "Quelle est votre stratégie préférée pour le trading à court terme ?"
-    ];
-
-    return Array(5).fill(0).map((_, i) => ({
-      id: `demo-${i}`,
-      user_id: `demo-user-${i}`,
-      user_name: names[i % names.length],
-      content: contents[i % contents.length],
-      created_at: new Date(Date.now() - (5 - i) * 1000 * 60 * 10).toISOString()
-    }));
-  };
-
   // Charger les messages existants et configurer la connexion en temps réel
   useEffect(() => {
     if (!user) return;
@@ -76,13 +56,13 @@ export default function CommunityChat() {
         if (data && Array.isArray(data)) {
           setMessages(data as ChatMessage[]);
         } else {
-          // Simuler des messages si aucune donnée n'est disponible
-          setMessages(generateDemoMessages());
+          // Aucun message disponible
+          setMessages([]);
         }
       } catch (error) {
         console.error('Erreur lors du chargement des messages:', error);
-        // Simuler des messages en cas d'erreur
-        setMessages(generateDemoMessages());
+        // En cas d'erreur, initialiser un tableau vide
+        setMessages([]);
       }
     };
 
@@ -156,18 +136,8 @@ export default function CommunityChat() {
         if (error) throw error;
       } catch (error: any) {
         console.error('Erreur lors de l\'envoi du message:', error);
-        
-        // Simuler un nouveau message dans l'interface
-        const newMsg: ChatMessage = {
-          id: `local-${Date.now()}`,
-          user_id: user.id,
-          user_name: user.user_metadata?.firstName || 'Vous',
-          content: newMessage.trim(),
-          created_at: new Date().toISOString()
-        };
-        
-        setMessages(prev => [...prev, newMsg]);
-        toast.error("Le message n'a pas pu être enregistré en base de données mais sera affiché temporairement.");
+        toast.error("Le message n'a pas pu être enregistré en base de données");
+        return;
       }
 
       setNewMessage("");

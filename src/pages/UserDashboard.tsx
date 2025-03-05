@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -9,30 +10,21 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CommunityChat from "@/components/community/CommunityChat";
 import ActiveMembers from "@/components/community/ActiveMembers";
-import ForumsSection from "@/components/community/ForumsSection";
-import ResourcesSection from "@/components/community/ResourcesSection";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 const UserDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { isLoading, hasPaidAccess, stats } = useUserDashboard();
+  const { isLoading, hasPaidAccess, stats, userCourses } = useUserDashboard();
   const [activeUsers, setActiveUsers] = useState(0);
 
-  // Vérifier si l'utilisateur a accès à la communauté
+  // Vérifier si l'utilisateur a accès à la communauté pour l'onglet communauté
   useEffect(() => {
-    if (!isLoading && !hasPaidAccess) {
-      toast.error("Vous devez avoir un abonnement actif pour accéder à la communauté.");
-      navigate('/dashboard');
+    if (!isLoading && stats) {
+      setActiveUsers(stats.communityMembers);
     }
-  }, [isLoading, hasPaidAccess, navigate]);
-
-  // Simuler le nombre d'utilisateurs actifs
-  useEffect(() => {
-    if (user && hasPaidAccess) {
-      setActiveUsers(Math.floor(Math.random() * 15) + 5);
-    }
-  }, [user, hasPaidAccess]);
+  }, [isLoading, stats]);
 
   if (isLoading) {
     return (
@@ -41,16 +33,12 @@ const UserDashboard = () => {
         <main className="flex-grow flex justify-center items-center">
           <div className="flex flex-col items-center">
             <Loader2 className="w-8 h-8 animate-spin text-guinea-green mb-4" />
-            <span className="text-lg dark:text-white">Chargement de la communauté...</span>
+            <span className="text-lg dark:text-white">Chargement de votre tableau de bord...</span>
           </div>
         </main>
         <Footer />
       </div>
     );
-  }
-
-  if (!hasPaidAccess) {
-    return null; // Redirection gérée par useEffect
   }
 
   return (
@@ -62,10 +50,12 @@ const UserDashboard = () => {
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold dark:text-white">Tableau de bord</h1>
             
-            <Badge variant="outline" className="flex items-center">
-              <Users className="mr-1 h-4 w-4 text-guinea-green" />
-              <span>{activeUsers} en ligne</span>
-            </Badge>
+            {hasPaidAccess && (
+              <Badge variant="outline" className="flex items-center">
+                <Users className="mr-1 h-4 w-4 text-guinea-green" />
+                <span>{activeUsers} membres</span>
+              </Badge>
+            )}
           </div>
           
           <Tabs defaultValue="overview" className="space-y-6">
@@ -95,19 +85,71 @@ const UserDashboard = () => {
             </TabsContent>
             
             <TabsContent value="courses" className="space-y-6">
-              {/* Contenu de l'onglet Mes cours */}
+              {userCourses.length === 0 ? (
+                <div className="text-center py-10 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                  <GraduationCap className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-xl font-medium mb-2 dark:text-white">Aucun cours inscrit</h3>
+                  <p className="text-gray-500 dark:text-gray-400 mb-6">
+                    Vous n'êtes inscrit à aucun cours pour le moment.
+                  </p>
+                  <Button onClick={() => navigate('/formations')} className="bg-guinea-green hover:bg-guinea-green/90 text-white">
+                    Parcourir les formations
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {userCourses.map(course => (
+                    <div key={course.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
+                      <div className="relative h-40">
+                        <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                          <span className="px-2 py-1 bg-guinea-yellow text-xs font-medium rounded-full">
+                            {course.level}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <h3 className="text-lg font-semibold mb-2 dark:text-white">{course.title}</h3>
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full mb-2">
+                          <div 
+                            className="bg-guinea-green h-2 rounded-full" 
+                            style={{ width: `${course.progress}%` }}
+                          ></div>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-500 dark:text-gray-400">Progression</span>
+                          <span className="font-medium dark:text-white">{course.progress}%</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </TabsContent>
             
             <TabsContent value="community" className="space-y-6">
-              <div className="grid gap-6 md:grid-cols-3">
-                <div className="md:col-span-2">
-                  <CommunityChat />
+              {!hasPaidAccess ? (
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 text-center">
+                  <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-xl font-medium mb-2 dark:text-white">Accès limité</h3>
+                  <p className="text-gray-500 dark:text-gray-400 mb-6">
+                    Vous devez avoir un abonnement actif pour accéder à la communauté Trading Matrix.
+                  </p>
+                  <Button onClick={() => navigate('/pricing')} className="bg-guinea-green hover:bg-guinea-green/90 text-white">
+                    Voir les abonnements
+                  </Button>
                 </div>
-                
-                <div>
-                  <ActiveMembers activeUsers={activeUsers} />
+              ) : (
+                <div className="grid gap-6 md:grid-cols-3">
+                  <div className="md:col-span-2">
+                    <CommunityChat />
+                  </div>
+                  
+                  <div>
+                    <ActiveMembers activeUsers={activeUsers} />
+                  </div>
                 </div>
-              </div>
+              )}
             </TabsContent>
           </Tabs>
         </div>

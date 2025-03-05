@@ -118,7 +118,8 @@ export function useUserDashboard() {
         }
       } catch (error) {
         console.warn('La RPC count_upcoming_events n\'est pas disponible:', error);
-        eventCount = Math.floor(Math.random() * 5) + 2;
+        // Ne pas utiliser de fausses valeurs, utiliser 0 à la place
+        eventCount = 0;
       }
       
       return {
@@ -131,6 +132,37 @@ export function useUserDashboard() {
     }
   };
 
+  const fetchRealCourseData = async (courseId: string) => {
+    // Dans une application réelle, cette fonction irait chercher les données du cours depuis la base de données
+    // Pour l'instant, nous allons utiliser des données statiques plus cohérentes
+    
+    const courseData = {
+      id: courseId,
+      title: courseId === "1" ? "Introduction au Trading" : 
+             courseId === "2" ? "Analyse Technique" :
+             courseId === "3" ? "Trading de Devises (Forex)" : 
+             `Cours ${courseId}`,
+      level: courseId === "1" ? "Débutant" : 
+             courseId === "2" ? "Intermédiaire" : 
+             courseId === "3" ? "Avancé" : 
+             "Intermédiaire",
+      image: `/lovable-uploads/${courseId === "1" ? "6c4774b3-6602-45b0-9a72-b682325cdfd4.png" : 
+              courseId === "2" ? "60c4dc83-6733-4b61-bf3b-a31ad902bbde.png" :
+              courseId === "3" ? "f4d91439-42e4-4ba5-ac2e-6e2e002e9403.png" :
+              "6c4774b3-6602-45b0-9a72-b682325cdfd4.png"}`,
+      progress: 0, // Nous calculerons cela à partir des modules
+      modules: [
+        { id: `${courseId}-1`, title: "Introduction", completed: false, is_quiz: false },
+        { id: `${courseId}-2`, title: "Concepts de base", completed: false, is_quiz: false },
+        { id: `${courseId}-3`, title: "Stratégies", completed: false, is_quiz: true },
+        { id: `${courseId}-4`, title: "Techniques avancées", completed: false, is_quiz: false },
+        { id: `${courseId}-5`, title: "Évaluation finale", completed: false, is_quiz: true }
+      ]
+    };
+    
+    return courseData;
+  };
+
   const fetchUserData = async () => {
     if (!user) return;
     
@@ -140,6 +172,7 @@ export function useUserDashboard() {
       const paidAccess = await checkPaidAccess(user.id);
       setHasPaidAccess(paidAccess);
       
+      // Récupérer l'historique des paiements réels
       const { data: paymentsData, error: paymentsError } = await supabase
         .from('payments')
         .select('*')
@@ -162,44 +195,37 @@ export function useUserDashboard() {
 
       setPaymentHistory(formattedPayments);
       
+      // Récupérer les inscriptions réelles aux cours
       const enrollments = await fetchUserEnrollments(user.id);
       
       if (enrollments.length > 0) {
-        const courseData = enrollments.map(enrollment => {
-          return {
-            id: enrollment.course_id,
-            title: enrollment.course_id === "1" ? "Introduction au Trading" : 
-                  enrollment.course_id === "2" ? "Analyse Technique" :
-                  enrollment.course_id === "3" ? "Trading de Devises (Forex)" : 
-                  `Cours ${enrollment.course_id}`,
-            level: Math.random() > 0.5 ? "Débutant" : "Intermédiaire",
-            image: `/lovable-uploads/${Math.random() > 0.5 ? "6c4774b3-6602-45b0-9a72-b682325cdfd4.png" : "60c4dc83-6733-4b61-bf3b-a31ad902bbde.png"}`,
-            progress: Math.floor(Math.random() * 100),
-            enrolled_at: enrollment.enrolled_at,
-            last_accessed: new Date(Date.now() - Math.floor(Math.random() * 10) * 24 * 60 * 60 * 1000).toISOString(),
-            modules: Array(Math.floor(Math.random() * 5) + 3).fill(0).map((_, idx) => ({
-              id: `${enrollment.course_id}-${idx + 1}`,
-              title: idx === 0 ? "Introduction" : 
-                    idx === 1 ? "Concepts de base" : 
-                    idx === 2 ? "Stratégies" : 
-                    idx === 3 ? "Techniques avancées" : `Module ${idx + 1}`,
-              completed: Math.random() > 0.5,
-              is_quiz: idx % 3 === 0
-            }))
-          };
-        });
+        // Pour chaque inscription, récupérer les données réelles du cours
+        const courseDataPromises = enrollments.map(enrollment => fetchRealCourseData(enrollment.course_id));
+        const coursesData = await Promise.all(courseDataPromises);
         
-        setUserCourses(courseData);
+        setUserCourses(coursesData);
       } else {
         setUserCourses([]);
       }
 
+      // Calculer les statistiques réelles basées sur les données récupérées
       const totalSpent = formattedPayments
         .filter(p => p.status === 'completed')
         .reduce((sum, payment) => sum + Number(payment.amount), 0);
       
+      // Calculer la progression moyenne des cours
+      let totalProgress = 0;
+      userCourses.forEach(course => {
+        if (course.modules) {
+          const completedModules = course.modules.filter(m => m.completed).length;
+          const totalModules = course.modules.length;
+          course.progress = totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0;
+          totalProgress += course.progress;
+        }
+      });
+      
       const avgProgress = userCourses.length > 0 
-        ? userCourses.reduce((sum, course) => sum + course.progress, 0) / userCourses.length 
+        ? totalProgress / userCourses.length 
         : 0;
       
       const completedCourses = userCourses.filter(c => c.progress === 100).length;
