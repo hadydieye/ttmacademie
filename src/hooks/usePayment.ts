@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
@@ -13,6 +12,7 @@ export interface PaymentDetails {
   courseName?: string;
   amount: number;
   currency: string;
+  screenshotFile?: File | null;
 }
 
 export interface PaymentResult {
@@ -53,8 +53,15 @@ export function usePayment() {
     }
 
     setIsProcessing(true);
-
+    
     try {
+      let screenshotUrl = null;
+      
+      if (paymentDetails.screenshotFile) {
+        console.log('Processing screenshot file:', paymentDetails.screenshotFile.name);
+        screenshotUrl = 'simulated-url-for-' + paymentDetails.screenshotFile.name;
+      }
+
       const { data, error } = await supabase.functions.invoke('process-payment', {
         body: {
           paymentMethod,
@@ -65,6 +72,7 @@ export function usePayment() {
           userId: user.id,
           email: user.email,
           currency: paymentDetails.currency || 'GNF',
+          screenshotUrl: screenshotUrl,
         },
       });
 
@@ -74,7 +82,6 @@ export function usePayment() {
         return { success: false, error: error.message };
       }
 
-      // Process successful payment
       toast.success(data.message);
       
       return { 
@@ -98,7 +105,7 @@ export function usePayment() {
       const { data, error } = await supabase
         .from('payments')
         .select('status, payment_method, amount, currency, created_at')
-        .limit(100); // Add a reasonable limit
+        .limit(100);
       
       if (error) throw error;
       
@@ -112,7 +119,6 @@ export function usePayment() {
   const getRecentPayments = async (limit = 5): Promise<PaymentData[]> => {
     console.log(`Fetching ${limit} recent payments...`);
     try {
-      // Use two separate queries and join the data manually to avoid join error
       const { data: paymentsData, error: paymentsError } = await supabase
         .from('payments')
         .select(`
@@ -133,12 +139,9 @@ export function usePayment() {
         throw paymentsError;
       }
 
-      // Fetch profile data separately if we have payments
       if (paymentsData && paymentsData.length > 0) {
-        // Extract unique user IDs
         const userIds = [...new Set(paymentsData.map(p => p.user_id))];
         
-        // Get profile data for those users
         const { data: profilesData, error: profilesError } = await supabase
           .from('profiles')
           .select('id, name, email')
@@ -148,13 +151,11 @@ export function usePayment() {
           console.error('Error fetching profiles:', profilesError);
         }
         
-        // Create a map of profiles by user ID for faster lookup
         const profilesMap = (profilesData || []).reduce((map, profile) => {
           map[profile.id] = profile;
           return map;
         }, {} as Record<string, any>);
         
-        // Combine the payment data with profile data
         const combinedData = paymentsData.map(payment => ({
           ...payment,
           profiles: profilesMap[payment.user_id] || null

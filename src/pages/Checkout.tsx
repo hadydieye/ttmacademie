@@ -10,6 +10,7 @@ import BankPayment from '@/components/payment/BankPayment';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { ArrowLeft, Check } from 'lucide-react';
+import { toast } from 'sonner';
 
 const Checkout = () => {
   const [searchParams] = useSearchParams();
@@ -56,6 +57,11 @@ const Checkout = () => {
   const handlePaymentSuccess = () => {
     resetPaymentScreens();
     setPaymentSuccess(true);
+    
+    toast.success('Paiement enregistré avec succès!', {
+      description: `Votre achat de ${itemName} a été confirmé.`,
+      duration: 5000,
+    });
   };
 
   const handleCancel = () => {

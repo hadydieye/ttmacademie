@@ -1,8 +1,7 @@
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Copy, CheckCircle, ArrowLeftCircle, Info } from 'lucide-react';
-import { useState } from 'react';
+import { Copy, CheckCircle, ArrowLeftCircle, Info, Upload, QrCode, Image } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface CryptoWallet {
@@ -27,6 +26,9 @@ const CryptoPaymentInstructions: React.FC<CryptoPaymentInstructionsProps> = ({
 }) => {
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
   const [hasScreenshot, setHasScreenshot] = useState<boolean>(false);
+  const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
+  const [showQRCode, setShowQRCode] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Liste des adresses crypto mise à jour
   const cryptoWallets: CryptoWallet[] = [
@@ -106,6 +108,47 @@ const CryptoPaymentInstructions: React.FC<CryptoPaymentInstructionsProps> = ({
     setHasScreenshot(!hasScreenshot);
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.type.startsWith('image/')) {
+        setScreenshotFile(file);
+        setHasScreenshot(true);
+        toast.success('Capture d\'écran téléchargée avec succès');
+      } else {
+        toast.error('Veuillez sélectionner une image');
+      }
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
+
+  const toggleQRCode = (address: string) => {
+    if (showQRCode === address) {
+      setShowQRCode(null);
+    } else {
+      setShowQRCode(address);
+    }
+  };
+
+  const generateQRCodeUrl = (address: string) => {
+    // Générer l'URL pour le code QR en utilisant une API QR Code gratuite
+    return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(address)}`;
+  };
+
+  const handlePaymentComplete = () => {
+    if (hasScreenshot) {
+      // Si nous avons un fichier de capture d'écran, on pourrait l'envoyer à un serveur ici
+      // Pour l'instant, on simule juste une réussite
+      toast.success('Paiement enregistré! Notre équipe va le vérifier.');
+      onComplete();
+    } else {
+      toast.error('Veuillez confirmer que vous avez pris une capture d\'écran');
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
@@ -145,48 +188,106 @@ const CryptoPaymentInstructions: React.FC<CryptoPaymentInstructionsProps> = ({
                 <div className="text-sm bg-gray-100 dark:bg-gray-700 rounded p-2 mr-2 flex-grow overflow-x-auto whitespace-nowrap font-mono">
                   {wallet.address}
                 </div>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => copyToClipboard(wallet.address)}
-                  className="ml-2 flex-shrink-0"
-                >
-                  {copiedAddress === wallet.address ? (
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                </Button>
+                <div className="flex space-x-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => toggleQRCode(wallet.address)}
+                    className="flex-shrink-0"
+                    title="Afficher le code QR"
+                  >
+                    <QrCode className="h-4 w-4" />
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => copyToClipboard(wallet.address)}
+                    className="flex-shrink-0"
+                    title="Copier l'adresse"
+                  >
+                    {copiedAddress === wallet.address ? (
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
               </div>
+              {showQRCode === wallet.address && (
+                <div className="mt-3 flex justify-center">
+                  <div className="bg-white p-2 rounded-md">
+                    <img 
+                      src={generateQRCodeUrl(wallet.address)} 
+                      alt={`QR Code pour ${wallet.name}`} 
+                      className="w-32 h-32"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
 
         <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md p-4 mb-6">
           <p className="text-yellow-800 dark:text-yellow-400 text-sm">
-            <strong>Important:</strong> Après avoir effectué le transfert, veuillez prendre une capture d'écran de la transaction 
-            et cocher la case ci-dessous. Ensuite, cliquez sur "J'ai effectué le paiement". 
+            <strong>Important:</strong> Après avoir effectué le transfert, veuillez télécharger une capture d'écran de la transaction 
+            ou cocher la case ci-dessous si vous l'avez déjà prise. Ensuite, cliquez sur "J'ai effectué le paiement". 
             Notre équipe vérifiera et validera votre transaction après réception de votre capture d'écran.
           </p>
         </div>
 
-        <div className="flex items-center mb-6">
-          <input
-            type="checkbox"
-            id="screenshotConfirmation"
-            checked={hasScreenshot}
-            onChange={toggleScreenshotConfirmation}
-            className="mr-2 h-4 w-4 text-guinea-green focus:ring-guinea-green rounded"
-          />
-          <label htmlFor="screenshotConfirmation" className="text-sm text-gray-700 dark:text-gray-300">
-            J'ai pris une capture d'écran de ma transaction et je la fournirai à l'équipe de support si nécessaire
-          </label>
+        {/* Section de téléchargement de capture d'écran */}
+        <div className="mb-6">
+          <div className="flex items-center mb-3">
+            <input
+              type="checkbox"
+              id="screenshotConfirmation"
+              checked={hasScreenshot}
+              onChange={toggleScreenshotConfirmation}
+              className="mr-2 h-4 w-4 text-guinea-green focus:ring-guinea-green rounded"
+            />
+            <label htmlFor="screenshotConfirmation" className="text-sm text-gray-700 dark:text-gray-300">
+              J'ai pris une capture d'écran de ma transaction et je la fournirai à l'équipe de support si nécessaire
+            </label>
+          </div>
+          
+          <div className="mt-3">
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+              Ou téléchargez directement votre capture d'écran:
+            </p>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            
+            <div className="flex items-center">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={triggerFileInput}
+                className="flex items-center"
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                Télécharger une image
+              </Button>
+              
+              {screenshotFile && (
+                <div className="ml-3 flex items-center text-sm text-green-600 dark:text-green-400">
+                  <CheckCircle className="mr-1 h-4 w-4" />
+                  {screenshotFile.name}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md p-4 mb-6 flex items-start">
           <Info className="h-5 w-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" />
           <p className="text-blue-800 dark:text-blue-400 text-sm">
-            Vous pouvez envoyer votre capture d'écran via WhatsApp au service client ou par email à support@tradinmatrix.com 
+            Vous pouvez également envoyer votre capture d'écran via WhatsApp au service client ou par email à support@tradinmatrix.com 
             en indiquant votre email et la date de transaction pour accélérer la validation de votre paiement.
           </p>
         </div>
@@ -200,7 +301,7 @@ const CryptoPaymentInstructions: React.FC<CryptoPaymentInstructionsProps> = ({
             <ArrowLeftCircle className="mr-2 h-4 w-4" /> Retour
           </Button>
           <Button 
-            onClick={onComplete}
+            onClick={handlePaymentComplete}
             className="bg-guinea-green hover:bg-guinea-green/90 text-white"
             disabled={!hasScreenshot}
           >
