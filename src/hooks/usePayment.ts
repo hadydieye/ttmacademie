@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
-export type PaymentMethod = 'orange-money' | 'wave' | 'payeer' | 'crypto' | 'card';
+export type PaymentMethod = 'orange-money' | 'wave' | 'payeer' | 'crypto' | 'card' | 'bank';
 
 export interface PaymentDetails {
   planId?: string;

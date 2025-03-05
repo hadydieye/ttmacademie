@@ -1,266 +1,206 @@
 
-import React, { useState, useRef } from 'react';
-import Card from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Banknote, PhoneCall, Copy, Check, ArrowRight, Upload, CheckCircle } from 'lucide-react';
-import { toast } from 'sonner';
-import { usePayment } from '@/hooks/usePayment';
+import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { usePayment } from "@/hooks/usePayment";
+import { Loader2, Upload, Check } from "lucide-react";
+import { toast } from "sonner";
 
 interface OrangeMoneyPaymentProps {
   amount: number;
-  currency?: string;
-  onSuccess?: () => void;
-  onCancel?: () => void;
+  currency: string;
+  courseId?: string;
+  courseName?: string;
+  onSuccess: (paymentId: string) => void;
 }
 
 const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
   amount,
-  currency = 'GNF',
-  onSuccess,
-  onCancel
+  currency,
+  courseId,
+  courseName,
+  onSuccess
 }) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [paymentCode, setPaymentCode] = useState('');
-  const [showPaymentInfo, setShowPaymentInfo] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [hasScreenshot, setHasScreenshot] = useState<boolean>(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [transactionId, setTransactionId] = useState("");
   const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const { processPayment, isProcessing } = usePayment();
-
-  // Generate fixed payment account number
-  const generatePaymentCode = () => {
-    // Use the fixed number provided
-    setPaymentCode('611353456');
-    setShowPaymentInfo(true);
-    toast.success("Numéro de paiement généré avec succès!");
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(paymentCode);
-    setCopied(true);
-    toast.success("Numéro copié!");
-    
-    setTimeout(() => {
-      setCopied(false);
-    }, 3000);
-  };
-  
-  const toggleScreenshotConfirmation = () => {
-    setHasScreenshot(!hasScreenshot);
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      if (file.type.startsWith('image/')) {
-        setScreenshotFile(file);
-        setHasScreenshot(true);
-        toast.success('Capture d\'écran téléchargée avec succès');
-      } else {
-        toast.error('Veuillez sélectionner une image');
-      }
-    }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!phoneNumber) {
-      toast.error('Veuillez entrer votre numéro de téléphone Orange Money');
+      toast.error("Veuillez saisir votre numéro de téléphone");
       return;
     }
     
-    if (!paymentCode) {
-      toast.error('Veuillez générer un numéro de paiement');
-      return;
-    }
+    setIsSubmitting(true);
     
-    if (!hasScreenshot) {
-      toast.error('Veuillez confirmer que vous avez pris une capture d\'écran ou télécharger une image');
-      return;
-    }
-
-    // Process the payment
-    await processPayment('orange-money', { 
-      amount, 
-      currency,
-      screenshotFile
-    });
-    
-    if (onSuccess) {
-      onSuccess();
+    try {
+      // Normalement, ici on appellerait l'API d'Orange Money pour initier le paiement
+      // Pour la démo, on passe directement à l'étape de confirmation
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setShowConfirmation(true);
+      }, 1500);
+    } catch (error) {
+      console.error("Erreur lors de l'initiation du paiement:", error);
+      toast.error("Impossible d'initier le paiement Orange Money");
+      setIsSubmitting(false);
     }
   };
 
-  return (
-    <Card className="max-w-md mx-auto p-6">
-      <div className="text-center mb-6">
-        <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Banknote className="h-8 w-8 text-orange-500" />
-        </div>
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Paiement Orange Money</h2>
-      </div>
+  const handleConfirmPayment = async () => {
+    try {
+      const result = await processPayment('orange-money', {
+        amount,
+        currency,
+        courseId,
+        courseName,
+        screenshotFile
+      });
+      
+      if (result.success && result.paymentId) {
+        toast.success("Paiement Orange Money enregistré avec succès!");
+        onSuccess(result.paymentId);
+      } else {
+        toast.error("Échec du paiement. Veuillez réessayer.");
+      }
+    } catch (error) {
+      console.error("Erreur de confirmation:", error);
+      toast.error("Erreur lors de la confirmation du paiement");
+    }
+  };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      
+      // Vérifier le type du fichier
+      if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+        toast.error("Veuillez télécharger une image (JPEG, PNG ou GIF)");
+        return;
+      }
+      
+      // Vérifier la taille du fichier (max 5 MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("La taille de l'image ne doit pas dépasser 5 MB");
+        return;
+      }
+      
+      setScreenshotFile(file);
+      toast.success("Capture d'écran téléchargée avec succès");
+    }
+  };
+
+  if (showConfirmation) {
+    return (
       <div className="space-y-6">
-        <div className="bg-orange-50 dark:bg-orange-900/10 p-4 rounded-lg">
-          <h3 className="font-medium text-orange-800 dark:text-orange-400 mb-2">Pourquoi choisir Orange Money?</h3>
-          <ul className="list-disc pl-5 text-sm text-gray-600 dark:text-gray-400 space-y-1">
-            <li>Paiement rapide et sécurisé</li>
-            <li>Disponible partout en Guinée</li>
-            <li>Frais de transaction minimes</li>
-            <li>Validation immédiate de votre paiement</li>
-          </ul>
-        </div>
-
-        <div className="bg-yellow-50 border border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800 p-4 rounded-lg">
-          <p className="text-yellow-800 dark:text-yellow-500 text-sm font-medium">
-            ⚠️ Ce service de paiement n'est disponible que sur le territoire Guinéen.
+        <div className="bg-amber-50 border border-amber-200 p-4 rounded-md">
+          <h3 className="font-semibold text-amber-800 mb-2">Instructions</h3>
+          <p className="text-sm text-amber-700 mb-3">
+            1. Effectuez le paiement de <strong>{amount.toLocaleString('fr-FR')} {currency}</strong> via Orange Money au numéro <strong>610 12 34 56</strong>
+          </p>
+          <p className="text-sm text-amber-700 mb-3">
+            2. Après avoir effectué le paiement, vous recevrez un SMS de confirmation avec un ID de transaction.
+          </p>
+          <p className="text-sm text-amber-700">
+            3. Entrez l'ID de transaction ci-dessous et téléchargez une capture d'écran comme preuve.
           </p>
         </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
+        
+        <div className="space-y-4">
           <div>
-            <label htmlFor="phone" className="block mb-2 text-sm font-medium">
-              Votre numéro Orange Money
-            </label>
-            <Input
-              id="phone"
-              type="tel"
-              placeholder="6xx xx xx xx"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              className="mb-2"
-              required
+            <Label htmlFor="transactionId">ID de transaction</Label>
+            <Input 
+              id="transactionId" 
+              placeholder="Ex: OM12345678" 
+              value={transactionId}
+              onChange={(e) => setTransactionId(e.target.value)}
             />
-            <p className="text-xs text-gray-500">Entrez le numéro que vous utiliserez pour effectuer le paiement.</p>
           </div>
-
-          {!showPaymentInfo ? (
-            <Button 
-              type="button" 
-              onClick={generatePaymentCode}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white"
-            >
-              Générer un numéro de paiement
-            </Button>
-          ) : (
-            <div className="border p-4 rounded-lg space-y-4">
-              <div>
-                <h3 className="font-medium mb-2">Numéro de paiement</h3>
-                <div className="flex items-center">
-                  <div className="flex-1 bg-gray-100 dark:bg-gray-800 p-3 rounded-l-md font-mono">
-                    {paymentCode}
-                  </div>
-                  <Button 
-                    type="button" 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={copyToClipboard}
-                    className="h-12 rounded-l-none rounded-r-md bg-gray-200 dark:bg-gray-700"
-                  >
-                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <h3 className="font-medium">Instructions:</h3>
-                <ol className="list-decimal pl-5 text-sm text-gray-600 dark:text-gray-400 space-y-2">
-                  <li>Envoyez <span className="font-bold">{amount.toLocaleString('fr-FR')} {currency}</span> au numéro ci-dessus via Orange Money</li>
-                  <li>Prenez une capture d'écran de votre transaction</li>
-                  <li>Téléchargez la capture d'écran ci-dessous ou cochez la case si vous l'avez déjà prise</li>
-                  <li>Une fois le paiement effectué, appuyez sur le bouton "Confirmer le paiement"</li>
-                </ol>
-              </div>
-              
-              {/* Section de téléchargement de capture d'écran */}
-              <div className="mt-4">
-                <div className="flex items-center mb-3">
-                  <input
-                    type="checkbox"
-                    id="screenshotConfirmation"
-                    checked={hasScreenshot}
-                    onChange={toggleScreenshotConfirmation}
-                    className="mr-2 h-4 w-4 text-orange-500 focus:ring-orange-500 rounded"
-                  />
-                  <label htmlFor="screenshotConfirmation" className="text-sm text-gray-700 dark:text-gray-300">
-                    J'ai pris une capture d'écran de ma transaction et je la fournirai à l'équipe de support si nécessaire
-                  </label>
-                </div>
-                
-                <div className="mt-3">
-                  <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
-                    Ou téléchargez directement votre capture d'écran:
-                  </p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  
-                  <div className="flex items-center">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={triggerFileInput}
-                      className="flex items-center"
-                    >
-                      <Upload className="mr-2 h-4 w-4" />
-                      Télécharger une image
-                    </Button>
-                    
-                    {screenshotFile && (
-                      <div className="ml-3 flex items-center text-sm text-green-600 dark:text-green-400">
-                        <CheckCircle className="mr-1 h-4 w-4" />
-                        {screenshotFile.name}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              
-              <Button 
-                type="submit" 
-                className="w-full bg-green-500 hover:bg-green-600 text-white mt-4"
-                disabled={isProcessing || !hasScreenshot}
-              >
-                {isProcessing ? 'Traitement...' : 'Confirmer le paiement'}
-              </Button>
-            </div>
-          )}
           
-          <div className="flex justify-between pt-4">
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={onCancel}
-              disabled={isProcessing}
-            >
-              Retour
-            </Button>
-            
-            <Button 
-              type="button" 
-              variant="outline" 
-              className="flex items-center text-orange-600 border-orange-600"
-              onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
-            >
-              Contacter sur WhatsApp
-              <ArrowRight className="ml-1 h-4 w-4" />
-            </Button>
+          <div>
+            <Label htmlFor="screenshot">Capture d'écran du paiement (obligatoire)</Label>
+            <div className="mt-1 flex items-center">
+              <label className="block w-full">
+                <span className="sr-only">Choisir une image</span>
+                <input
+                  id="screenshot"
+                  name="screenshot"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-md file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-blue-50 file:text-blue-700
+                    hover:file:bg-blue-100"
+                />
+              </label>
+            </div>
+            {screenshotFile && (
+              <div className="mt-2 flex items-center text-sm text-green-600">
+                <Check className="h-4 w-4 mr-1" />
+                {screenshotFile.name}
+              </div>
+            )}
           </div>
-        </form>
+          
+          <Button 
+            className="w-full" 
+            onClick={handleConfirmPayment}
+            disabled={!transactionId || !screenshotFile || isProcessing}
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Traitement...
+              </>
+            ) : (
+              "Confirmer le paiement"
+            )}
+          </Button>
+        </div>
       </div>
-    </Card>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <Label htmlFor="phoneNumber">Numéro de téléphone Orange Money</Label>
+        <Input 
+          id="phoneNumber" 
+          placeholder="Ex: 610123456" 
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          className="mt-1"
+        />
+        <p className="text-sm text-muted-foreground mt-1">
+          Entrez le numéro associé à votre compte Orange Money
+        </p>
+      </div>
+      
+      <Button 
+        className="w-full" 
+        type="submit"
+        disabled={!phoneNumber || isSubmitting}
+      >
+        {isSubmitting ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Initialisation...
+          </>
+        ) : (
+          "Payer avec Orange Money"
+        )}
+      </Button>
+    </form>
   );
 };
 
