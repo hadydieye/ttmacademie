@@ -1,4 +1,3 @@
-
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
@@ -124,27 +123,25 @@ serve(async (req) => {
 
     // Determine if this is a course payment or a plan payment
     const paymentType = courseId ? 'course' : 'plan';
-    const itemId = courseId || planId;
-    const itemName = courseName || planId;
+    const itemId = courseId || planId || 'standard-plan';
+    const itemName = courseName || planId || 'Standard Plan';
 
     // Store payment information in the database
     const { data, error } = await supabase
       .from('payments')
-      .insert([
-        {
-          payment_id: paymentId,
-          user_id: userId,
-          item_id: itemId,
-          item_type: paymentType,
-          item_name: itemName,
-          amount,
-          currency,
-          payment_method: paymentMethod,
-          status,
-          payment_details: paymentDetails,
-          created_at: new Date().toISOString(),
-        },
-      ])
+      .insert({
+        payment_id: paymentId,
+        user_id: userId,
+        item_id: itemId,
+        item_type: paymentType,
+        item_name: itemName,
+        amount,
+        currency,
+        payment_method: paymentMethod,
+        status,
+        payment_details: paymentDetails,
+        created_at: new Date().toISOString(),
+      })
       .select()
 
     if (error) {
@@ -159,15 +156,13 @@ serve(async (req) => {
     if (courseId) {
       const { error: enrollmentError } = await supabase
         .from('enrollments')
-        .insert([
-          {
-            user_id: userId,
-            course_id: courseId,
-            payment_id: paymentId,
-            status: 'active',
-            enrolled_at: new Date().toISOString(),
-          },
-        ])
+        .insert({
+          user_id: userId,
+          course_id: courseId,
+          payment_id: paymentId,
+          status: 'active',
+          enrolled_at: new Date().toISOString(),
+        })
       
       if (enrollmentError) {
         console.error('Error creating enrollment:', enrollmentError)
@@ -176,14 +171,12 @@ serve(async (req) => {
       // Log the activity
       await supabase
         .from('activity_logs')
-        .insert([
-          {
-            type: 'enrollment',
-            user_id: userId,
-            user_email: email,
-            details: `Inscription au cours: ${courseName}`,
-          },
-        ])
+        .insert({
+          type: 'enrollment',
+          user_id: userId,
+          user_email: email,
+          details: `Inscription au cours: ${courseName}`,
+        })
     }
 
     // In a real implementation, we would check the payment status and update accordingly

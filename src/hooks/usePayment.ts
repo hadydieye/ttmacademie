@@ -1,7 +1,12 @@
+
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { Json } from '@/integrations/supabase/types';
+
+// Define a type for payment methods to export
+export type PaymentMethod = 'orange-money' | 'wave' | 'payeer' | 'crypto' | 'card' | 'bank';
 
 export interface PaymentData {
   payment_id: string;
@@ -11,7 +16,10 @@ export interface PaymentData {
   payment_method: string;
   status: string;
   item_name: string;
+  item_id: string;
+  item_type: string;
   created_at: string;
+  payment_details?: Json;
   profiles?: {
     name: string;
     email: string;
@@ -23,7 +31,7 @@ export function usePayment() {
   const [isProcessing, setIsProcessing] = useState(false);
   
   const processPayment = async (
-    paymentMethod: string,
+    paymentMethod: PaymentMethod,
     paymentDetails: {
       amount: number;
       currency: string;
@@ -57,21 +65,26 @@ export function usePayment() {
         screenshotUrl = `https://agaslhilgfibvmdiajxk.supabase.co/storage/v1/object/public/payment-screenshots/${uploadData.path}`;
       }
       
+      // Determine payment item details
+      const isCoursePurchase = !!courseId;
+      const itemType = isCoursePurchase ? 'course' : 'plan';
+      const itemId = courseId || 'standard-plan'; // Default to standard plan if no course ID
+      const itemName = courseName || 'Achat en ligne';
+      
       // Create payment record in Supabase
       const { data: paymentData, error: paymentError } = await supabase
         .from('payments')
-        .insert([
-          {
-            user_id: user.id,
-            amount,
-            currency,
-            payment_method: paymentMethod,
-            status: 'pending',
-            item_name: courseName || 'Achat en ligne',
-            course_id: courseId,
-            screenshot_url: screenshotUrl,
-          }
-        ])
+        .insert({
+          user_id: user.id,
+          amount,
+          currency,
+          payment_method: paymentMethod,
+          status: 'pending',
+          item_name: itemName,
+          item_id: itemId,
+          item_type: itemType,
+          payment_details: screenshotUrl ? { screenshot_url: screenshotUrl } : null,
+        })
         .select()
         .single();
         
@@ -110,7 +123,7 @@ export function usePayment() {
         
       if (error) throw error;
       
-      return data || [];
+      return data as PaymentData[] || [];
     } catch (error) {
       console.error('Error fetching payment data:', error);
       throw error;

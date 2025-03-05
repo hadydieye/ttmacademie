@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,7 +13,7 @@ interface PaymentFormProps {
   currency?: string;
   onSuccess?: () => void;
   onCancel?: () => void;
-  onPaymentMethodSelected?: (method: string) => void;
+  onPaymentMethodSelected?: (method: PaymentMethod) => void;
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({
