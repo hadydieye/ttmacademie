@@ -169,6 +169,76 @@ const Testimonials = () => {
           </div>
         </section>
 
+        {/* Add a third video testimonial */}
+        <section className="py-20 bg-white dark:bg-gray-800">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="relative overflow-hidden rounded-xl shadow-lg animate-fade-in">
+                <div className="aspect-video bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                  <img 
+                    src="/lovable-uploads/f576709e-e1a1-4926-aa75-7a1ed7644f7f.png" 
+                    alt="Témoignage vidéo" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-guinea-red">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 bg-white dark:bg-gray-800">
+                  <h3 className="font-bold text-lg mb-2 dark:text-white">Jean de Ouagadougou</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Comment j'ai appris à gérer mon risque efficacement</p>
+                </div>
+              </div>
+              
+              <div className="relative overflow-hidden rounded-xl shadow-lg animate-fade-in">
+                <div className="aspect-video bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                  <img 
+                    src="/lovable-uploads/1cac934d-bd00-4c47-87ea-5ad9276f6315.png" 
+                    alt="Témoignage vidéo" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-guinea-red">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 bg-white dark:bg-gray-800">
+                  <h3 className="font-bold text-lg mb-2 dark:text-white">Mariam de Bamako</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Mon expérience avec les formations avancées de TTM</p>
+                </div>
+              </div>
+              
+              <div className="relative overflow-hidden rounded-xl shadow-lg animate-fade-in">
+                <div className="aspect-video bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                  <img 
+                    src="/lovable-uploads/0e95e2af-2c76-4a3f-97e7-a3b26879b4e5.png" 
+                    alt="Témoignage vidéo" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-guinea-red">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 bg-white dark:bg-gray-800">
+                  <h3 className="font-bold text-lg mb-2 dark:text-white">Ibrahim de Niamey</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Du débutant au trader confirmé en 6 mois</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
         <section className="py-20">
           <div className="container mx-auto px-4 md:px-6">

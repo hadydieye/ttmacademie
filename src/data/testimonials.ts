@@ -10,7 +10,7 @@ export interface Testimonial {
   bgImage: string;
 }
 
-// Testimonial data with images of Black African people
+// Testimonial data with images of African professionals and students
 export const testimonials: Testimonial[] = [
   {
     id: 1,
@@ -57,4 +57,49 @@ export const testimonials: Testimonial[] = [
     rating: 5,
     bgImage: "/lovable-uploads/60c4dc83-6733-4b61-bf3b-a31ad902bbde.png"
   },
+  {
+    id: 6,
+    name: "Ousmane Konaté",
+    role: "Trader à Temps Plein, Abidjan",
+    content: "Après avoir essayé plusieurs formations internationales, j'ai enfin trouvé avec TTM Académie une approche adaptée aux marchés africains. Leurs stratégies tiennent compte de nos horaires et de nos contraintes spécifiques.",
+    avatar: "/lovable-uploads/4446a15b-62d8-4d0a-b038-9e984054f2e3.png",
+    rating: 5,
+    bgImage: "/lovable-uploads/7d1ef882-2f70-4dc0-b257-ec51c2aaf9fc.png"
+  },
+  {
+    id: 7,
+    name: "Fatou Ndiaye",
+    role: "Professeure d'Économie, Université de Bamako",
+    content: "J'intègre maintenant les ressources de TTM Académie dans mes cours. Leur approche pratique du trading et de l'analyse de marché complète parfaitement l'enseignement théorique que nous dispensons à l'université.",
+    avatar: "/lovable-uploads/45badc4a-1db3-4805-bd99-4ad83c3ddb0b.png",
+    rating: 5,
+    bgImage: "/lovable-uploads/9b285d2e-d2cd-4ce7-bc61-e4d2c63c3a12.png"
+  },
+  {
+    id: 8,
+    name: "Sekou Touré",
+    role: "Ingénieur & Trader Particulier, Abidjan",
+    content: "La formation TTM Académie m'a permis de créer une source de revenus complémentaire tout en conservant mon emploi d'ingénieur. Leur flexibilité et leur méthodologie sont parfaitement adaptées aux professionnels actifs.",
+    avatar: "/lovable-uploads/64617320-161a-4c65-b082-31d0193db414.png",
+    rating: 4,
+    bgImage: "/lovable-uploads/6c119f27-4e1b-4cf3-964b-c9cf552747f2.png"
+  },
+  {
+    id: 9,
+    name: "Aminata Diop",
+    role: "Étudiante & Trader, Université de Dakar",
+    content: "Grâce à TTM Académie, j'ai pu commencer à trader avec un petit capital pendant mes études. La communauté d'étudiants africains qui tradent ensemble est une ressource inestimable pour progresser.",
+    avatar: "/lovable-uploads/d5e1460f-a93a-4ed4-82ac-120e03b71d96.png",
+    rating: 5,
+    bgImage: "/lovable-uploads/cf0eb5fe-f5ce-4ab2-bd59-396580002628.png"
+  },
+  {
+    id: 10,
+    name: "Jean-Pierre Kaboré",
+    role: "Analyste Financier, Ouagadougou",
+    content: "TTM Académie offre une perspective unique sur les marchés internationaux avec une sensibilité africaine. Leurs analyses des impacts des événements mondiaux sur les économies africaines sont particulièrement pertinentes.",
+    avatar: "/lovable-uploads/13aff269-29ab-4b50-956a-dcd5d76a9068.png",
+    rating: 5,
+    bgImage: "/lovable-uploads/d7319208-2335-4578-9eaa-e3cbe86a5661.png"
+  }
 ];
