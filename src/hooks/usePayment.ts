@@ -8,6 +8,7 @@ import { Json } from '@/integrations/supabase/types';
 // Define a type for payment methods to export
 export type PaymentMethod = 'orange-money' | 'wave' | 'payeer' | 'crypto' | 'card' | 'bank';
 
+// Update interface to properly match the database schema and query result
 export interface PaymentData {
   payment_id: string;
   user_id: string;
@@ -19,11 +20,12 @@ export interface PaymentData {
   item_id: string;
   item_type: string;
   created_at: string;
+  updated_at?: string;
   payment_details?: Json;
   profiles?: {
-    name: string;
-    email: string;
-  };
+    name: string | null;
+    email: string | null;
+  } | null;
 }
 
 export function usePayment() {
@@ -123,7 +125,8 @@ export function usePayment() {
         
       if (error) throw error;
       
-      return data as PaymentData[] || [];
+      // Use type assertion to ensure compatibility with PaymentData interface
+      return (data || []) as unknown as PaymentData[];
     } catch (error) {
       console.error('Error fetching payment data:', error);
       throw error;
