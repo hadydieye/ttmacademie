@@ -40,47 +40,26 @@ const Testimonials = () => {
         {/* Hero Section */}
         <section className="py-16 bg-white dark:bg-gray-800">
           <div className="container mx-auto px-4 md:px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <div>
-                <span className="inline-block text-sm font-medium px-3 py-1 rounded-full bg-guinea-red/10 text-guinea-red dark:bg-guinea-red/20 dark:text-guinea-red/90 mb-4">
-                  Témoignages
-                </span>
-                <h1 className="text-4xl md:text-5xl font-bold mb-6 dark:text-white">
-                  Ce que disent nos étudiants africains
-                </h1>
-                <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-                  Découvrez les histoires inspirantes des traders qui ont suivi nos formations et transformé 
-                  leur approche du trading sur les marchés africains.
-                </p>
-                <div className="flex flex-wrap gap-4">
-                  <Link to="/formations">
-                    <Button 
-                      className="bg-guinea-red hover:bg-guinea-red/90 text-white flex items-center gap-2"
-                    >
-                      <ArrowRight className="h-4 w-4" />
-                      Découvrir nos formations
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-              <div className="relative">
-                <img 
-                  src="/lovable-uploads/7807fc3d-8178-4bb4-8601-2375fa79ec42.png" 
-                  alt="Témoignages des étudiants" 
-                  className="rounded-xl shadow-lg w-full object-cover aspect-video"
-                />
-                <div className="absolute -bottom-6 -left-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg p-4 flex items-center max-w-xs">
-                  <div className="bg-guinea-yellow rounded-full p-2 mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
-                      <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
-                      <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-medium dark:text-white">Témoignages authentiques</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Traders africains</p>
-                  </div>
-                </div>
+            <div className="text-center max-w-3xl mx-auto">
+              <span className="inline-block text-sm font-medium px-3 py-1 rounded-full bg-guinea-red/10 text-guinea-red dark:bg-guinea-red/20 dark:text-guinea-red/90 mb-4">
+                Témoignages
+              </span>
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 dark:text-white">
+                Ce que disent nos étudiants africains
+              </h1>
+              <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                Découvrez les histoires inspirantes des traders qui ont suivi nos formations et transformé 
+                leur approche du trading sur les marchés africains.
+              </p>
+              <div className="flex justify-center">
+                <Link to="/formations">
+                  <Button 
+                    className="bg-guinea-red hover:bg-guinea-red/90 text-white flex items-center gap-2"
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                    Découvrir nos formations
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
