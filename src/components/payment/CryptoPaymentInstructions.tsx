@@ -104,9 +104,20 @@ const CryptoPaymentInstructions: React.FC<CryptoPaymentInstructionsProps> = ({
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-        <h2 className="text-2xl font-bold mb-4 dark:text-white">Instructions de paiement Crypto</h2>
+        <h2 className="text-2xl font-bold mb-4 dark:text-white">Paiement en Cryptomonnaie</h2>
         
         <div className="mb-6">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            Les cryptomonnaies sont une forme de monnaie numérique qui utilise la cryptographie pour sécuriser les transactions.
+            Elles offrent des avantages significatifs par rapport aux moyens de paiement traditionnels:
+          </p>
+          <ul className="list-disc pl-5 text-sm text-gray-600 dark:text-gray-400 space-y-1 mb-4">
+            <li>Transactions rapides et mondiales</li>
+            <li>Frais de transaction réduits</li>
+            <li>Sécurité et confidentialité accrues</li>
+            <li>Absence d'intermédiaires financiers</li>
+            <li>Protection contre l'inflation</li>
+          </ul>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             Pour finaliser votre paiement, veuillez envoyer l'équivalent en crypto de:
           </p>

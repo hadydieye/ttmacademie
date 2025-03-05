@@ -1,13 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { CreditCard, Banknote, Wallet } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { CreditCard, Banknote } from 'lucide-react';
 import { usePayment, PaymentMethod } from '@/hooks/usePayment';
-import { toast } from 'sonner';
 
 interface PaymentFormProps {
   planId?: string;
@@ -33,14 +31,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   onPaymentMethodSelected
 }) => {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('orange-money');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [walletAddress, setWalletAddress] = useState('');
-  const [payeerAccount, setPayeerAccount] = useState('');
-  
-  const { processPayment, isProcessing } = usePayment();
+  const { isProcessing } = usePayment();
 
   useEffect(() => {
     if (onPaymentMethodSelected) {
@@ -48,50 +39,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     }
   }, [paymentMethod, onPaymentMethodSelected]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (paymentMethod === 'crypto' && onPaymentMethodSelected) {
-      return;
-    }
-
-    if (paymentMethod === 'orange-money' && onPaymentMethodSelected) {
-      return;
-    }
-    
-    if (paymentMethod === 'payeer' && !phoneNumber) {
-      toast.error('Veuillez entrer votre numéro de téléphone Mobile Money');
-      return;
-    }
-    
-    if (paymentMethod === 'card' && (!cardNumber || !expiryDate || !cvv)) {
-      toast.error('Veuillez compléter tous les champs de la carte bancaire');
-      return;
-    }
-    
-    if (paymentMethod === 'payeer' && !payeerAccount) {
-      toast.error('Veuillez entrer votre identifiant Payeer');
-      return;
-    }
-
-    const result = await processPayment(paymentMethod, {
-      planId,
-      planName,
-      courseId,
-      courseName,
-      amount,
-      currency,
-    });
-
-    if (result.success && onSuccess) {
-      onSuccess();
-    }
-  };
-
   return (
     <Card className="max-w-md mx-auto p-6">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2">Paiement</h2>
+        <h2 className="text-2xl font-bold mb-2">Choisir une méthode de paiement</h2>
         <p className="text-gray-600 dark:text-gray-400">
           {courseName ? `Cours: ${courseName}` : `Plan: ${planName}`}
         </p>
@@ -100,165 +51,111 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
         </p>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <div className="mb-6">
-          <p className="mb-3 font-medium">Choisir une méthode de paiement:</p>
-          <RadioGroup 
-            value={paymentMethod} 
-            onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}
-            className="flex flex-col space-y-3"
-          >
-            <div className="flex items-center space-x-2 border p-3 rounded-md">
-              <RadioGroupItem value="orange-money" id="orange-money" />
-              <Label htmlFor="orange-money" className="flex items-center">
-                <Banknote className="w-5 h-5 mr-2 text-orange-500" />
-                Orange Money
-              </Label>
-            </div>
-            
-            <div className="flex items-center space-x-2 border p-3 rounded-md">
-              <RadioGroupItem value="payeer" id="payeer" />
-              <Label htmlFor="payeer" className="flex items-center">
-                <img 
-                  src="/lovable-uploads/046d4238-1adf-41e3-bf40-ca41dd48df6d.png" 
-                  alt="Payeer" 
-                  className="w-5 h-5 mr-2" 
-                />
-                Payeer
-              </Label>
-            </div>
-            
-            <div className="flex items-center space-x-2 border p-3 rounded-md">
-              <RadioGroupItem value="crypto" id="crypto" />
-              <Label htmlFor="crypto" className="flex items-center">
-                <img 
-                  src="/lovable-uploads/64617320-161a-4c65-b082-31d0193db414.png" 
-                  alt="Cryptomonnaie" 
-                  className="w-5 h-5 mr-2" 
-                />
-                Cryptomonnaie
-              </Label>
-            </div>
-            
-            <div className="flex items-center space-x-2 border p-3 rounded-md">
-              <RadioGroupItem value="card" id="card" />
-              <Label htmlFor="card" className="flex items-center">
-                <CreditCard className="w-5 h-5 mr-2 text-blue-500" />
-                Carte Bancaire
-              </Label>
-            </div>
-          </RadioGroup>
-        </div>
-
-        {(paymentMethod === 'payeer') && (
-          <div className="mb-6">
-            <Label htmlFor="phone" className="block mb-2">
-              Numéro Téléphone
+      <div className="mb-6">
+        <p className="mb-3 font-medium">Sélectionnez votre méthode de paiement préférée:</p>
+        <RadioGroup 
+          value={paymentMethod} 
+          onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}
+          className="flex flex-col space-y-3"
+        >
+          <div className="flex items-center space-x-2 border p-3 rounded-md">
+            <RadioGroupItem value="orange-money" id="orange-money" />
+            <Label htmlFor="orange-money" className="flex items-center cursor-pointer">
+              <Banknote className="w-5 h-5 mr-2 text-orange-500" />
+              Orange Money
             </Label>
-            <Input
-              id="phone"
-              type="tel"
-              placeholder="6xx xx xx xx"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              className="mb-2"
-              required
-            />
-            <p className="text-sm text-gray-500">Vous recevrez une demande de paiement sur ce numéro.</p>
           </div>
-        )}
-
-        {paymentMethod === 'payeer' && (
-          <div className="mb-6">
-            <Label htmlFor="payeer" className="block mb-2">Identifiant Payeer</Label>
-            <Input
-              id="payeer"
-              type="text"
-              placeholder="P1234567"
-              value={payeerAccount}
-              onChange={(e) => setPayeerAccount(e.target.value)}
-              className="mb-2"
-              required
-            />
-            <p className="text-sm text-gray-500">Entrez votre identifiant Payeer pour recevoir les instructions de paiement.</p>
-          </div>
-        )}
-
-        {paymentMethod === 'card' && (
-          <div className="space-y-4 mb-6">
-            <div>
-              <Label htmlFor="card-number" className="block mb-2">Numéro de carte</Label>
-              <Input
-                id="card-number"
-                type="text"
-                placeholder="1234 5678 9012 3456"
-                value={cardNumber}
-                onChange={(e) => setCardNumber(e.target.value)}
-                required
+          
+          <div className="flex items-center space-x-2 border p-3 rounded-md">
+            <RadioGroupItem value="payeer" id="payeer" />
+            <Label htmlFor="payeer" className="flex items-center cursor-pointer">
+              <img 
+                src="/lovable-uploads/046d4238-1adf-41e3-bf40-ca41dd48df6d.png" 
+                alt="Payeer" 
+                className="w-5 h-5 mr-2" 
               />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="expiry" className="block mb-2">Date d'expiration</Label>
-                <Input
-                  id="expiry"
-                  type="text"
-                  placeholder="MM/AA"
-                  value={expiryDate}
-                  onChange={(e) => setExpiryDate(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="cvv" className="block mb-2">CVV</Label>
-                <Input
-                  id="cvv"
-                  type="text"
-                  placeholder="123"
-                  value={cvv}
-                  onChange={(e) => setCvv(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
+              Payeer
+            </Label>
           </div>
-        )}
-
-        {paymentMethod === 'crypto' && (
-          <div className="mb-6">
-            <p className="text-sm text-gray-500 mb-4">
-              Cliquez sur "Continuer" pour voir toutes les adresses de paiement crypto disponibles.
-            </p>
+          
+          <div className="flex items-center space-x-2 border p-3 rounded-md">
+            <RadioGroupItem value="crypto" id="crypto" />
+            <Label htmlFor="crypto" className="flex items-center cursor-pointer">
+              <img 
+                src="/lovable-uploads/64617320-161a-4c65-b082-31d0193db414.png" 
+                alt="Cryptomonnaie" 
+                className="w-5 h-5 mr-2" 
+              />
+              Cryptomonnaie
+            </Label>
           </div>
-        )}
+          
+          <div className="flex items-center space-x-2 border p-3 rounded-md">
+            <RadioGroupItem value="card" id="card" />
+            <Label htmlFor="card" className="flex items-center cursor-pointer">
+              <CreditCard className="w-5 h-5 mr-2 text-blue-500" />
+              Carte Bancaire
+            </Label>
+          </div>
+        </RadioGroup>
+      </div>
 
+      <div className="mb-6">
         {paymentMethod === 'orange-money' && (
-          <div className="mb-6">
-            <p className="text-sm text-gray-500 mb-4">
-              Cliquez sur "Continuer" pour accéder à notre page de paiement Orange Money sécurisée.
+          <div className="bg-orange-50 dark:bg-orange-900/10 p-4 rounded-lg">
+            <h3 className="font-medium text-orange-800 dark:text-orange-400 mb-2">Orange Money</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Paiement mobile rapide et sécurisé via Orange Money. Cliquez sur Continuer pour accéder à la page de paiement.
             </p>
           </div>
         )}
+        
+        {paymentMethod === 'payeer' && (
+          <div className="bg-blue-50 dark:bg-blue-900/10 p-4 rounded-lg">
+            <h3 className="font-medium text-blue-800 dark:text-blue-400 mb-2">Payeer</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Système de paiement électronique international avec de faibles frais de transaction. Cliquez sur Continuer pour accéder à la page de paiement.
+            </p>
+          </div>
+        )}
+        
+        {paymentMethod === 'crypto' && (
+          <div className="bg-gray-50 dark:bg-gray-700/10 p-4 rounded-lg">
+            <h3 className="font-medium text-gray-800 dark:text-gray-400 mb-2">Cryptomonnaie</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Payez avec BTC, ETH, USDT (TRC20, ERC20, BEP20), TRX, LTC et d'autres crypto-monnaies. Cliquez sur Continuer pour voir les adresses disponibles.
+            </p>
+          </div>
+        )}
+        
+        {paymentMethod === 'card' && (
+          <div className="bg-purple-50 dark:bg-purple-900/10 p-4 rounded-lg">
+            <h3 className="font-medium text-purple-800 dark:text-purple-400 mb-2">Carte Bancaire</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Paiement sécurisé par carte bancaire (Visa, Mastercard, etc.). Cliquez sur Continuer pour accéder au formulaire de paiement.
+            </p>
+          </div>
+        )}
+      </div>
 
-        <div className="flex justify-between mt-6">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={onCancel}
-            disabled={isProcessing}
-          >
-            Annuler
-          </Button>
-          <Button 
-            type={paymentMethod === 'crypto' || paymentMethod === 'orange-money' ? 'button' : 'submit'} 
-            className="bg-guinea-green hover:bg-guinea-green/90 text-white"
-            disabled={isProcessing}
-          >
-            {isProcessing ? 'Traitement...' : (paymentMethod === 'crypto' || paymentMethod === 'orange-money' ? 'Continuer' : 'Payer maintenant')}
-          </Button>
-        </div>
-      </form>
+      <div className="flex justify-between mt-6">
+        <Button 
+          type="button" 
+          variant="outline" 
+          onClick={onCancel}
+          disabled={isProcessing}
+        >
+          Annuler
+        </Button>
+        <Button 
+          type="button"
+          className="bg-guinea-green hover:bg-guinea-green/90 text-white"
+          disabled={isProcessing}
+          onClick={() => onPaymentMethodSelected && onPaymentMethodSelected(paymentMethod)}
+        >
+          Continuer
+        </Button>
+      </div>
     </Card>
   );
 };

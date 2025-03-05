@@ -43,9 +43,10 @@ const queryClient = new QueryClient({
 // WhatsApp button with location awareness
 const WhatsAppButtonWithHint = () => {
   const location = useLocation();
-  const isCheckoutPage = location.pathname === '/checkout';
+  const isPaymentPage = location.pathname === '/checkout' || 
+                        location.pathname.includes('/payment');
   
-  return <WhatsAppButton phoneNumber="+224 663 29 32 80" showHint={isCheckoutPage} />;
+  return <WhatsAppButton phoneNumber="+224 663 29 32 80" showHint={isPaymentPage} />;
 };
 
 const App = () => (

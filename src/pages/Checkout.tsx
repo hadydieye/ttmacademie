@@ -6,6 +6,8 @@ import Footer from "@/components/layout/Footer";
 import PaymentForm from '@/components/payment/PaymentForm';
 import CryptoPaymentInstructions from '@/components/payment/CryptoPaymentInstructions';
 import OrangeMoneyPayment from '@/components/payment/OrangeMoneyPayment';
+import PayeerPayment from '@/components/payment/PayeerPayment';
+import BankPayment from '@/components/payment/BankPayment';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { ArrowLeft, Check } from 'lucide-react';
@@ -18,6 +20,8 @@ const Checkout = () => {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [showCryptoInstructions, setShowCryptoInstructions] = useState(false);
   const [showOrangeMoneyPayment, setShowOrangeMoneyPayment] = useState(false);
+  const [showPayeerPayment, setShowPayeerPayment] = useState(false);
+  const [showBankPayment, setShowBankPayment] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
 
   // Get payment information from URL params
@@ -47,6 +51,8 @@ const Checkout = () => {
     setShowPaymentForm(false);
     setShowCryptoInstructions(false);
     setShowOrangeMoneyPayment(false);
+    setShowPayeerPayment(false);
+    setShowBankPayment(false);
     setPaymentSuccess(true);
   };
 
@@ -54,6 +60,8 @@ const Checkout = () => {
     setShowPaymentForm(false);
     setShowCryptoInstructions(false);
     setShowOrangeMoneyPayment(false);
+    setShowPayeerPayment(false);
+    setShowBankPayment(false);
   };
 
   const handleBackToPricing = () => {
@@ -77,16 +85,20 @@ const Checkout = () => {
     } else if (method === 'orange-money') {
       setShowPaymentForm(false);
       setShowOrangeMoneyPayment(true);
+    } else if (method === 'payeer') {
+      setShowPaymentForm(false);
+      setShowPayeerPayment(true);
+    } else if (method === 'card') {
+      setShowPaymentForm(false);
+      setShowBankPayment(true);
     }
   };
 
-  const handleBackFromCrypto = () => {
+  const handleBackFromSpecificPayment = () => {
     setShowCryptoInstructions(false);
-    setShowPaymentForm(true);
-  };
-
-  const handleBackFromOrangeMoney = () => {
     setShowOrangeMoneyPayment(false);
+    setShowPayeerPayment(false);
+    setShowBankPayment(false);
     setShowPaymentForm(true);
   };
 
@@ -137,7 +149,7 @@ const Checkout = () => {
           <CryptoPaymentInstructions
             amount={amount}
             currency={currency}
-            onBack={handleBackFromCrypto}
+            onBack={handleBackFromSpecificPayment}
             onComplete={handlePaymentSuccess}
           />
         ) : showOrangeMoneyPayment ? (
@@ -145,7 +157,21 @@ const Checkout = () => {
             amount={amount}
             currency={currency}
             onSuccess={handlePaymentSuccess}
-            onCancel={handleBackFromOrangeMoney}
+            onCancel={handleBackFromSpecificPayment}
+          />
+        ) : showPayeerPayment ? (
+          <PayeerPayment
+            amount={amount}
+            currency={currency}
+            onSuccess={handlePaymentSuccess}
+            onCancel={handleBackFromSpecificPayment}
+          />
+        ) : showBankPayment ? (
+          <BankPayment
+            amount={amount}
+            currency={currency}
+            onSuccess={handlePaymentSuccess}
+            onCancel={handleBackFromSpecificPayment}
           />
         ) : showPaymentForm ? (
           <PaymentForm
