@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
@@ -58,8 +57,7 @@ export default function CommunityChat() {
     const fetchMessages = async () => {
       try {
         // Utilisation d'une méthode sécurisée pour vérifier si la table existe
-        const { data, error } = await supabase.rpc('get_chat_messages')
-          .order('created_at', { ascending: true });
+        const { data, error } = await supabase.rpc('get_chat_messages');
 
         if (error) {
           console.error('Erreur RPC:', error);
@@ -92,7 +90,7 @@ export default function CommunityChat() {
             schema: 'public', 
             table: 'chat_messages' 
           }, 
-          async (payload) => {
+          async (payload: any) => {
             try {
               // Obtenir les informations sur l'utilisateur pour le nouveau message
               const { data: userData, error: userError } = await supabase

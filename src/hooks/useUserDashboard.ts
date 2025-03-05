@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -47,10 +46,8 @@ export function useUserDashboard() {
     upcomingEvents: 0
   });
 
-  // Fonction pour vérifier si l'utilisateur a un abonnement actif
   const checkPaidAccess = async (userId: string) => {
     try {
-      // Vérifier si l'utilisateur a des paiements complétés pour un abonnement
       const { data, error } = await supabase
         .from('payments')
         .select('*')
@@ -61,7 +58,6 @@ export function useUserDashboard() {
         
       if (error) throw error;
       
-      // Si au moins un paiement d'abonnement a été trouvé
       return data && data.length > 0;
     } catch (error) {
       console.error('Erreur lors de la vérification des paiements:', error);
@@ -69,7 +65,6 @@ export function useUserDashboard() {
     }
   };
 
-  // Fonction pour obtenir les inscriptions aux cours réelles de l'utilisateur
   const fetchUserEnrollments = async (userId: string) => {
     try {
       const { data, error } = await supabase
@@ -91,31 +86,24 @@ export function useUserDashboard() {
     }
   };
 
-  // Fonction pour obtenir les statistiques de la communauté
   const fetchCommunityStats = async () => {
     try {
-      // Obtenir le nombre réel d'utilisateurs
       const { count } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true });
       
-      // Obtenir le nombre d'événements à venir
       const today = new Date().toISOString();
       let eventCount = 0;
       
-      // Vérifier si la table events existe en comptant les événements
       try {
-        // Au lieu d'utiliser from('events'), nous vérifions d'une autre manière
-        const { count: eventsCount } = await supabase
-          .rpc('count_upcoming_events', { current_date: today })
-          .single();
+        const { data: eventsCount } = await supabase
+          .rpc('count_upcoming_events', { current_date: today });
           
         if (eventsCount !== null) {
           eventCount = eventsCount;
         }
       } catch (error) {
         console.warn('La RPC count_upcoming_events n\'est pas disponible:', error);
-        // Utiliser une valeur par défaut
         eventCount = Math.floor(Math.random() * 5) + 2;
       }
       
@@ -135,11 +123,9 @@ export function useUserDashboard() {
     setIsLoading(true);
     
     try {
-      // Vérifier si l'utilisateur a un accès payant
       const paidAccess = await checkPaidAccess(user.id);
       setHasPaidAccess(paidAccess);
       
-      // Récupérer l'historique des paiements
       const { data: paymentsData, error: paymentsError } = await supabase
         .from('payments')
         .select('*')
@@ -150,7 +136,6 @@ export function useUserDashboard() {
         throw paymentsError;
       }
 
-      // Formater l'historique des paiements
       const formattedPayments = paymentsData.map(payment => ({
         payment_id: payment.payment_id,
         date: new Date(payment.created_at).toLocaleDateString('fr-FR'),
@@ -163,14 +148,10 @@ export function useUserDashboard() {
 
       setPaymentHistory(formattedPayments);
       
-      // Récupérer les inscriptions aux cours de l'utilisateur
       const enrollments = await fetchUserEnrollments(user.id);
       
-      // Pour la démonstration, nous allons utiliser des données de cours simulées
-      // En production, vous récupéreriez les données de cours réelles à partir de l'ID de cours
       if (enrollments.length > 0) {
         const courseData = enrollments.map(enrollment => {
-          // Simuler des cours basés sur les inscriptions réelles
           return {
             id: enrollment.course_id,
             title: enrollment.course_id === "1" ? "Introduction au Trading" : 
@@ -199,7 +180,6 @@ export function useUserDashboard() {
         setUserCourses([]);
       }
 
-      // Calculer les statistiques à partir des données réelles
       const totalSpent = formattedPayments
         .filter(p => p.status === 'completed')
         .reduce((sum, payment) => sum + Number(payment.amount), 0);
@@ -210,7 +190,6 @@ export function useUserDashboard() {
       
       const completedCourses = userCourses.filter(c => c.progress === 100).length;
       
-      // Calculer le nombre total de modules et de quiz complétés
       let totalModules = 0;
       let completedQuizzes = 0;
       
@@ -225,7 +204,6 @@ export function useUserDashboard() {
         }
       });
 
-      // Récupérer les statistiques de la communauté
       const communityStats = await fetchCommunityStats();
 
       setStats({
@@ -247,14 +225,11 @@ export function useUserDashboard() {
     }
   };
 
-  // Mettre en place une souscription en temps réel pour les mises à jour des paiements
   useEffect(() => {
     if (!user) return;
 
-    // Chargement initial des données
     fetchUserData();
 
-    // Mettre en place une souscription en temps réel
     const channel = supabase
       .channel('dashboard-changes')
       .on('postgres_changes', 
@@ -266,12 +241,11 @@ export function useUserDashboard() {
           }, 
           (payload) => {
             console.log('Données de paiement modifiées:', payload);
-            fetchUserData(); // Actualiser les données lorsque les paiements changent
+            fetchUserData();
           }
       )
       .subscribe();
 
-    // Nettoyer la souscription
     return () => {
       supabase.removeChannel(channel);
     };
