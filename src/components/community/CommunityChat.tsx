@@ -66,7 +66,7 @@ export default function CommunityChat() {
     const fetchMessages = async () => {
       try {
         // Utiliser RPC au lieu d'accéder directement à la table
-        const { data, error } = await supabase.rpc<ChatMessage[], null>('get_chat_messages');
+        const { data, error } = await supabase.rpc('get_chat_messages');
 
         if (error) {
           console.error('Erreur RPC:', error);
@@ -74,7 +74,7 @@ export default function CommunityChat() {
         }
 
         if (data && Array.isArray(data)) {
-          setMessages(data);
+          setMessages(data as ChatMessage[]);
         } else {
           // Simuler des messages si aucune donnée n'est disponible
           setMessages(generateDemoMessages());
@@ -148,10 +148,7 @@ export default function CommunityChat() {
     try {
       try {
         // Utiliser RPC pour ajouter le message
-        const { error } = await supabase.rpc<null, {
-          message_content: string;
-          user_identifier: string;
-        }>('add_chat_message', {
+        const { error } = await supabase.rpc('add_chat_message', {
           message_content: newMessage.trim(),
           user_identifier: user.id
         });

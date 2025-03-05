@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -107,13 +108,13 @@ export function useUserDashboard() {
       let eventCount = 0;
       
       try {
-        const { data: eventsCount, error } = await supabase
-          .rpc<number, { current_date: string }>('count_upcoming_events', { current_date: today });
+        const { data, error } = await supabase
+          .rpc('count_upcoming_events', { current_date: today });
           
         if (error) throw error;
           
-        if (eventsCount !== null) {
-          eventCount = eventsCount;
+        if (data !== null) {
+          eventCount = data as number;
         }
       } catch (error) {
         console.warn('La RPC count_upcoming_events n\'est pas disponible:', error);
