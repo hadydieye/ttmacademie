@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { usePayment } from "@/hooks/usePayment";
-import { Loader2, Check } from "lucide-react";
+import { Loader2, Check, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
 interface BankPaymentProps {
@@ -13,6 +13,7 @@ interface BankPaymentProps {
   courseId?: string;
   courseName?: string;
   onSuccess: (paymentId: string) => void;
+  onCancel?: () => void;
 }
 
 const BankPayment: React.FC<BankPaymentProps> = ({
@@ -20,7 +21,8 @@ const BankPayment: React.FC<BankPaymentProps> = ({
   currency,
   courseId,
   courseName,
-  onSuccess
+  onSuccess,
+  onCancel
 }) => {
   const [senderName, setSenderName] = useState("");
   const [senderBank, setSenderBank] = useState("");
@@ -80,6 +82,18 @@ const BankPayment: React.FC<BankPaymentProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {onCancel && (
+        <Button 
+          type="button" 
+          variant="outline" 
+          onClick={onCancel} 
+          className="mb-4"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Retour
+        </Button>
+      )}
+      
       <div className="bg-green-50 border border-green-200 p-4 rounded-md mb-4">
         <h3 className="font-semibold text-green-800 mb-2">Coordonnées bancaires</h3>
         <div className="space-y-2 text-sm text-green-700">

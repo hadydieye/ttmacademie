@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { usePayment } from "@/hooks/usePayment";
-import { Loader2, Upload, Check } from "lucide-react";
+import { Loader2, Upload, Check, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
 interface OrangeMoneyPaymentProps {
@@ -13,6 +13,7 @@ interface OrangeMoneyPaymentProps {
   courseId?: string;
   courseName?: string;
   onSuccess: (paymentId: string) => void;
+  onCancel?: () => void;
 }
 
 const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
@@ -20,7 +21,8 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
   currency,
   courseId,
   courseName,
-  onSuccess
+  onSuccess,
+  onCancel
 }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -99,6 +101,18 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
   if (showConfirmation) {
     return (
       <div className="space-y-6">
+        {onCancel && (
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={onCancel} 
+            className="mb-4"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Retour
+          </Button>
+        )}
+        
         <div className="bg-amber-50 border border-amber-200 p-4 rounded-md">
           <h3 className="font-semibold text-amber-800 mb-2">Instructions</h3>
           <p className="text-sm text-amber-700 mb-3">
@@ -172,6 +186,18 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {onCancel && (
+        <Button 
+          type="button" 
+          variant="outline" 
+          onClick={onCancel} 
+          className="mb-4"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Retour
+        </Button>
+      )}
+      
       <div>
         <Label htmlFor="phoneNumber">Numéro de téléphone Orange Money</Label>
         <Input 

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { usePayment } from "@/hooks/usePayment";
-import { Loader2, Check } from "lucide-react";
+import { Loader2, Check, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
 interface PayeerPaymentProps {
@@ -13,6 +13,7 @@ interface PayeerPaymentProps {
   courseId?: string;
   courseName?: string;
   onSuccess: (paymentId: string) => void;
+  onCancel?: () => void;
 }
 
 const PayeerPayment: React.FC<PayeerPaymentProps> = ({
@@ -20,7 +21,8 @@ const PayeerPayment: React.FC<PayeerPaymentProps> = ({
   currency,
   courseId,
   courseName,
-  onSuccess
+  onSuccess,
+  onCancel
 }) => {
   const [walletId, setWalletId] = useState("");
   const [transactionId, setTransactionId] = useState("");
@@ -79,6 +81,18 @@ const PayeerPayment: React.FC<PayeerPaymentProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {onCancel && (
+        <Button 
+          type="button" 
+          variant="outline" 
+          onClick={onCancel} 
+          className="mb-4"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Retour
+        </Button>
+      )}
+      
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-md">
         <h3 className="font-semibold text-blue-800 mb-2">Instructions</h3>
         <p className="text-sm text-blue-700 mb-2">
