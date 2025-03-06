@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -7,8 +8,6 @@ import { useUserDashboard } from "@/hooks/useUserDashboard";
 import { Loader2, Users, GraduationCap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CommunityChat from "@/components/community/CommunityChat";
-import ActiveMembers from "@/components/community/ActiveMembers";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
@@ -58,10 +57,9 @@ const UserDashboard = () => {
           </div>
           
           <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="grid w-full max-w-md grid-cols-3">
+            <TabsList className="grid w-full max-w-md grid-cols-2">
               <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
               <TabsTrigger value="courses">Mes cours</TabsTrigger>
-              <TabsTrigger value="community">Communauté</TabsTrigger>
             </TabsList>
             
             <TabsContent value="overview" className="space-y-6">
@@ -122,31 +120,6 @@ const UserDashboard = () => {
                       </div>
                     </div>
                   ))}
-                </div>
-              )}
-            </TabsContent>
-            
-            <TabsContent value="community" className="space-y-6">
-              {!hasPaidAccess ? (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 text-center">
-                  <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-xl font-medium mb-2 dark:text-white">Accès limité</h3>
-                  <p className="text-gray-500 dark:text-gray-400 mb-6">
-                    Vous devez avoir un abonnement actif pour accéder à la communauté Trading Matrix.
-                  </p>
-                  <Button onClick={() => navigate('/pricing')} className="bg-guinea-green hover:bg-guinea-green/90 text-white">
-                    Voir les abonnements
-                  </Button>
-                </div>
-              ) : (
-                <div className="grid gap-6 md:grid-cols-3">
-                  <div className="md:col-span-2">
-                    <CommunityChat />
-                  </div>
-                  
-                  <div>
-                    <ActiveMembers activeUsers={activeUsers} />
-                  </div>
                 </div>
               )}
             </TabsContent>
