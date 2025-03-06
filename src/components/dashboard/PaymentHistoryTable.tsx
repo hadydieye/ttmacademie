@@ -1,11 +1,11 @@
 
 import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { PaymentHistory } from '@/hooks/useUserDashboard';
+import { UserPayment } from '@/hooks/useUserDashboard';
 import { Badge } from "@/components/ui/badge";
 
 interface PaymentHistoryTableProps {
-  payments: PaymentHistory[];
+  payments: UserPayment[];
 }
 
 export const PaymentHistoryTable: React.FC<PaymentHistoryTableProps> = ({ payments }) => {
@@ -66,7 +66,9 @@ export const PaymentHistoryTable: React.FC<PaymentHistoryTableProps> = ({ paymen
         <TableBody>
           {payments.map((payment) => (
             <TableRow key={payment.payment_id}>
-              <TableCell className="font-medium">{payment.date}</TableCell>
+              <TableCell className="font-medium">
+                {new Date(payment.created_at).toLocaleDateString('fr-FR')}
+              </TableCell>
               <TableCell>{payment.item_name}</TableCell>
               <TableCell>{payment.amount.toLocaleString('fr-FR')} {payment.currency}</TableCell>
               <TableCell>{formatPaymentMethod(payment.payment_method)}</TableCell>
