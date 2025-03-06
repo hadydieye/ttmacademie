@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Navbar from "@/components/layout/Navbar";
@@ -39,7 +40,10 @@ const Checkout = () => {
     if (!user && !paymentSuccess) {
       navigate('/login?redirect=checkout');
     }
-  }, [user, navigate, paymentSuccess]);
+    
+    // Scroll to top when component mounts or when payment method changes
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [user, navigate, paymentSuccess, showPaymentForm, showCryptoInstructions, showOrangeMoneyPayment, showPayeerPayment, showBankPayment]);
 
   const resetPaymentScreens = () => {
     setShowPaymentForm(false);
@@ -232,3 +236,4 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
