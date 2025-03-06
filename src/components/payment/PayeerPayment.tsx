@@ -96,7 +96,7 @@ const PayeerPayment: React.FC<PayeerPaymentProps> = ({
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-md">
         <h3 className="font-semibold text-blue-800 mb-2">Instructions</h3>
         <p className="text-sm text-blue-700 mb-2">
-          1. Envoyez <strong>{amount.toLocaleString('fr-FR')} {currency}</strong> à notre compte Payeer: <strong>P1234567</strong>
+          1. Envoyez <strong>{amount.toLocaleString('fr-FR')} {currency}</strong> à notre compte Payeer: <strong>P1124727273</strong>
         </p>
         <p className="text-sm text-blue-700 mb-2">
           2. Enregistrez une capture d'écran de la transaction comme preuve de paiement.

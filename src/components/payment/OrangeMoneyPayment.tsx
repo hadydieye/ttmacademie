@@ -116,7 +116,7 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
         <div className="bg-amber-50 border border-amber-200 p-4 rounded-md">
           <h3 className="font-semibold text-amber-800 mb-2">Instructions</h3>
           <p className="text-sm text-amber-700 mb-3">
-            1. Effectuez le paiement de <strong>{amount.toLocaleString('fr-FR')} {currency}</strong> via Orange Money au numéro <strong>610 12 34 56</strong>
+            1. Effectuez le paiement de <strong>{amount.toLocaleString('fr-FR')} {currency}</strong> via Orange Money au numéro <strong>611353456</strong>
           </p>
           <p className="text-sm text-amber-700 mb-3">
             2. Après avoir effectué le paiement, vous recevrez un SMS de confirmation avec un ID de transaction.

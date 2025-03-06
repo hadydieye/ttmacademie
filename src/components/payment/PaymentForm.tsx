@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -58,7 +59,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           <PaymentOption
             id="orange-money"
             name="Orange Money"
-            description="Paiement mobile rapide et sécurisé"
+            description="Paiement mobile rapide et sécurisé (Numéro: 611353456)"
             icon={<Banknote className="w-5 h-5 text-orange-500" />}
             isSelected={selectedPaymentMethod === 'orange-money'}
             onClick={() => handleMethodSelection('orange-money')}
@@ -67,7 +68,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           <PaymentOption
             id="payeer"
             name="Payeer"
-            description="Système de paiement électronique international"
+            description="Système de paiement électronique international (ID: P1124727273)"
             icon={<img 
               src="/lovable-uploads/046d4238-1adf-41e3-bf40-ca41dd48df6d.png" 
               alt="Payeer" 
