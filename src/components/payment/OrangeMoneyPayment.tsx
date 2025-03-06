@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { usePayment } from "@/hooks/usePayment";
-import { Loader2, Upload, Check, ArrowLeft } from "lucide-react";
+import { Loader2, Check, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
 interface OrangeMoneyPaymentProps {
@@ -25,37 +25,18 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
   onCancel
 }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [transactionId, setTransactionId] = useState("");
   const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
-  const [showConfirmation, setShowConfirmation] = useState(false);
   const { processPayment, isProcessing } = usePayment();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!phoneNumber) {
-      toast.error("Veuillez saisir votre numéro de téléphone");
+    if (!phoneNumber || !transactionId || !screenshotFile) {
+      toast.error("Veuillez remplir tous les champs et télécharger une capture d'écran");
       return;
     }
     
-    setIsSubmitting(true);
-    
-    try {
-      // Normalement, ici on appellerait l'API d'Orange Money pour initier le paiement
-      // Pour la démo, on passe directement à l'étape de confirmation
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setShowConfirmation(true);
-      }, 1500);
-    } catch (error) {
-      console.error("Erreur lors de l'initiation du paiement:", error);
-      toast.error("Impossible d'initier le paiement Orange Money");
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleConfirmPayment = async () => {
     try {
       const result = await processPayment('orange-money', {
         amount,
@@ -72,8 +53,8 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
         toast.error("Échec du paiement. Veuillez réessayer.");
       }
     } catch (error) {
-      console.error("Erreur de confirmation:", error);
-      toast.error("Erreur lors de la confirmation du paiement");
+      console.error("Erreur de paiement:", error);
+      toast.error("Erreur lors du traitement du paiement");
     }
   };
 
@@ -98,92 +79,6 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
     }
   };
 
-  if (showConfirmation) {
-    return (
-      <div className="space-y-6">
-        {onCancel && (
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={onCancel} 
-            className="mb-4"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Retour
-          </Button>
-        )}
-        
-        <div className="bg-amber-50 border border-amber-200 p-4 rounded-md">
-          <h3 className="font-semibold text-amber-800 mb-2">Instructions</h3>
-          <p className="text-sm text-amber-700 mb-3">
-            1. Effectuez le paiement de <strong>{amount.toLocaleString('fr-FR')} {currency}</strong> via Orange Money au numéro <strong>611353456</strong>
-          </p>
-          <p className="text-sm text-amber-700 mb-3">
-            2. Après avoir effectué le paiement, vous recevrez un SMS de confirmation avec un ID de transaction.
-          </p>
-          <p className="text-sm text-amber-700">
-            3. Entrez l'ID de transaction ci-dessous et téléchargez une capture d'écran comme preuve.
-          </p>
-        </div>
-        
-        <div className="space-y-4">
-          <div>
-            <Label htmlFor="transactionId">ID de transaction</Label>
-            <Input 
-              id="transactionId" 
-              placeholder="Ex: OM12345678" 
-              value={transactionId}
-              onChange={(e) => setTransactionId(e.target.value)}
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="screenshot">Capture d'écran du paiement (obligatoire)</Label>
-            <div className="mt-1 flex items-center">
-              <label className="block w-full">
-                <span className="sr-only">Choisir une image</span>
-                <input
-                  id="screenshot"
-                  name="screenshot"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="block w-full text-sm text-gray-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-md file:border-0
-                    file:text-sm file:font-semibold
-                    file:bg-blue-50 file:text-blue-700
-                    hover:file:bg-blue-100"
-                />
-              </label>
-            </div>
-            {screenshotFile && (
-              <div className="mt-2 flex items-center text-sm text-green-600">
-                <Check className="h-4 w-4 mr-1" />
-                {screenshotFile.name}
-              </div>
-            )}
-          </div>
-          
-          <Button 
-            className="w-full" 
-            onClick={handleConfirmPayment}
-            disabled={!transactionId || !screenshotFile || isProcessing}
-          >
-            {isProcessing ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Traitement...
-              </>
-            ) : (
-              "Confirmer le paiement"
-            )}
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {onCancel && (
@@ -198,32 +93,81 @@ const OrangeMoneyPayment: React.FC<OrangeMoneyPaymentProps> = ({
         </Button>
       )}
       
+      <div className="bg-orange-50 border border-orange-200 p-4 rounded-md">
+        <h3 className="font-semibold text-orange-800 mb-2">Instructions</h3>
+        <p className="text-sm text-orange-700 mb-2">
+          1. Envoyez <strong>{amount.toLocaleString('fr-FR')} {currency}</strong> à notre numéro Orange Money: <strong>611353456</strong>
+        </p>
+        <p className="text-sm text-orange-700 mb-2">
+          2. Enregistrez une capture d'écran de la transaction comme preuve de paiement.
+        </p>
+        <p className="text-sm text-orange-700">
+          3. Complétez le formulaire ci-dessous avec votre numéro Orange Money.
+        </p>
+      </div>
+      
       <div>
-        <Label htmlFor="phoneNumber">Numéro de téléphone Orange Money</Label>
+        <Label htmlFor="phoneNumber">Votre numéro Orange Money</Label>
         <Input 
           id="phoneNumber" 
-          placeholder="Ex: 610123456" 
+          placeholder="Ex: 611123456" 
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
           className="mt-1"
         />
-        <p className="text-sm text-muted-foreground mt-1">
-          Entrez le numéro associé à votre compte Orange Money
-        </p>
+      </div>
+      
+      <div>
+        <Label htmlFor="transactionId">ID de transaction</Label>
+        <Input 
+          id="transactionId" 
+          placeholder="Ex: OM123456789" 
+          value={transactionId}
+          onChange={(e) => setTransactionId(e.target.value)}
+          className="mt-1"
+        />
+      </div>
+      
+      <div>
+        <Label htmlFor="screenshot">Capture d'écran du paiement (obligatoire)</Label>
+        <div className="mt-1 flex items-center">
+          <label className="block w-full">
+            <span className="sr-only">Choisir une image</span>
+            <input
+              id="screenshot"
+              name="screenshot"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-md file:border-0
+                file:text-sm file:font-semibold
+                file:bg-orange-50 file:text-orange-700
+                hover:file:bg-orange-100"
+            />
+          </label>
+        </div>
+        {screenshotFile && (
+          <div className="mt-2 flex items-center text-sm text-green-600">
+            <Check className="h-4 w-4 mr-1" />
+            {screenshotFile.name}
+          </div>
+        )}
       </div>
       
       <Button 
-        className="w-full" 
+        className="w-full bg-orange-500 hover:bg-orange-600" 
         type="submit"
-        disabled={!phoneNumber || isSubmitting}
+        disabled={!phoneNumber || !transactionId || !screenshotFile || isProcessing}
       >
-        {isSubmitting ? (
+        {isProcessing ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Initialisation...
+            Traitement...
           </>
         ) : (
-          "Payer avec Orange Money"
+          "Confirmer le paiement Orange Money"
         )}
       </Button>
     </form>
