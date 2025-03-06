@@ -4,11 +4,15 @@ import { Button } from "@/components/ui/button";
 import Card from "../ui/card";
 import { Check, CreditCard, ArrowRight, Phone, Shield } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 type BillingCycle = "monthly" | "yearly";
 
 const Pricing = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
 
   const toggleBillingCycle = () => {
@@ -16,6 +20,18 @@ const Pricing = () => {
   };
 
   const handlePlanSelection = (planName: string) => {
+    // Si l'utilisateur n'est pas connecté, le rediriger vers la page d'inscription
+    if (!user) {
+      navigate('/register?redirect=pricing');
+      toast({
+        title: "Inscription requise",
+        description: "Veuillez vous inscrire pour accéder à ce plan",
+        duration: 3000,
+      });
+      return;
+    }
+    
+    // Si l'utilisateur est connecté, montrer le toast normal
     toast({
       title: "Plan sélectionné",
       description: `Vous avez choisi le plan ${planName}. Un conseiller vous contactera bientôt.`,

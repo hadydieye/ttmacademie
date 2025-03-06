@@ -4,6 +4,9 @@ import Card from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Linkedin, Twitter } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 export interface TrainerProps {
   id: string;
@@ -22,8 +25,21 @@ interface TrainerCardProps {
 }
 
 const TrainerCard: React.FC<TrainerCardProps> = ({ trainer }) => {
-  const isScriptrader = trainer.id === "scriptrader";
-  const isYotraderFx = trainer.id === "yotraderfx";
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  const handleLearnMore = (e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault();
+      navigate('/register?redirect=about');
+      toast({
+        title: "Inscription requise",
+        description: "Veuillez vous inscrire pour en savoir plus sur nos formateurs",
+        duration: 3000,
+      });
+    }
+  };
   
   return (
     <Card className="h-full overflow-hidden border-0 shadow-xl">
@@ -71,12 +87,21 @@ const TrainerCard: React.FC<TrainerCardProps> = ({ trainer }) => {
                 </a>
               )}
             </div>
-            <Link to={`/about#${trainer.id}`}>
-              <Button variant="ghost" className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/20 p-0 flex items-center gap-1">
-                En savoir plus
-                <ArrowRight size={16} />
-              </Button>
-            </Link>
+            {user ? (
+              <Link to={`/about#${trainer.id}`}>
+                <Button variant="ghost" className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/20 p-0 flex items-center gap-1">
+                  En savoir plus
+                  <ArrowRight size={16} />
+                </Button>
+              </Link>
+            ) : (
+              <Link to={`/about#${trainer.id}`} onClick={handleLearnMore}>
+                <Button variant="ghost" className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/20 p-0 flex items-center gap-1">
+                  En savoir plus
+                  <ArrowRight size={16} />
+                </Button>
+              </Link>
+            )}
           </Card.Footer>
         </div>
       </div>

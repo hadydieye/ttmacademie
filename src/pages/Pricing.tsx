@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -7,10 +8,12 @@ import { Check, X, ArrowRight } from "lucide-react";
 import Card from "@/components/ui/card";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 const Pricing = () => {
   const navigate = useNavigate();
   const [isAnnual, setIsAnnual] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     document.title = "Tarifs - The Trading Matrix Académie";
@@ -36,6 +39,12 @@ const Pricing = () => {
   }, []);
 
   const handleSubscribe = (plan: any) => {
+    if (!user) {
+      navigate('/register?redirect=pricing');
+      toast.info("Veuillez vous inscrire pour accéder à ce plan");
+      return;
+    }
+    
     const params = new URLSearchParams({
       plan: plan.id,
       name: plan.name,
