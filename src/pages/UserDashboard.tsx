@@ -5,25 +5,18 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useAuth } from "@/context/AuthContext";
 import { useUserDashboard } from "@/hooks/useUserDashboard";
-import { Loader2, Users, GraduationCap } from "lucide-react";
+import { Loader2, Users, GraduationCap, Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const UserDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { isLoading, hasPaidAccess, stats, courses: userCourses } = useUserDashboard();
-  const [activeUsers, setActiveUsers] = useState(0);
-
-  // Vérifier si l'utilisateur a accès à la communauté pour l'onglet communauté
-  useEffect(() => {
-    if (!isLoading && stats) {
-      setActiveUsers(stats.communityMembers);
-    }
-  }, [isLoading, stats]);
-
+  const { isLoading, hasPaidAccess, stats, courses: userCourses, payments } = useUserDashboard();
+  
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
@@ -51,15 +44,16 @@ const UserDashboard = () => {
             {hasPaidAccess && (
               <Badge variant="outline" className="flex items-center">
                 <Users className="mr-1 h-4 w-4 text-guinea-green" />
-                <span>{activeUsers} membres</span>
+                <span>{stats.communityMembers} membres</span>
               </Badge>
             )}
           </div>
           
           <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsList className="grid w-full max-w-md grid-cols-3">
               <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
               <TabsTrigger value="courses">Mes cours</TabsTrigger>
+              <TabsTrigger value="payments">Mes paiements</TabsTrigger>
             </TabsList>
             
             <TabsContent value="overview" className="space-y-6">
@@ -75,10 +69,17 @@ const UserDashboard = () => {
                   </p>
                 </div>
                 
-                {/* Autres statistiques */}
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium dark:text-white">Paiements</h3>
+                    <Wallet className="h-5 w-5 text-guinea-green" />
+                  </div>
+                  <p className="text-3xl font-bold dark:text-white">{payments.length}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Transactions effectuées
+                  </p>
+                </div>
               </div>
-              
-              {/* Autres sections de la vue d'ensemble */}
             </TabsContent>
             
             <TabsContent value="courses" className="space-y-6">
@@ -120,6 +121,62 @@ const UserDashboard = () => {
                       </div>
                     </div>
                   ))}
+                </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="payments" className="space-y-6">
+              {payments.length === 0 ? (
+                <div className="text-center py-10 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                  <Wallet className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-xl font-medium mb-2 dark:text-white">Aucun paiement</h3>
+                  <p className="text-gray-500 dark:text-gray-400 mb-6">
+                    Vous n'avez effectué aucun paiement pour le moment.
+                  </p>
+                </div>
+              ) : (
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Détails</TableHead>
+                        <TableHead>Montant</TableHead>
+                        <TableHead>Méthode</TableHead>
+                        <TableHead>Statut</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {payments.map((payment) => (
+                        <TableRow key={payment.payment_id}>
+                          <TableCell className="font-medium">
+                            {new Date(payment.created_at).toLocaleDateString('fr-FR')}
+                          </TableCell>
+                          <TableCell>{payment.item_name}</TableCell>
+                          <TableCell>{payment.amount.toLocaleString('fr-FR')} {payment.currency}</TableCell>
+                          <TableCell>
+                            {payment.payment_method === 'orange-money' ? 'Orange Money' :
+                             payment.payment_method === 'wave' ? 'Wave' :
+                             payment.payment_method === 'crypto' ? 'Crypto' :
+                             payment.payment_method === 'card' ? 'Carte bancaire' :
+                             payment.payment_method}
+                          </TableCell>
+                          <TableCell>
+                            <Badge className={
+                              payment.status === 'completed' ? 'bg-green-500 hover:bg-green-600' :
+                              payment.status === 'pending' ? 'bg-yellow-500 hover:bg-yellow-600' :
+                              payment.status === 'failed' ? 'bg-red-500 hover:bg-red-600' :
+                              'bg-gray-500 hover:bg-gray-600'
+                            }>
+                              {payment.status === 'completed' ? 'Complété' :
+                               payment.status === 'pending' ? 'En attente' :
+                               payment.status === 'failed' ? 'Échoué' : payment.status}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </div>
               )}
             </TabsContent>
