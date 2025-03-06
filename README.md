@@ -1,69 +1,144 @@
-# Welcome to your Lovable project
+# TradeWise Community
 
-## Project info
+TradeWise Community est une plateforme éducative dédiée aux traders en Afrique, offrant des formations, des ressources et une communauté pour échanger et progresser. Ce projet est construit avec React, TypeScript, Tailwind CSS et utilise Supabase pour l'authentification et la gestion des données.
 
-**URL**: https://lovable.dev/projects/6a2bf922-f1a3-4c88-8f2c-c1a09e92e919
+## Table des matières
 
-## How can I edit this code?
+- [Structure du projet](#structure-du-projet)
+- [Fonctionnalités](#fonctionnalités)
+- [Installation](#installation)
+- [Utilisation](#utilisation)
+- [Contribuer](#contribuer)
+- [Licence](#licence)
 
-There are several ways of editing your application.
+## Structure du projet
 
-**Use Lovable**
+### Architecture Frontend
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/6a2bf922-f1a3-4c88-8f2c-c1a09e92e919) and start prompting.
+- **Framework**: React avec TypeScript
+- **Styling**: Tailwind CSS avec composants shadcn/ui
+- **Routage**: React Router Dom
+- **Gestion d'état**: Context API et React Query
+- **Thème**: Support du mode clair/sombre
 
-Changes made via Lovable will be committed automatically to this repo.
+### Pages principales
 
-**Use your preferred IDE**
+- **Accueil (Index)**: Présentation générale de la plateforme
+- **À propos (About)**: Information sur l'académie et les formateurs
+- **Formations (Training)**: Contenu éducatif accessible après inscription
+- **Tarification (Pricing)**: Plans d'abonnement avec différentes options
+- **Authentification**: Pages de connexion, inscription, réinitialisation de mot de passe
+- **Dashboard**: Espace utilisateur personnel
+- **Communauté**: Espace d'échange entre utilisateurs
+- **Assistant Trading**: Chatbot d'aide aux traders
+- **Page admin**: Interface de gestion pour les administrateurs
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Composants clés
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Layout**: Navbar, Footer, UserMenu
+- **Authentication**: ProtectedRoute, AdminRoute
+- **UI**: Nombreux composants réutilisables (cards, buttons, forms, etc.)
+- **Éléments spécifiques**: TrainerCard, PaymentHistoryTable, LiveQuotes
 
-Follow these steps:
+### Services intégrés
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- **Authentification**: Via Supabase
+- **Base de données**: Tables Supabase pour profils utilisateurs, paiements, etc.
+- **Edge Functions**: Fonctions serverless pour le traitement des paiements et le chatbot
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Fonctionnalités
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Fonctionnalités utilisateur
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+- Inscription et connexion
+- Consultation des formations et ressources
+- Abonnement à différents plans tarifaires
+- Paiement via diverses méthodes (Orange Money, crypto, etc.)
+- Interactions avec la communauté
+- Assistant Trading pour l'aide et les conseils
 
-**Edit a file directly in GitHub**
+### Fonctionnalités administrateur
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- Gestion des utilisateurs
+- Suivi des paiements
+- Journal d'activités
+- Statistiques de la plateforme
 
-**Use GitHub Codespaces**
+### Intégrations externes
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- **WhatsApp**: Button flottant pour contacter le support
+- **Assistant Trading**: Intégration d'AI pour aider les utilisateurs
+- **API de données financières**: Pour les cotations en temps réel
 
-## What technologies are used for this project?
+### UX/UI
 
-This project is built with .
+- Design responsive pour mobile et desktop
+- Thème avec couleurs personnalisées (vert, jaune et rouge guinéens)
+- Animations et transitions fluides
+- Toasts pour les notifications
+- Boutons flottants (WhatsApp, Assistant, ScrollToTop)
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Sécurité
 
-## How can I deploy this project?
+- Routes protégées pour contenu premium
+- Authentification sécurisée
+- Gestion des erreurs avec ErrorBoundary
+- Validation des formulaires
 
-Simply open [Lovable](https://lovable.dev/projects/6a2bf922-f1a3-4c88-8f2c-c1a09e92e919) and click on Share -> Publish.
+### Infrastructure
 
-## I want to use a custom domain - is that possible?
+- Déploiement via Lovable
+- Backend serverless avec Supabase
+- Support multi-langue (français principalement)
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## Installation
+
+Pour installer et exécuter ce projet localement, suivez les étapes suivantes :
+
+1. Clonez le dépôt :
+   ```bash
+   git clone https://github.com/votre-utilisateur/tradewise-community.git
+   cd tradewise-community
+   ```
+
+2. Installez les dépendances :
+   ```bash
+   npm install
+   ```
+
+3. Configurez les variables d'environnement :
+   Créez un fichier `.env` à la racine du projet et ajoutez les variables nécessaires (ex: `SUPABASE_URL`, `SUPABASE_KEY`).
+
+4. Démarrez l'application :
+   ```bash
+   npm start
+   ```
+
+## Utilisation
+
+- **Accueil**: Présentation de la plateforme.
+- **À propos**: Informations sur l'académie et les formateurs.
+- **Formations**: Accédez aux formations après inscription.
+- **Tarification**: Choisissez un plan d'abonnement.
+- **Dashboard**: Espace personnel pour gérer vos formations et paiements.
+- **Communauté**: Échangez avec d'autres traders.
+- **Assistant Trading**: Obtenez de l'aide via le chatbot.
+
+## Contribuer
+
+Nous apprécions les contributions ! Pour contribuer à ce projet, suivez ces étapes :
+
+1. Forkez le projet
+2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
+3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
+4. Pushez vers la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrez une Pull Request
+
+## Licence
+
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+---
+
+**TradeWise Community** est une plateforme éducative complète pour les traders africains, avec un focus particulier sur la Guinée, offrant des formations adaptées au marché local et des méthodes de paiement accessibles dans la région.
+
