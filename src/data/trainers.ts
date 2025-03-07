@@ -21,7 +21,7 @@ export const trainers: TrainerProps[] = [
     image: "/lovable-uploads/84a23c52-a109-4386-ab9b-8f73a7635693.png",
     socialLinks: {
       linkedin: "https://linkedin.com/in/yotraderfx",
-      twitter: "https://twitter.com/yotraderfx"
+      twitter: "https://x.com/ange6645?s=21"
     }
   }
 ];
