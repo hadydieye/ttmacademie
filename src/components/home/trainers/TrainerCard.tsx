@@ -44,12 +44,12 @@ const TrainerCard: React.FC<TrainerCardProps> = ({ trainer }) => {
   return (
     <Card className="h-full overflow-hidden border-0 shadow-xl">
       <div className="flex flex-col md:flex-row">
-        {/* Image section - on the left with no overlay */}
-        <div className="md:w-2/5 h-96 md:h-auto overflow-hidden relative bg-gray-50">
+        {/* Image section - occupe tout l'espace disponible sans fond visible */}
+        <div className="md:w-2/5 h-96 md:h-auto relative flex items-center justify-center">
           <img 
             src={trainer.image} 
             alt={trainer.name}
-            className="w-full h-full object-contain p-4 transition-transform duration-500 hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
         </div>
         
