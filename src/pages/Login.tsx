@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,6 @@ const Login = () => {
   const [localLoading, setLocalLoading] = useState(false);
   const [showTestTools, setShowTestTools] = useState(false);
 
-  // Données de test pour faciliter les tests
   const testAccounts = [
     { email: "test@example.com", password: "password123" },
     { email: "admin@example.com", password: "admin123" }
@@ -72,15 +70,7 @@ const Login = () => {
         </div>
 
         <div className="space-y-2">
-          <div className="flex justify-between">
-            <Label htmlFor="password" className="text-gray-300">Mot de passe</Label>
-            <Link 
-              to="/forgot-password" 
-              className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
-            >
-              Mot de passe oublié?
-            </Link>
-          </div>
+          <Label htmlFor="password" className="text-gray-300">Mot de passe</Label>
           <div className="relative">
             <Input
               id="password"
@@ -112,8 +102,17 @@ const Login = () => {
           {(isLoading || localLoading) ? "Connexion en cours..." : "Se connecter"}
           {!isLoading && !localLoading && <LogIn className="ml-2 h-4 w-4" />}
         </Button>
+        
+        <div className="text-center">
+          <Link 
+            to="/forgot-password" 
+            className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
+          >
+            Mot de passe oublié?
+          </Link>
+        </div>
 
-        <div className="mt-6 text-center">
+        <div className="text-center">
           <p className="text-sm text-gray-400">
             Vous n'avez pas de compte?{" "}
             <Link 
@@ -126,7 +125,6 @@ const Login = () => {
         </div>
       </form>
 
-      {/* Bouton pour afficher les outils de test */}
       <div className="mt-8 text-center">
         <button
           type="button"
@@ -137,7 +135,6 @@ const Login = () => {
         </button>
       </div>
 
-      {/* Outils de test uniquement visibles en mode développement */}
       {showTestTools && (
         <div className="mt-4 p-4 border border-gray-700 rounded-lg bg-gray-900">
           <h3 className="text-sm font-medium mb-3 text-gray-300">Outils de test (Mode Développement)</h3>
