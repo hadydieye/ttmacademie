@@ -18,19 +18,20 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
       {showHint && (
-        <div className="mb-2 bg-white dark:bg-gray-800 text-sm p-2 rounded-lg shadow-lg max-w-xs animate-bounce">
+        <div className="mb-2 bg-white dark:bg-gray-800 text-sm p-3 rounded-xl shadow-lg max-w-xs animate-bounce">
           Contactez-nous sur WhatsApp pour confirmer votre paiement
-          <div className="absolute w-2 h-2 bg-white dark:bg-gray-800 transform rotate-45 -bottom-1 right-6"></div>
+          <div className="absolute w-3 h-3 bg-white dark:bg-gray-800 transform rotate-45 -bottom-1.5 right-6"></div>
         </div>
       )}
       <a
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center w-16 h-16 rounded-full bg-green-500 shadow-lg hover:bg-green-600 transition-colors duration-300 text-white"
+        className="flex items-center justify-center w-16 h-16 rounded-full bg-[#25D366] shadow-lg hover:bg-[#20BF5B] transition-all duration-300 text-white relative overflow-hidden group"
         aria-label="Nous contacter sur WhatsApp"
       >
-        <WhatsappLogo className="w-8 h-8 fill-current" />
+        <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+        <WhatsappLogo className="w-9 h-9 fill-current" />
         <span className="sr-only">Contacter sur WhatsApp</span>
       </a>
     </div>
