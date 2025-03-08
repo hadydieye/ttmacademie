@@ -146,10 +146,10 @@ const Pricing = () => {
             avec des prix adaptés au marché guinéen et des méthodes de paiement locales.
           </p>
 
-          {/* Billing Toggle */}
+          {/* Billing Toggle - Fixed alignment */}
           <div className="flex items-center justify-center mb-8">
             <span
-              className={`mr-3 ${
+              className={`mr-3 text-base ${
                 billingCycle === "monthly" ? "font-medium text-gray-900 dark:text-white" : "text-gray-500 dark:text-gray-400"
               }`}
             >
@@ -166,7 +166,7 @@ const Pricing = () => {
               />
             </button>
             <span
-              className={`ml-3 ${
+              className={`ml-3 text-base ${
                 billingCycle === "yearly" ? "font-medium text-gray-900 dark:text-white" : "text-gray-500 dark:text-gray-400"
               }`}
             >
@@ -178,7 +178,7 @@ const Pricing = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {plans.map((plan, index) => (
             <Card
               key={plan.name}
@@ -199,17 +199,17 @@ const Pricing = () => {
               <Card.Header>
                 <div className="mb-4">
                   <Card.Title className="text-2xl">{plan.name}</Card.Title>
-                  <Card.Description className="mt-1.5">
+                  <Card.Description className="mt-1.5 text-base">
                     {plan.description}
                   </Card.Description>
                 </div>
-                <div className="mb-4">
+                <div className="mb-6 py-4 border-y border-gray-100 dark:border-gray-700">
                   <span className="text-4xl font-bold dark:text-white">
                     {billingCycle === "monthly"
                       ? `${formatCurrency(plan.price.monthly)}`
                       : `${formatCurrency(plan.price.yearly)}`}
                   </span>
-                  <span className="text-gray-500 dark:text-gray-400 ml-2">
+                  <span className="text-gray-500 dark:text-gray-400 ml-2 text-lg">
                     {plan.currency} {billingCycle === "monthly" ? "/mois" : "/an"}
                   </span>
                   <div className="text-sm text-gray-500 mt-1">
@@ -223,7 +223,7 @@ const Pricing = () => {
                   )}
                 </div>
                 <Button
-                  className={`w-full ${
+                  className={`w-full py-6 text-lg ${
                     plan.popular
                       ? "bg-guinea-yellow hover:bg-guinea-yellow/90 text-black"
                       : "bg-guinea-green hover:bg-guinea-green/90 text-white"
@@ -231,17 +231,17 @@ const Pricing = () => {
                   onClick={() => handlePlanSelection(plan.name)}
                 >
                   {plan.cta}
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Card.Header>
               <Card.Content>
-                <h4 className="font-medium mb-4 text-gray-900 dark:text-white">
+                <h4 className="font-medium mb-4 text-lg text-gray-900 dark:text-white">
                   Ce qui est inclus :
                 </h4>
                 <ul className="space-y-3">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex">
-                      <Check className="h-5 w-5 text-guinea-green dark:text-guinea-yellow mr-3 flex-shrink-0" />
+                      <Check className="h-5 w-5 text-guinea-green dark:text-guinea-yellow mr-3 flex-shrink-0 mt-0.5" />
                       <span className="text-gray-600 dark:text-gray-300">{feature}</span>
                     </li>
                   ))}

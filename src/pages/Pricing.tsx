@@ -161,27 +161,33 @@ const Pricing = () => {
                 pour les traders guinéens et africains.
               </p>
               
-              {/* Pricing Toggle */}
+              {/* Pricing Toggle - Fixed alignment */}
               <div className="flex items-center justify-center mb-12">
-                <span className={`text-sm font-medium mr-3 ${!isAnnual ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>Mensuel</span>
+                <span className={`text-base font-medium mr-3 ${!isAnnual ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+                  Mensuel
+                </span>
                 <button 
                   onClick={() => setIsAnnual(!isAnnual)}
-                  className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none"
+                  className="relative inline-flex h-6 w-12 items-center rounded-full transition-colors focus:outline-none"
                   style={{ backgroundColor: isAnnual ? '#1db954' : '#718096' }}
                 >
                   <span
                     className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      isAnnual ? 'translate-x-6' : 'translate-x-1'
+                      isAnnual ? 'translate-x-7' : 'translate-x-1'
                     }`}
                   />
                 </button>
-                <span className={`text-sm font-medium ml-3 ${isAnnual ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>Annuel</span>
-                <span className="ml-2 bg-guinea-yellow/20 text-guinea-yellow text-xs px-2 py-1 rounded-full">Économisez 15%</span>
+                <span className={`text-base font-medium ml-3 ${isAnnual ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+                  Annuel
+                </span>
+                <span className="ml-2 bg-guinea-yellow/20 text-guinea-yellow text-xs px-2 py-1 rounded-full">
+                  Économisez 15%
+                </span>
               </div>
             </div>
 
-            {/* Pricing Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Pricing Cards - Improved spacing and visibility */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
               {plans.map((plan) => (
                 <div key={plan.id} className={`relative animate-fade-in ${plan.highlight ? 'md:-mt-8' : ''}`}>
                   {plan.highlight && (
@@ -193,25 +199,25 @@ const Pricing = () => {
                   )}
                   
                   <Card className={`border-2 ${plan.highlight ? `border-${plan.color}` : 'border-transparent'} h-full`}>
-                    <Card.Header>
-                      <div className={`w-12 h-12 rounded-full bg-${plan.color}/10 flex items-center justify-center text-${plan.color} mb-4`}>
+                    <Card.Header className="space-y-3">
+                      <div className={`w-12 h-12 rounded-full bg-${plan.color}/10 flex items-center justify-center text-${plan.color} mb-2`}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                         </svg>
                       </div>
-                      <Card.Title>{plan.name}</Card.Title>
-                      <Card.Description>{plan.description}</Card.Description>
+                      <Card.Title className="text-2xl">{plan.name}</Card.Title>
+                      <Card.Description className="text-base">{plan.description}</Card.Description>
                     </Card.Header>
-                    <Card.Content className="space-y-4">
-                      <div className="text-center py-4">
+                    <Card.Content className="space-y-6">
+                      <div className="text-center py-4 border-y border-gray-100 dark:border-gray-700">
                         <div className="flex items-center justify-center">
-                          <span className="text-3xl font-bold dark:text-white">
+                          <span className="text-4xl font-bold dark:text-white">
                             {isAnnual 
                               ? (plan.annualPrice / 1000).toLocaleString('fr-FR') 
                               : (plan.monthlyPrice / 1000).toLocaleString('fr-FR')
                             }K
                           </span>
-                          <span className="text-lg text-gray-500 dark:text-gray-400 ml-1">{plan.currency}</span>
+                          <span className="text-xl text-gray-500 dark:text-gray-400 ml-1">{plan.currency}</span>
                         </div>
                         <span className="text-sm text-gray-500 dark:text-gray-400">
                           par {isAnnual ? 'an' : 'mois'}
@@ -222,11 +228,11 @@ const Pricing = () => {
                       </div>
                       
                       <div>
-                        <h4 className="font-medium mb-3 dark:text-white">Ce qui est inclus :</h4>
-                        <ul className="space-y-2">
+                        <h4 className="font-medium mb-4 text-lg dark:text-white">Ce qui est inclus :</h4>
+                        <ul className="space-y-3">
                           {plan.features.map((feature, index) => (
                             <li key={index} className="flex items-start">
-                              <Check className={`h-5 w-5 text-${plan.color} mr-2 shrink-0`} />
+                              <Check className={`h-5 w-5 text-${plan.color} mr-3 shrink-0 mt-0.5`} />
                               <span className="text-gray-600 dark:text-gray-300">{feature}</span>
                             </li>
                           ))}
@@ -235,11 +241,11 @@ const Pricing = () => {
                       
                       {plan.notIncluded.length > 0 && (
                         <div>
-                          <h4 className="font-medium mb-3 dark:text-white">Non inclus :</h4>
-                          <ul className="space-y-2">
+                          <h4 className="font-medium mb-4 text-lg dark:text-white">Non inclus :</h4>
+                          <ul className="space-y-3">
                             {plan.notIncluded.map((feature, index) => (
                               <li key={index} className="flex items-start">
-                                <X className="h-5 w-5 text-gray-400 mr-2 shrink-0" />
+                                <X className="h-5 w-5 text-gray-400 mr-3 shrink-0 mt-0.5" />
                                 <span className="text-gray-500 dark:text-gray-400">{feature}</span>
                               </li>
                             ))}
@@ -249,11 +255,11 @@ const Pricing = () => {
                     </Card.Content>
                     <Card.Footer>
                       <Button 
-                        className={`w-full bg-${plan.color} hover:bg-${plan.color}/90 text-white`}
+                        className={`w-full bg-${plan.color} hover:bg-${plan.color}/90 text-white py-6 text-lg`}
                         onClick={() => handleSubscribe(plan)}
                       >
                         {plan.cta}
-                        <ArrowRight className="ml-2 h-4 w-4" />
+                        <ArrowRight className="ml-2 h-5 w-5" />
                       </Button>
                     </Card.Footer>
                   </Card>
