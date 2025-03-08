@@ -10,7 +10,10 @@ export const trainers: TrainerProps[] = [
     image: "/lovable-uploads/f06da5b8-baf0-4975-9a4c-72f90e9b6ab0.png",
     socialLinks: {
       linkedin: "https://linkedin.com/in/scriptrader",
-      twitter: "https://twitter.com/scriptrader"
+      twitter: "https://twitter.com/scriptrader",
+      facebook: "https://facebook.com/scriptrader",
+      instagram: "https://instagram.com/scriptrader",
+      tiktok: "https://tiktok.com/@scriptrader"
     }
   },
   {
@@ -21,7 +24,10 @@ export const trainers: TrainerProps[] = [
     image: "/lovable-uploads/84a23c52-a109-4386-ab9b-8f73a7635693.png",
     socialLinks: {
       linkedin: "https://linkedin.com/in/yotraderfx",
-      twitter: "https://x.com/ange6645?s=21"
+      twitter: "https://x.com/ange6645?s=21",
+      facebook: "https://facebook.com/yotraderfx",
+      instagram: "https://instagram.com/yotraderfx",
+      tiktok: "https://tiktok.com/@yotraderfx"
     }
   }
 ];

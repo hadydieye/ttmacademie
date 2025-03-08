@@ -2,7 +2,7 @@
 import React from "react";
 import Card from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Linkedin, Twitter } from "lucide-react";
+import { ArrowRight, Facebook, Instagram, Linkedin, Twitter, Video } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +17,9 @@ export interface TrainerProps {
   socialLinks?: {
     linkedin?: string;
     twitter?: string;
+    facebook?: string;
+    instagram?: string;
+    tiktok?: string;
   };
 }
 
@@ -72,6 +75,7 @@ const TrainerCard: React.FC<TrainerCardProps> = ({ trainer }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-blue-400 transition-colors"
+                  aria-label="LinkedIn"
                 >
                   <Linkedin size={20} />
                 </a>
@@ -82,8 +86,42 @@ const TrainerCard: React.FC<TrainerCardProps> = ({ trainer }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-blue-400 transition-colors"
+                  aria-label="Twitter/X"
                 >
                   <Twitter size={20} />
+                </a>
+              )}
+              {trainer.socialLinks?.facebook && (
+                <a 
+                  href={trainer.socialLinks.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                  aria-label="Facebook"
+                >
+                  <Facebook size={20} />
+                </a>
+              )}
+              {trainer.socialLinks?.instagram && (
+                <a 
+                  href={trainer.socialLinks.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram size={20} />
+                </a>
+              )}
+              {trainer.socialLinks?.tiktok && (
+                <a 
+                  href={trainer.socialLinks.tiktok}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                  aria-label="TikTok"
+                >
+                  <Video size={20} />
                 </a>
               )}
             </div>
