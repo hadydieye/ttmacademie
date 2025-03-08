@@ -10,7 +10,7 @@ const Testimonials = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
+      if (window.innerWidth >= 1280) {
         setItemsPerPage(3);
       } else if (window.innerWidth >= 768) {
         setItemsPerPage(2);
@@ -51,7 +51,7 @@ const Testimonials = () => {
         </div>
         
         {/* Section Background Image */}
-        <div className="relative rounded-xl overflow-hidden mb-12 max-w-5xl mx-auto">
+        <div className="relative rounded-xl overflow-hidden mb-12 max-w-6xl mx-auto">
           <img 
             src="/lovable-uploads/7807fc3d-8178-4bb4-8601-2375fa79ec42.png" 
             alt="Formation de trading" 
@@ -63,18 +63,22 @@ const Testimonials = () => {
           </div>
         </div>
 
-        <TestimonialsCarousel 
-          testimonials={testimonials} 
-          activeIndex={activeIndex} 
-          itemsPerPage={itemsPerPage} 
-        />
+        <div className="max-w-7xl mx-auto">
+          <TestimonialsCarousel 
+            testimonials={testimonials} 
+            activeIndex={activeIndex} 
+            itemsPerPage={itemsPerPage} 
+          />
 
-        <TestimonialsNavigation 
-          activeIndex={activeIndex} 
-          maxIndex={maxIndex} 
-          onPrev={handlePrev} 
-          onNext={handleNext} 
-        />
+          <div className="mt-8">
+            <TestimonialsNavigation 
+              activeIndex={activeIndex} 
+              maxIndex={maxIndex} 
+              onPrev={handlePrev} 
+              onNext={handleNext} 
+            />
+          </div>
+        </div>
       </div>
     </section>
   );

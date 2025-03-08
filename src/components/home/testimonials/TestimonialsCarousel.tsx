@@ -15,8 +15,8 @@ const TestimonialsCarousel: React.FC<TestimonialsCarouselProps> = ({
   itemsPerPage,
 }) => {
   return (
-    <div className="relative">
-      <div className="flex overflow-hidden">
+    <div className="relative max-w-7xl mx-auto">
+      <div className="overflow-hidden">
         <div
           className="flex transition-transform duration-500 ease-in-out"
           style={{
