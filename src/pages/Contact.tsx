@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -80,9 +79,8 @@ const Contact = () => {
                       <div>
                         <h3 className="font-medium text-lg dark:text-white">Notre siège</h3>
                         <p className="text-gray-600 dark:text-gray-400">
-                          Immeuble Koubia, Avenue de la République<br />
-                          Kaloum, Conakry<br />
-                          Guinée
+                          Quartier Lansanaya, Commune de Matoto<br />
+                          Conakry, Guinée
                         </p>
                       </div>
                     </div>
@@ -94,8 +92,7 @@ const Contact = () => {
                       <div>
                         <h3 className="font-medium text-lg dark:text-white">Téléphone</h3>
                         <p className="text-gray-600 dark:text-gray-400">
-                          +224 623 45 67 89<br />
-                          +224 661 12 34 56
+                          +224 611 35 34 56
                         </p>
                       </div>
                     </div>
@@ -107,8 +104,7 @@ const Contact = () => {
                       <div>
                         <h3 className="font-medium text-lg dark:text-white">Email</h3>
                         <p className="text-gray-600 dark:text-gray-400">
-                          info@ttmacademie.com<br />
-                          support@ttmacademie.com
+                          contact@thetradingmatrix.com
                         </p>
                       </div>
                     </div>
