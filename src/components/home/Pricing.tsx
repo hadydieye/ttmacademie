@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Card from "../ui/card";
@@ -185,7 +184,7 @@ const Pricing = () => {
               hover
               className={`${
                 plan.popular
-                  ? "border-2 border-guinea-yellow relative scale-105 z-10"
+                  ? "border-2 border-guinea-yellow relative z-10"
                   : "border border-gray-200 dark:border-gray-700"
               } animate-fade-in animation-delay-${index * 100}`}
             >
