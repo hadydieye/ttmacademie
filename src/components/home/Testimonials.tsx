@@ -3,10 +3,12 @@ import React, { useState, useEffect } from "react";
 import { testimonials } from "@/data/testimonials";
 import TestimonialsCarousel from "./testimonials/TestimonialsCarousel";
 import TestimonialsNavigation from "./testimonials/TestimonialsNavigation";
+import { Carousel, CarouselApi } from "@/components/ui/carousel";
 
 const Testimonials = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(3);
+  const [api, setApi] = useState<CarouselApi>();
 
   useEffect(() => {
     const handleResize = () => {
@@ -23,6 +25,20 @@ const Testimonials = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    if (!api) return;
+    
+    const handleSelect = () => {
+      setActiveIndex(api.selectedScrollSnap());
+    };
+    
+    api.on("select", handleSelect);
+    
+    return () => {
+      api.off("select", handleSelect);
+    };
+  }, [api]);
 
   const maxIndex = Math.ceil(testimonials.length / itemsPerPage) - 1;
 
@@ -64,11 +80,13 @@ const Testimonials = () => {
         </div>
 
         <div className="max-w-7xl mx-auto">
-          <TestimonialsCarousel 
-            testimonials={testimonials} 
-            activeIndex={activeIndex} 
-            itemsPerPage={itemsPerPage} 
-          />
+          <Carousel setApi={setApi}>
+            <TestimonialsCarousel 
+              testimonials={testimonials} 
+              activeIndex={activeIndex} 
+              itemsPerPage={itemsPerPage} 
+            />
+          </Carousel>
 
           <div className="mt-8">
             <TestimonialsNavigation 

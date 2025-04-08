@@ -2,6 +2,7 @@
 import React from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCarousel } from "@/components/ui/carousel";
 
 interface TestimonialsNavigationProps {
   activeIndex: number;
@@ -16,10 +17,22 @@ const TestimonialsNavigation: React.FC<TestimonialsNavigationProps> = ({
   onPrev,
   onNext,
 }) => {
+  const carousel = useCarousel();
+
+  const handlePrev = () => {
+    carousel?.scrollPrev();
+    onPrev();
+  };
+
+  const handleNext = () => {
+    carousel?.scrollNext();
+    onNext();
+  };
+
   return (
     <div className="flex justify-center mt-8 gap-4">
       <Button
-        onClick={onPrev}
+        onClick={handlePrev}
         disabled={activeIndex === 0}
         variant="outline"
         size="icon"
@@ -33,7 +46,7 @@ const TestimonialsNavigation: React.FC<TestimonialsNavigationProps> = ({
         <ArrowLeft className="w-5 h-5" />
       </Button>
       <Button
-        onClick={onNext}
+        onClick={handleNext}
         disabled={activeIndex === maxIndex}
         variant="outline"
         size="icon"
