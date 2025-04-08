@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -15,21 +14,10 @@ const About = () => {
   }, []);
 
   return (
-    <div 
-      className="min-h-screen flex flex-col bg-white dark:bg-gray-950"
-      style={{
-        backgroundImage: `url('/lovable-uploads/f662b4c5-66d3-4211-8cbe-970970311a37.png')`,
-        backgroundSize: 'cover',
-        backgroundAttachment: 'fixed',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundBlendMode: 'overlay',
-        backgroundColor: 'rgba(255, 255, 255, 0.97)',
-      }}
-    >
+    <div className="min-h-screen flex flex-col bg-background dark:bg-gray-950">
       <Navbar />
       <main className="flex-grow container mx-auto px-4 py-16 md:px-6 dark:text-gray-200">
-        <section className="relative mb-24 py-16 rounded-3xl overflow-hidden dark:bg-gray-900/50">
+        <section className="relative mb-24 py-16 rounded-3xl overflow-hidden bg-white/70 dark:bg-gray-900/50 shadow-lg">
           <div className="absolute inset-0 bg-gradient-to-r from-guinea-green/20 to-guinea-red/20 dark:from-guinea-green/10 dark:to-guinea-red/10 -z-10"></div>
           <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-guinea-green/5 dark:bg-guinea-green/10 rounded-full filter blur-3xl"></div>
           <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-guinea-red/5 dark:bg-guinea-red/10 rounded-full filter blur-3xl"></div>
