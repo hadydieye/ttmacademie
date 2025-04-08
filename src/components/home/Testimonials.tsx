@@ -9,6 +9,8 @@ const Testimonials = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const [api, setApi] = useState<CarouselApi>();
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,9 +33,15 @@ const Testimonials = () => {
     
     const handleSelect = () => {
       setActiveIndex(api.selectedScrollSnap());
+      setCanScrollPrev(api.canScrollPrev());
+      setCanScrollNext(api.canScrollNext());
     };
     
     api.on("select", handleSelect);
+    
+    // Initial check
+    setCanScrollPrev(api.canScrollPrev());
+    setCanScrollNext(api.canScrollNext());
     
     return () => {
       api.off("select", handleSelect);
@@ -43,10 +51,12 @@ const Testimonials = () => {
   const maxIndex = Math.ceil(testimonials.length / itemsPerPage) - 1;
 
   const handlePrev = () => {
+    api?.scrollPrev();
     setActiveIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : 0));
   };
 
   const handleNext = () => {
+    api?.scrollNext();
     setActiveIndex(prevIndex => (prevIndex < maxIndex ? prevIndex + 1 : maxIndex));
   };
 
@@ -80,7 +90,15 @@ const Testimonials = () => {
         </div>
 
         <div className="max-w-7xl mx-auto">
-          <Carousel setApi={setApi}>
+          <Carousel 
+            setApi={setApi}
+            opts={{
+              align: "start",
+              loop: false,
+              startIndex: activeIndex,
+              slidesToScroll: itemsPerPage
+            }}
+          >
             <TestimonialsCarousel 
               testimonials={testimonials} 
               activeIndex={activeIndex} 
@@ -93,7 +111,9 @@ const Testimonials = () => {
               activeIndex={activeIndex} 
               maxIndex={maxIndex} 
               onPrev={handlePrev} 
-              onNext={handleNext} 
+              onNext={handleNext}
+              canScrollPrev={canScrollPrev}
+              canScrollNext={canScrollNext}
             />
           </div>
         </div>

@@ -2,13 +2,14 @@
 import React from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCarousel } from "@/components/ui/carousel";
 
 interface TestimonialsNavigationProps {
   activeIndex: number;
   maxIndex: number;
   onPrev: () => void;
   onNext: () => void;
+  canScrollPrev: boolean;
+  canScrollNext: boolean;
 }
 
 const TestimonialsNavigation: React.FC<TestimonialsNavigationProps> = ({
@@ -16,28 +17,18 @@ const TestimonialsNavigation: React.FC<TestimonialsNavigationProps> = ({
   maxIndex,
   onPrev,
   onNext,
+  canScrollPrev,
+  canScrollNext,
 }) => {
-  const carousel = useCarousel();
-
-  const handlePrev = () => {
-    carousel?.scrollPrev();
-    onPrev();
-  };
-
-  const handleNext = () => {
-    carousel?.scrollNext();
-    onNext();
-  };
-
   return (
     <div className="flex justify-center mt-8 gap-4">
       <Button
-        onClick={handlePrev}
-        disabled={activeIndex === 0}
+        onClick={onPrev}
+        disabled={!canScrollPrev}
         variant="outline"
         size="icon"
         className={`w-10 h-10 rounded-full ${
-          activeIndex === 0
+          !canScrollPrev
             ? "border-gray-200 text-gray-400 cursor-not-allowed dark:border-gray-700 dark:text-gray-600"
             : "border-guinea-green text-guinea-green hover:bg-guinea-green hover:text-white transition-colors dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow dark:hover:text-black"
         }`}
@@ -46,12 +37,12 @@ const TestimonialsNavigation: React.FC<TestimonialsNavigationProps> = ({
         <ArrowLeft className="w-5 h-5" />
       </Button>
       <Button
-        onClick={handleNext}
-        disabled={activeIndex === maxIndex}
+        onClick={onNext}
+        disabled={!canScrollNext}
         variant="outline"
         size="icon"
         className={`w-10 h-10 rounded-full ${
-          activeIndex === maxIndex
+          !canScrollNext
             ? "border-gray-200 text-gray-400 cursor-not-allowed dark:border-gray-700 dark:text-gray-600"
             : "border-guinea-green text-guinea-green hover:bg-guinea-green hover:text-white transition-colors dark:border-guinea-yellow dark:text-guinea-yellow dark:hover:bg-guinea-yellow dark:hover:text-black"
         }`}
