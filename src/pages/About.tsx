@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -96,10 +97,10 @@ const About = () => {
         <section id="trainers" className="mb-20">
           <div className="text-center mb-12 animate-fade-in">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-guinea-gradient dark:text-guinea-gradient">
-              Nos Formateurs Experts
+              Notre Formateur Expert
             </h2>
             <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-              Découvrez les professionnels expérimentés qui vous guideront dans votre parcours d'apprentissage
+              Découvrez le professionnel expérimenté qui vous guidera dans votre parcours d'apprentissage
             </p>
           </div>
 
@@ -107,15 +108,15 @@ const About = () => {
             <div 
               key={trainer.id} 
               id={trainer.id}
-              className={`mb-16 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} flex flex-col md:flex items-center gap-8 animate-fade-in animation-delay-${index * 100}`}
+              className="mb-16 md:flex-row flex flex-col md:flex items-center gap-8 animate-fade-in"
             >
               <div className="md:w-1/3">
                 <div className="rounded-2xl overflow-hidden shadow-lg max-w-xs mx-auto bg-white dark:bg-gray-800/90 transition-transform duration-500 hover:scale-105">
-                  <div className={`relative ${trainer.id === "scriptrader" ? "bg-gradient-to-b from-guinea-green/10 to-guinea-red/10 dark:from-guinea-green/20 dark:to-guinea-red/20" : ""}`}>
+                  <div className="relative bg-gradient-to-b from-guinea-green/10 to-guinea-red/10 dark:from-guinea-green/20 dark:to-guinea-red/20">
                     <img 
                       src={trainer.image} 
                       alt={trainer.name}
-                      className={`w-full h-auto ${trainer.id === "scriptrader" ? "object-contain p-2" : "object-cover"}`}
+                      className="w-full h-auto object-contain p-2"
                     />
                   </div>
                   <div className="p-4 bg-guinea-gradient bg-opacity-10 dark:bg-opacity-5 dark:bg-gray-800/90">
@@ -154,32 +155,15 @@ const About = () => {
                   <p className="text-gray-700 dark:text-gray-300 text-lg mb-4">
                     {trainer.bio}
                   </p>
-                  {trainer.id === "scriptrader" && (
-                    <>
-                      <p className="text-gray-700 dark:text-gray-300 mb-4">
-                        Scriptrader a commencé sa carrière de trader en 2016 et s'est rapidement distingué par sa maîtrise exceptionnelle de l'analyse technique. Sa capacité à identifier les configurations de prix et à prévoir les mouvements du marché lui a valu une reconnaissance dans la communauté du trading.
-                      </p>
-                      <p className="text-gray-700 dark:text-gray-300 mb-4">
-                        Spécialisé dans le trading des paires de devises majeures et des indices, Scriptrader a développé une méthodologie unique qui combine les principes de l'analyse technique traditionnelle avec des indicateurs avancés et l'étude du sentiment du marché.
-                      </p>
-                      <p className="text-gray-700 dark:text-gray-300">
-                        En tant que formateur à The Trading Matrix Académie, il partage sa passion pour les graphiques et aide les étudiants à maîtriser l'art de l'analyse technique, en enseignant comment identifier les opportunités de trading à haut potentiel tout en minimisant les risques.
-                      </p>
-                    </>
-                  )}
-                  {trainer.id === "yotraderfx" && (
-                    <>
-                      <p className="text-gray-700 dark:text-gray-300 mb-4">
-                        YotraderFx est un analyste financier chevronné avec une formation en économie et en finance. Sa compréhension approfondie des fondamentaux économiques et des facteurs macroéconomiques qui influencent les marchés lui permet d'avoir une vision globale du trading.
-                      </p>
-                      <p className="text-gray-700 dark:text-gray-300 mb-4">
-                        Il excelle particulièrement dans l'analyse des corrélations entre les différentes classes d'actifs et comprend comment les événements sur un marché peuvent affecter les autres. Cette vision holistique est au cœur de son approche d'enseignement.
-                      </p>
-                      <p className="text-gray-700 dark:text-gray-300">
-                        Dans ses cours à The Trading Matrix Académie, YotraderFx aide les étudiants à comprendre comment intégrer l'analyse fondamentale dans leur stratégie de trading, comment interpréter les données économiques et comment anticiper les réactions du marché aux actualités importantes.
-                      </p>
-                    </>
-                  )}
+                  <p className="text-gray-700 dark:text-gray-300 mb-4">
+                    Scriptrader a commencé sa carrière de trader en 2016 et s'est rapidement distingué par sa maîtrise exceptionnelle de l'analyse technique. Sa capacité à identifier les configurations de prix et à prévoir les mouvements du marché lui a valu une reconnaissance dans la communauté du trading.
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300 mb-4">
+                    Spécialisé dans le trading des paires de devises majeures et des indices, Scriptrader a développé une méthodologie unique qui combine les principes de l'analyse technique traditionnelle avec des indicateurs avancés et l'étude du sentiment du marché.
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    En tant que formateur à The Trading Matrix Académie, il partage sa passion pour les graphiques et aide les étudiants à maîtriser l'art de l'analyse technique, en enseignant comment identifier les opportunités de trading à haut potentiel tout en minimisant les risques.
+                  </p>
                 </div>
                 <div className="flex space-x-4">
                   {trainer.socialLinks?.linkedin && (

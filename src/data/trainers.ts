@@ -15,19 +15,5 @@ export const trainers: TrainerProps[] = [
       instagram: "https://instagram.com/scriptrader",
       tiktok: "https://tiktok.com/@scriptrader"
     }
-  },
-  {
-    id: "yotraderfx",
-    name: "YotraderFx",
-    role: "Analyste des Marchés Financiers",
-    bio: "YotraderFx est un expert reconnu dans l'analyse fondamentale et l'étude des corrélations entre les différents marchés financiers, avec une approche unique du trading.",
-    image: "/lovable-uploads/84a23c52-a109-4386-ab9b-8f73a7635693.png",
-    socialLinks: {
-      linkedin: "https://linkedin.com/in/yotraderfx",
-      twitter: "https://x.com/ange6645?s=21",
-      facebook: "https://facebook.com/yotraderfx",
-      instagram: "https://instagram.com/yotraderfx",
-      tiktok: "https://tiktok.com/@yotraderfx"
-    }
   }
 ];
