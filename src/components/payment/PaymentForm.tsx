@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CreditCard, Banknote, ArrowRight } from 'lucide-react';
+import { Banknote, ArrowRight } from 'lucide-react';
 import { usePayment, PaymentMethod } from '@/hooks/usePayment';
 
 interface PaymentFormProps {
@@ -89,15 +89,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             />}
             isSelected={selectedPaymentMethod === 'crypto'}
             onClick={() => handleMethodSelection('crypto')}
-          />
-          
-          <PaymentOption
-            id="card"
-            name="Carte Bancaire"
-            description="Paiement sécurisé par carte (Visa, Mastercard, etc.)"
-            icon={<CreditCard className="w-5 h-5 text-blue-500" />}
-            isSelected={selectedPaymentMethod === 'card'}
-            onClick={() => handleMethodSelection('card')}
           />
         </div>
       </div>

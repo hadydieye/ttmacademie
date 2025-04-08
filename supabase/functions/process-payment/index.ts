@@ -1,4 +1,3 @@
-
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
@@ -101,31 +100,6 @@ serve(async (req) => {
         }
         // In a real implementation, you would integrate with a crypto payment gateway
         console.log('Processing Crypto payment')
-        break
-
-      case 'card':
-        // Simulate card payment integration
-        paymentDetails = {
-          provider: 'Credit Card',
-          last4: `${Math.floor(Math.random() * 10000)}`.padStart(4, '0'),
-          brand: 'Visa',
-          screenshotUrl: screenshotUrl,
-          verification_status: screenshotUrl ? 'screenshot_provided' : 'waiting_for_verification'
-        }
-        // In a real implementation, you would integrate with a card processor like Stripe
-        console.log('Processing Credit Card payment')
-        break
-
-      case 'bank':
-        // Simulate bank transfer integration
-        paymentDetails = {
-          provider: 'Bank Transfer',
-          referenceId: `BT-${Math.floor(Math.random() * 1000000)}`,
-          accountName: 'Trading Matrix Academy',
-          screenshotUrl: screenshotUrl,
-          verification_status: screenshotUrl ? 'screenshot_provided' : 'waiting_for_verification'
-        }
-        console.log('Processing Bank Transfer payment')
         break
 
       default:
@@ -250,10 +224,6 @@ function getNextSteps(paymentMethod: string, screenshotUrl?: string): string {
       return `${baseMessage} Connectez-vous à votre compte Payeer pour confirmer la transaction.`;
     case 'crypto':
       return `${baseMessage} Vérifiez la transaction sur la blockchain. Votre accès sera activé dès confirmation.`;
-    case 'card':
-      return `${baseMessage} Votre paiement par carte a été traité. Vous avez accès immédiat à votre abonnement.`;
-    case 'bank':
-      return `${baseMessage} Votre paiement par virement bancaire a été enregistré. Il sera vérifié dans les 24-48h.`;
     default:
       return `${baseMessage} Votre paiement est en cours de traitement.`;
   }

@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { Json } from '@/integrations/supabase/types';
 
 // Define a type for payment methods to export
-export type PaymentMethod = 'orange-money' | 'wave' | 'payeer' | 'crypto' | 'card' | 'bank';
+export type PaymentMethod = 'orange-money' | 'wave' | 'payeer' | 'crypto';
 
 // Update interface to properly match the database schema and query result
 export interface PaymentData {

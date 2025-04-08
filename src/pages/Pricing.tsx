@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -281,7 +280,7 @@ const Pricing = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md text-center">
                 <img 
                   src="/lovable-uploads/6c119f27-4e1b-4cf3-964b-c9cf552747f2.png" 
@@ -307,14 +306,6 @@ const Pricing = () => {
                   className="w-16 h-16 object-contain mx-auto mb-4"
                 />
                 <p className="font-medium dark:text-white">Payeer</p>
-              </div>
-              
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4 text-guinea-green">
-                  <rect width="20" height="14" x="2" y="5" rx="2"></rect>
-                  <line x1="2" x2="22" y1="10" y2="10"></line>
-                </svg>
-                <p className="font-medium dark:text-white">Carte Bancaire</p>
               </div>
             </div>
           </div>

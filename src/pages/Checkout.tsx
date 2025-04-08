@@ -13,7 +13,6 @@ import PaymentForm from '@/components/payment/PaymentForm';
 import CryptoPaymentInstructions from '@/components/payment/CryptoPaymentInstructions';
 import OrangeMoneyPayment from '@/components/payment/OrangeMoneyPayment';
 import PayeerPayment from '@/components/payment/PayeerPayment';
-import BankPayment from '@/components/payment/BankPayment';
 import { PaymentMethod } from '@/hooks/usePayment';
 
 const Checkout = () => {
@@ -26,7 +25,6 @@ const Checkout = () => {
   const [showCryptoInstructions, setShowCryptoInstructions] = useState(false);
   const [showOrangeMoneyPayment, setShowOrangeMoneyPayment] = useState(false);
   const [showPayeerPayment, setShowPayeerPayment] = useState(false);
-  const [showBankPayment, setShowBankPayment] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
 
   const planId = searchParams.get('plan') || '';
@@ -44,14 +42,13 @@ const Checkout = () => {
     
     // Scroll to top when payment method changes
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [user, navigate, paymentSuccess, showPaymentForm, showCryptoInstructions, showOrangeMoneyPayment, showPayeerPayment, showBankPayment]);
+  }, [user, navigate, paymentSuccess, showPaymentForm, showCryptoInstructions, showOrangeMoneyPayment, showPayeerPayment]);
 
   const resetPaymentScreens = () => {
     setShowPaymentForm(false);
     setShowCryptoInstructions(false);
     setShowOrangeMoneyPayment(false);
     setShowPayeerPayment(false);
-    setShowBankPayment(false);
   };
 
   const handleStartPayment = () => {
@@ -95,8 +92,6 @@ const Checkout = () => {
       setShowOrangeMoneyPayment(true);
     } else if (method === 'payeer') {
       setShowPayeerPayment(true);
-    } else if (method === 'card') {
-      setShowBankPayment(true);
     }
   };
 
@@ -137,13 +132,6 @@ const Checkout = () => {
         />
       ) : showPayeerPayment ? (
         <PayeerPayment
-          amount={amount}
-          currency={currency}
-          onSuccess={handlePaymentSuccess}
-          onCancel={handleBackFromSpecificPayment}
-        />
-      ) : showBankPayment ? (
-        <BankPayment
           amount={amount}
           currency={currency}
           onSuccess={handlePaymentSuccess}

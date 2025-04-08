@@ -58,8 +58,6 @@ export function AdminPayments() {
         return <Badge className="bg-purple-500">Payeer</Badge>;
       case 'crypto':
         return <Badge className="bg-slate-800">Crypto</Badge>;
-      case 'card':
-        return <Badge className="bg-green-700">Carte</Badge>;
       default:
         return <Badge variant="outline">{method}</Badge>;
     }
