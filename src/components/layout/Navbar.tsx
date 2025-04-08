@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -52,9 +53,11 @@ const Navbar = () => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold bg-gradient-to-r from-primary-dark to-secondary-dark bg-clip-text text-transparent dark:from-white dark:to-gray-400">
-              TTM Académie
-            </span>
+            <img 
+              src="/lovable-uploads/37f328f6-b917-442d-b1ab-33056377cedb.png" 
+              alt="TTM Académie" 
+              className="h-10 md:h-12 w-auto" 
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -165,6 +168,13 @@ const Navbar = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-4 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-900 shadow-md">
+            <div className="py-2 flex justify-center">
+              <img 
+                src="/lovable-uploads/37f328f6-b917-442d-b1ab-33056377cedb.png" 
+                alt="TTM Académie" 
+                className="h-8 w-auto" 
+              />
+            </div>
             <MobileNavLink 
               href="/" 
               onClick={() => {
@@ -214,7 +224,7 @@ const Navbar = () => {
             {user ? (
               <MobileNavLink 
                 href="formations" 
-                onClick={() => navigate('/formations')}
+                onClick={() => navigateToPage("formations")}
                 active={location.pathname === '/formations'}
               >
                 Mes formations

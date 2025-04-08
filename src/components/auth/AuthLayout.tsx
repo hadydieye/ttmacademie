@@ -24,9 +24,11 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
       <header className="py-4 px-4 md:px-6 z-10">
         <div className="container mx-auto flex justify-between items-center">
           <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">
-              TTM Académie
-            </span>
+            <img 
+              src="/lovable-uploads/37f328f6-b917-442d-b1ab-33056377cedb.png" 
+              alt="TTM Académie" 
+              className="h-8 md:h-10 w-auto" 
+            />
           </Link>
           <ThemeToggle />
         </div>
