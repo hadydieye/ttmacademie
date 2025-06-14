@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/context/AuthContext';
@@ -9,36 +8,43 @@ export function useVisitorTracking() {
   useEffect(() => {
     const logPageVisit = async () => {
       try {
-        // Get IP address for anonymous tracking (optional, needs server implementation)
-        // For now, we'll just record if it's a logged-in user or anonymous visit
-        
-        const visitorType = user ? 'authenticated' : 'anonymous';
-        const visitorId = user?.id || null;
-        const visitorEmail = user?.email || null;
+        // Seulement enregistrer les visites pour les utilisateurs authentifiés
+        if (!user) {
+          console.debug('Visitor tracking skipped: anonymous user');
+          return;
+        }
         
         // Get current page path
         const currentPath = window.location.pathname;
         
         // Log the visit to the activity_logs table
-        await supabase.from('activity_logs').insert({
+        const { error } = await supabase.from('activity_logs').insert({
           type: 'page_view',
-          user_id: visitorId,
-          user_email: visitorEmail,
-          details: `Page visitée: ${currentPath} (${visitorType} visitor)`
+          user_id: user.id,
+          user_email: user.email,
+          details: `Page visitée: ${currentPath} (authenticated visitor)`
         });
         
-        console.log('Visit logged successfully');
+        if (error) {
+          console.warn('Failed to log page visit:', error.message);
+          return;
+        }
+        
+        console.debug('Visit logged successfully for:', currentPath);
       } catch (error) {
-        console.error('Error logging visit:', error);
+        console.warn('Error logging visit:', error);
+        // Ne pas lancer d'erreur pour éviter de casser l'application
       }
     };
 
-    // Log the visit when the component mounts
-    logPageVisit();
+    // Log the visit when the component mounts (only for authenticated users)
+    if (user) {
+      logPageVisit();
+    }
     
-    // We don't want to re-run this effect on every render or when user changes
+    // We don't want to re-run this effect on every render
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user?.id]); // Only re-run when user authentication status changes
 
   return null;
 }

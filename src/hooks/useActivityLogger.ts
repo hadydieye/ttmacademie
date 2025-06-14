@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -12,24 +11,40 @@ export const useActivityLogger = () => {
   const { user } = useAuth();
   
   const logActivity = async (type: string, details: string) => {
+    // Ne pas enregistrer l'activité si l'utilisateur n'est pas connecté
+    if (!user) {
+      console.debug('Activity logging skipped: user not authenticated');
+      return;
+    }
+
     try {
-      await supabase.from('activity_logs').insert({
+      const { error } = await supabase.from('activity_logs').insert({
         type,
-        user_id: user?.id || null,
-        user_email: user?.email || 'Anonyme',
+        user_id: user.id,
+        user_email: user.email,
         details
       });
+
+      if (error) {
+        console.warn('Failed to log activity:', error.message);
+        // Ne pas lancer d'erreur pour éviter de casser l'application
+        return;
+      }
+
+      console.debug('Activity logged successfully:', { type, details });
     } catch (error) {
-      console.error('Erreur lors de l\'enregistrement de l\'activité:', error);
+      console.warn('Error logging activity:', error);
+      // Ne pas lancer d'erreur pour éviter de casser l'application
     }
   };
 
-  // Enregistrer les visites de page
+  // Enregistrer les visites de page pour les utilisateurs connectés uniquement
   useEffect(() => {
-    // Détecter les changements de page et enregistrer la visite
-    const pageVisitDetails = `Page visitée: ${location.pathname}`;
-    logActivity('visit', pageVisitDetails);
-  }, [location.pathname]);
+    if (user) {
+      const pageVisitDetails = `Page visitée: ${location.pathname}`;
+      logActivity('visit', pageVisitDetails);
+    }
+  }, [location.pathname, user]);
 
   return { logActivity };
 };

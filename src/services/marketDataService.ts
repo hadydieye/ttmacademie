@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 
 export interface MarketQuote {
@@ -29,15 +28,16 @@ const fetchQuoteForSymbol = async (symbol: string): Promise<MarketQuote | null> 
     const response = await fetch(`https://api.twelvedata.com/quote?symbol=${formattedSymbol}&apikey=demo`);
     
     if (!response.ok) {
-      throw new Error(`Erreur HTTP: ${response.status}`);
+      console.warn(`API HTTP error for ${symbol}: ${response.status}. Using demo data.`);
+      return getDemoQuoteForSymbol(symbol);
     }
 
     const data = await response.json();
     
-    // Vérifier si l'API a retourné une erreur
-    if (data.code === 400 || data.status === 'error') {
-      console.error(`Erreur pour ${symbol}:`, data.message || 'API error');
-      return null;
+    // Vérifier si l'API a retourné une erreur (demo key limitations)
+    if (data.code === 400 || data.status === 'error' || data.message?.includes('demo')) {
+      console.warn(`API limitation for ${symbol}: ${data.message || 'Demo key limitation'}. Using demo data.`);
+      return getDemoQuoteForSymbol(symbol);
     }
 
     // Calculer le changement et le pourcentage de changement
@@ -53,9 +53,42 @@ const fetchQuoteForSymbol = async (symbol: string): Promise<MarketQuote | null> 
       lastUpdated: new Date(),
     };
   } catch (error) {
-    console.error(`Erreur lors de la récupération des données pour ${symbol}:`, error);
-    return null;
+    console.warn(`Network error for ${symbol}:`, error, 'Using demo data.');
+    return getDemoQuoteForSymbol(symbol);
   }
+};
+
+// Fonction pour obtenir une cotation de démonstration pour un symbole spécifique
+const getDemoQuoteForSymbol = (symbol: string): MarketQuote => {
+  const demoData = getDemoQuotes();
+  const quote = demoData.find(q => q.symbol === symbol);
+  
+  if (quote) {
+    // Ajouter une petite variation aléatoire pour simuler le mouvement du marché
+    const variation = (Math.random() - 0.5) * 0.02; // ±1% variation
+    const newBid = quote.bid * (1 + variation);
+    const newAsk = quote.ask * (1 + variation);
+    const newChange = quote.change * (1 + variation * 0.5);
+    
+    return {
+      ...quote,
+      bid: parseFloat(newBid.toFixed(5)),
+      ask: parseFloat(newAsk.toFixed(5)),
+      change: parseFloat(newChange.toFixed(5)),
+      changePercent: parseFloat(((newChange / (newBid - newChange)) * 100).toFixed(2)),
+      lastUpdated: new Date(),
+    };
+  }
+  
+  // Fallback si le symbole n'est pas trouvé
+  return {
+    symbol,
+    bid: 1.0000,
+    ask: 1.0002,
+    change: 0.0001,
+    changePercent: 0.01,
+    lastUpdated: new Date(),
+  };
 };
 
 // Hook personnalisé pour utiliser les données de marché en temps réel
@@ -63,6 +96,7 @@ export const useMarketData = () => {
   const [quotes, setQuotes] = useState<MarketQuote[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [usingDemoData, setUsingDemoData] = useState(false);
 
   // Fonction pour charger toutes les cotations
   const loadAllQuotes = async () => {
@@ -73,13 +107,28 @@ export const useMarketData = () => {
       const quotePromises = WATCHED_SYMBOLS.map(symbol => fetchQuoteForSymbol(symbol));
       const results = await Promise.all(quotePromises);
       
-      // Filtrer les résultats null
+      // Filtrer les résultats null (ne devrait pas arriver avec le fallback)
       const validQuotes = results.filter((quote): quote is MarketQuote => quote !== null);
       
-      setQuotes(validQuotes);
+      if (validQuotes.length === 0) {
+        // Si aucune cotation n'est disponible, utiliser les données de démonstration
+        console.warn('No quotes available from API, using demo data');
+        setQuotes(getDemoQuotes());
+        setUsingDemoData(true);
+      } else {
+        setQuotes(validQuotes);
+        // Vérifier si nous utilisons des données de démonstration
+        const isDemoData = validQuotes.some(quote => {
+          const demoQuote = getDemoQuotes().find(d => d.symbol === quote.symbol);
+          return demoQuote && Math.abs(quote.bid - demoQuote.bid) < 0.1;
+        });
+        setUsingDemoData(isDemoData);
+      }
     } catch (err) {
       console.error('Erreur lors du chargement des cotations:', err);
-      setError('Impossible de charger les données de marché. Veuillez réessayer plus tard.');
+      setError('Connexion API limitée. Affichage des données de démonstration.');
+      setQuotes(getDemoQuotes());
+      setUsingDemoData(true);
     } finally {
       setLoading(false);
     }
@@ -102,13 +151,13 @@ export const useMarketData = () => {
     loadAllQuotes();
   };
 
-  return { quotes, loading, error, refreshData };
+  return { quotes, loading, error, refreshData, usingDemoData };
 };
 
-// Fonction alternative pour utiliser des données de démonstration quand l'API est indisponible
+// Fonction pour utiliser des données de démonstration
 export const getDemoQuotes = (): MarketQuote[] => {
   const now = new Date();
-  return [
+  const baseQuotes = [
     {
       symbol: 'XAUUSD',
       bid: 2758.40,
@@ -150,4 +199,21 @@ export const getDemoQuotes = (): MarketQuote[] => {
       lastUpdated: now
     }
   ];
+
+  // Ajouter une petite variation aléatoire pour simuler des données en temps réel
+  return baseQuotes.map(quote => {
+    const variation = (Math.random() - 0.5) * 0.01; // ±0.5% variation
+    const newBid = quote.bid * (1 + variation);
+    const newAsk = quote.ask * (1 + variation);
+    const newChange = quote.change * (1 + variation * 0.3);
+    
+    return {
+      ...quote,
+      bid: parseFloat(newBid.toFixed(5)),
+      ask: parseFloat(newAsk.toFixed(5)),
+      change: parseFloat(newChange.toFixed(5)),
+      changePercent: parseFloat(((newChange / (newBid - newChange)) * 100).toFixed(2)),
+      lastUpdated: now,
+    };
+  });
 };
