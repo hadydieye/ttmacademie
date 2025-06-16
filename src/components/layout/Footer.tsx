@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -11,9 +10,16 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* About Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-bold bg-gradient-to-r from-purple-600 to-blue-500 dark:from-purple-300 dark:to-blue-300 bg-clip-text text-transparent mb-4">
-              The Trading Matrix
-            </h3>
+            <div className="flex items-center mb-4">
+              <img 
+                src="/logo TTM academie copy copy.png" 
+                alt="TTM Académie" 
+                className="h-8 w-auto mr-3" 
+              />
+              <h3 className="text-lg font-bold bg-gradient-to-r from-purple-600 to-blue-500 dark:from-purple-300 dark:to-blue-300 bg-clip-text text-transparent">
+                TTM Académie
+              </h3>
+            </div>
             <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm md:text-base">
               Une plateforme éducative dédiée à l'excellence dans le trading et l'investissement.
             </p>
@@ -77,7 +83,7 @@ const Footer = () => {
         <div className="border-t border-gray-200 dark:border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-center text-gray-500 dark:text-gray-500 text-sm mb-4 md:mb-0">
-              © {new Date().getFullYear()} The Trading Matrix. Tous droits réservés.
+              © {new Date().getFullYear()} TTM Académie. Tous droits réservés.
             </p>
             <div className="flex space-x-6">
               <FooterLink href="/terms" small>Conditions d'utilisation</FooterLink>

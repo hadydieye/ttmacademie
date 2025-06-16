@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -25,7 +24,7 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
         <div className="container mx-auto flex justify-between items-center">
           <Link to="/" className="flex items-center">
             <img 
-              src="/lovable-uploads/37f328f6-b917-442d-b1ab-33056377cedb.png" 
+              src="/logo TTM academie copy copy.png" 
               alt="TTM Académie" 
               className="h-8 md:h-10 w-auto" 
             />

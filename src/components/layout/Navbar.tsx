@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -54,7 +53,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
             <img 
-              src="/lovable-uploads/37f328f6-b917-442d-b1ab-33056377cedb.png" 
+              src="/logo TTM academie copy copy.png" 
               alt="TTM Académie" 
               className="h-10 md:h-12 w-auto" 
             />
@@ -170,7 +169,7 @@ const Navbar = () => {
           <div className="px-4 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-900 shadow-md">
             <div className="py-2 flex justify-center">
               <img 
-                src="/lovable-uploads/37f328f6-b917-442d-b1ab-33056377cedb.png" 
+                src="/logo TTM academie copy copy.png" 
                 alt="TTM Académie" 
                 className="h-8 w-auto" 
               />

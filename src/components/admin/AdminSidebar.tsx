@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { 
@@ -27,7 +26,12 @@ export function AdminSidebar() {
     <Sidebar>
       <SidebarHeader className="border-b p-4">
         <Link to="/" className="flex items-center space-x-2">
-          <span className="text-xl font-bold">Matrix Admin</span>
+          <img 
+            src="/logo TTM academie copy copy.png" 
+            alt="TTM Académie" 
+            className="h-8 w-auto" 
+          />
+          <span className="text-xl font-bold">Admin</span>
         </Link>
         <SidebarTrigger className="md:hidden" />
       </SidebarHeader>
